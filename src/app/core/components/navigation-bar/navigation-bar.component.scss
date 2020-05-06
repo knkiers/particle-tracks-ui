@@ -1,0 +1,25 @@
+$toolbar-title-padding: 16px !default;
+
+.toolbar-title {
+  margin: 0 $toolbar-title-padding 0 $toolbar-title-padding;
+}
+
+.navigation-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.fill-space {
+    flex: 1 1 auto;
+}
+
+// the following sets the horizontal navigation bar above everything else; it also means it covers the title of the side nav....
+.app-navigation-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 998;
+}
