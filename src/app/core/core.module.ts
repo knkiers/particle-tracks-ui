@@ -5,11 +5,11 @@ import { RouterModule } from '@angular/router';
 import { NavigationBarComponent } from './components/navigation-bar/navigation-bar.component';
 import { NavComponent } from './components/nav/nav.component';
 import { LayoutModule } from '@angular/cdk/layout';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
+//import { MatToolbarModule } from '@angular/material/toolbar';
+//import { MatButtonModule } from '@angular/material/button';
+//import { MatSidenavModule } from '@angular/material/sidenav';
+//import { MatIconModule } from '@angular/material/icon';
+//import { MatListModule } from '@angular/material/list';
 
 import { AngularMaterialModule } from '../shared/angular-material/angular-material.module';
 
@@ -18,11 +18,11 @@ import { AngularMaterialModule } from '../shared/angular-material/angular-materi
   imports: [
     CommonModule,
     LayoutModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatIconModule,
-    MatListModule,
+    //MatToolbarModule,
+    //MatButtonModule,
+    //MatSidenavModule,
+    //MatIconModule,
+    //MatListModule,
     AngularMaterialModule,
     RouterModule
   ],
