@@ -42,31 +42,22 @@ export class LoginComponent implements OnInit {
         this.loginForm.value.password).subscribe(
         (result) => {
           console.log('back in the login component! ', result);
-          /*
+          
           this.userService.setUserData(result.token).subscribe(
-            result => {
+            (result) => {
               this.router.navigate(['/events']);
-            }
-          );
-          */
+            },
+            (errorMessage) => {
+              console.log('back in the login component...there was an error!', errorMessage, typeof errorMessage);
+              this.signinServerError = errorMessage;
+              this.loginInvalid = true;
+            });
         },
         (errorMessage) => {
           console.log('back in the login component...there was an error!', errorMessage, typeof errorMessage);
           this.signinServerError = errorMessage;
           this.loginInvalid = true;
-        }
-          //let errorDict = JSON.parse(error._body);
-          //console.log('there was an error');
-          //console.log(errorDict);
-          // if there are multiple errors, only the last one will be shown;
-          // this will allow the user to fix one error at a time, which isn't so bad....
-          //for (var key in errorDict) {
-          //  this.signinServerError = errorDict[key][0];//the text of the error is the only entry in an array....
-          //  console.log(errorDict[key]);
-          
-        )
-        //});
-        
+        });
     }
   }
 
