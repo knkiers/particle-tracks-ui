@@ -19,6 +19,10 @@ import { MatListModule } from '@angular/material/list';
 
 import { MatCardModule } from '@angular/material/card';
 
+// Forms
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+
 const modules: any[] = [
   MatMenuModule,
   MatSidenavModule,
@@ -26,7 +30,9 @@ const modules: any[] = [
   MatButtonModule,
   MatIconModule,
   MatListModule,
-  MatCardModule
+  MatCardModule,
+  MatFormFieldModule,
+  MatInputModule
 ]
 
 

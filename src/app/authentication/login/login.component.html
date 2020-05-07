@@ -1,32 +1,44 @@
-<p>login works!</p>
+<div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="0px" fxLayoutGap.xs="0px">
 
-<p>login works!</p>
+    <!-- https://developer.okta.com/blog/2020/01/21/angular-material-login ...to be continued.....-->
 
-<p>login works!</p>
+    <mat-card class="login-card">
+        <h1>Login</h1>
+        <!--<mat-card-title class="card-title">Login</mat-card-title>-->
+        <mat-card-content>
+            <mat-error *ngIf="loginInvalid">
+                The username and password were not recognised.
+            </mat-error>
+            {{signinServerError}}
+            <form [formGroup]="loginForm" novalidate (ngSubmit)="onSubmit()">
+                <mat-form-field appearance="outline" class="login-formfield">
+                    <mat-label>Username</mat-label>
+                    <input matInput placeholder="Username" type="text" formControlName="username" required>
+                    <mat-error>
+                        Please provide a valid email address
+                    </mat-error>
+                    <!--<mat-icon matSuffix>sentiment_very_satisfied</mat-icon>-->
+                    <!--<mat-hint>Hint</mat-hint>-->
+                </mat-form-field>
 
-<p>login works!</p>
+                <mat-form-field type="password" appearance="outline" class="login-formfield">
+                    <mat-label>Password</mat-label>
+                    <input matInput placeholder="Password" type="password" formControlName="password" required>
+                    <mat-error>
+                        Please provide a valid password
+                    </mat-error>
+                    <!--<mat-icon matSuffix>sentiment_very_satisfied</mat-icon>-->
+                    <!--<mat-hint>Hint</mat-hint>-->
+                </mat-form-field>
+                <!--<mat-divider></mat-divider>-->
+                <button mat-button>SUBMIT</button>
+            </form>
+        </mat-card-content>
 
-<p>login works!</p>
+        <!--<mat-divider></mat-divider>
+        <mat-card-actions>
+            <button mat-button>SUBMIT</button>
+        </mat-card-actions>-->
+    </mat-card>
 
-<p>login works!</p>
-
-<mat-card class="example-card">
-    <mat-card-header>
-      <div mat-card-avatar class="example-header-image"></div>
-      <mat-card-title>Shiba Inu</mat-card-title>
-      <mat-card-subtitle>Dog Breed</mat-card-subtitle>
-    </mat-card-header>
-    <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
-    <mat-card-content>
-      <p>
-        The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-        A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-        bred for hunting.
-      </p>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-button>LIKE</button>
-      <button mat-button>SHARE</button>
-    </mat-card-actions>
-  </mat-card>
-
+</div>

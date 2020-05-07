@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { AuthenticationRoutingModule } from './authentication-routing.module';
 import { LoginComponent } from './login/login.component';
@@ -12,8 +15,9 @@ import { AngularMaterialModule } from '../shared/angular-material/angular-materi
   imports: [
     CommonModule,
     AuthenticationRoutingModule,
-    //MatCardModule,
-    AngularMaterialModule
+    FlexLayoutModule,
+    AngularMaterialModule,
+    ReactiveFormsModule
   ],
   exports: [
   ]
