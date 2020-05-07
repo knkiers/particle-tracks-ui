@@ -6,10 +6,9 @@
         <h1>Login</h1>
         <!--<mat-card-title class="card-title">Login</mat-card-title>-->
         <mat-card-content>
-            <mat-error *ngIf="loginInvalid">
-                The username and password were not recognised.
+            <mat-error *ngIf="loginInvalid" class="login-error-message">
+                {{signinServerError}}
             </mat-error>
-            {{signinServerError}}
             <form [formGroup]="loginForm" novalidate (ngSubmit)="onSubmit()">
                 <mat-form-field appearance="outline" class="login-formfield">
                     <mat-label>Username</mat-label>

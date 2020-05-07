@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 
-//import { UserService } from '../../shared/services/user.service';
+import { UserService } from '../../shared/services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -16,10 +16,10 @@ export class LoginComponent implements OnInit {
   //      https://scotch.io/tutorials/using-angular-2s-model-driven-forms-with-formgroup-and-formcontrol
 
   public loginForm: FormGroup; // model driven form
-  signinServerError: any;
-  public loginInvalid: boolean;
+  signinServerError: String = '';
+  public loginInvalid: boolean = false;
 
-  constructor(//private userService: UserService,
+  constructor(private userService: UserService,
               private router: Router,
               private fb: FormBuilder,) {}
 
@@ -34,32 +34,39 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     if (this.loginForm.valid){
       this.loginInvalid = false;
-      this.signinServerError = null;//reinitialize it....
+      this.signinServerError = '';//reinitialize it....
       console.log('submitted!', this.loginForm.value.username,this.loginForm.value.password);
-      /*
+      
       this.userService.login(
         this.loginForm.value.username,
         this.loginForm.value.password).subscribe(
         (result) => {
+          console.log('back in the login component! ', result);
+          /*
           this.userService.setUserData(result.token).subscribe(
             result => {
               this.router.navigate(['/events']);
             }
           );
+          */
         },
-        (error) => {
-          let errorDict = JSON.parse(error._body);
-          console.log('there was an error');
-          console.log(errorDict);
+        (errorMessage) => {
+          console.log('back in the login component...there was an error!', errorMessage, typeof errorMessage);
+          this.signinServerError = errorMessage;
+          this.loginInvalid = true;
+        }
+          //let errorDict = JSON.parse(error._body);
+          //console.log('there was an error');
+          //console.log(errorDict);
           // if there are multiple errors, only the last one will be shown;
           // this will allow the user to fix one error at a time, which isn't so bad....
-          for (var key in errorDict) {
-            this.signinServerError = errorDict[key][0];//the text of the error is the only entry in an array....
-            console.log(errorDict[key]);
-          }
+          //for (var key in errorDict) {
+          //  this.signinServerError = errorDict[key][0];//the text of the error is the only entry in an array....
+          //  console.log(errorDict[key]);
           
-        });
-        */
+        )
+        //});
+        
     }
   }
 
