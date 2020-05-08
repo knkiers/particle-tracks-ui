@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 // deprecated: import { Http, Headers } from '@angular/http';
 // Angular 8/9: https://www.positronx.io/angular-8-httpclient-http-tutorial-build-consume-restful-api/
 
@@ -13,10 +13,11 @@ import { Router } from '@angular/router';
 
 import { Observable, Subject, pipe, ObservableInput } from 'rxjs';
 //import { map } from 'rxjs/operators';
-import { throwError } from 'rxjs';
 import { tap, retry, catchError } from 'rxjs/operators';
 
 import { JwtHelperService } from '@auth0/angular-jwt';
+
+import { HttpService } from './http.service';
 
 // NOTE: only using angular2-jwt to decode the jwt; in principle this package could
 //       be used much more extensively
@@ -55,27 +56,10 @@ export class UserService {
   userAnnounced$ = this.userAnnouncedSource.asObservable();
 
   constructor(
+    private httpService: HttpService,
     private http: HttpClient,
     private router: Router
   ) { }
-
-  // Http Headers
-  buildHttpOptions() {
-    return {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      })
-    };
-  }
-
-  buildHttpOptionsSecure(token: string) {
-    return {
-      headers: new HttpHeaders({
-        'Authorization': `JWT ${token}`,//'Bearer ' +token,
-        'Content-Type':'application/json'
-      })
-    };
-  }
 
   /*
   register(username, password, email, firstName, lastName, institutionId): Observable<any> {
@@ -149,7 +133,7 @@ export class UserService {
   // example from: https://www.positronx.io/angular-8-httpclient-http-tutorial-build-consume-restful-api/
   login(username: string, password: string): Observable<any> {
     console.log('inside service: ', username, password);
-    let httpOptions = this.buildHttpOptions();
+    let httpOptions = this.httpService.buildHttpOptions();
     return this.http.post<any>(LoginUrl, JSON.stringify({ username, password }), httpOptions)
       .pipe(
       retry(5),
@@ -157,33 +141,9 @@ export class UserService {
         console.log('here is what we got back: ',res);
         sessionStorage.setItem('auth_token', res.token);
       }),
-      catchError(this.loginErrorHandler)
+      catchError(this.httpService.loginErrorHandler)
     )
   }  
-
-  // https://www.techiediaries.com/angular/angular-9-8-tutorial-by-example-rest-crud-apis-http-get-requests-with-httpclient/
-  // https://developer.okta.com/blog/2020/01/21/angular-material-login
-  loginErrorHandler(error: HttpErrorResponse) {
-    console.log('inside error handler ');
-    let errorMessage = 'Sorry, there was an unknown error.  Please contact the site administrator if the problem persists.';
-    let errorMessageForConsole = '';
-    if (error.error instanceof ErrorEvent) {
-      // Client-side errors
-      console.log('client side error');
-      errorMessageForConsole = `Error: ${error.error.message}`;
-      console.log(errorMessageForConsole);
-    } else {
-      // Server-side errors
-      console.log('server side error');
-      errorMessageForConsole = `Error Code: ${error.status}\nMessage: ${error.message}`;
-      if ((error.status === 400) || (error.status === 401)) {
-        errorMessage = 'Username and password were not recognized.'
-      }
-    }
-    console.log(errorMessageForConsole);
-    return throwError(errorMessage);
-  }
-
 
   /*
   resetPassword(email: string) {
@@ -243,7 +203,7 @@ export class UserService {
   setUserData(authToken: string): Observable<any> {
     let decoded = this.jwtHelper.decodeToken(authToken);//localStorage.getItem('auth_token'));
     let userID = decoded.user_id;
-    let httpOptions = this.buildHttpOptionsSecure(authToken);
+    let httpOptions = this.httpService.buildHttpOptionsSecure(authToken);
     
     // some useful information about map, etc.:
     // https://stackoverflow.com/questions/40029986/how-does-map-subscribe-on-angular2-work
@@ -261,31 +221,9 @@ export class UserService {
         return userData;
         //sessionStorage.setItem('auth_token', res.token);
       }),
-      catchError(this.errorHandler)
+      catchError(this.httpService.errorHandler)
     );
   }
-
-  errorHandler(error: HttpErrorResponse) {
-    console.log('inside error handler ');
-    let errorMessage = 'Sorry, there was an unknown error.  Please contact the site administrator if the problem persists.';
-    let errorMessageForConsole = '';
-    if (error.error instanceof ErrorEvent) {
-      // Client-side errors
-      console.log('client side error');
-      errorMessageForConsole = `Error: ${error.error.message}`;
-      console.log(errorMessageForConsole);
-    } else {
-      // Server-side errors
-      console.log('server side error');
-      errorMessageForConsole = `Error Code: ${error.status}\nMessage: ${error.message}`;
-      if ((error.status === 400) || (error.status === 401)) {
-        errorMessage = 'Username and password were not recognized.'
-      }
-    }
-    console.log(errorMessageForConsole);
-    return throwError(errorMessage);
-  }
-
 
   logout() {
     sessionStorage.removeItem('auth_token');
@@ -338,7 +276,7 @@ export class UserService {
     //https://stackoverflow.com/questions/45286764/angular-httpclient-doesnt-send-header
 
     let authToken = sessionStorage.getItem('auth_token');
-    let httpOptions = this.buildHttpOptionsSecure(authToken);
+    let httpOptions = this.httpService.buildHttpOptionsSecure(authToken);
 
     return this.http.get<any>(
         UsersUrl,
@@ -349,7 +287,7 @@ export class UserService {
           console.log('users: ',users);
           return users;
         }),
-        catchError(this.errorHandler)
+        catchError(this.httpService.errorHandler)
       );
   }
 
@@ -366,7 +304,7 @@ export class UserService {
     // https://blog.hackages.io/angular-http-httpclient-same-but-different-86a50bbcc450
 
     let authToken = sessionStorage.getItem('auth_token');
-    let httpOptions = this.buildHttpOptionsSecure(authToken);
+    let httpOptions = this.httpService.buildHttpOptionsSecure(authToken);
 
     //eventually will be required to switch to HttpClient; then this will be how to set the headers:
     //let headers = new HttpHeaders(); // this is the
@@ -384,7 +322,7 @@ export class UserService {
           console.log('users: ',users);
           return users;
         }),
-        catchError(this.errorHandler)
+        catchError(this.httpService.errorHandler)
       );
   }
   
@@ -423,7 +361,7 @@ export class UserService {
   }
 
   fetchInstitutions() {
-    let httpOptions = this.buildHttpOptions();
+    let httpOptions = this.httpService.buildHttpOptions();
     return this.http
       .get(
         InstitutionsUrl,
@@ -434,7 +372,7 @@ export class UserService {
           console.log('institutions: ', institutions);
           return institutions;
         }),
-        catchError(this.errorHandler)
+        catchError(this.httpService.errorHandler)
       );
   }
 
