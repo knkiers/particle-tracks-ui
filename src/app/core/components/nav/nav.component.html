@@ -1,5 +1,8 @@
 <!-- https://github.com/Robinyo/serendipity -->
-<app-navigation-bar (toggleSidenav)="navigationSidenav.toggle()">
+<app-navigation-bar 
+  (toggleSidenav)="navigationSidenav.toggle()"
+  (logUserOut)="logout()"
+  [isLoggedIn]="isLoggedIn()">
 </app-navigation-bar>
 
 <mat-sidenav-container class="sidenav-container">

@@ -32,6 +32,7 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
+    //console.log('submitted!');
     if (this.loginForm.valid){
       this.loginInvalid = false;
       this.signinServerError = '';//reinitialize it....

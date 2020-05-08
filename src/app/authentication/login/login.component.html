@@ -1,43 +1,53 @@
-<div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="0px" fxLayoutGap.xs="0px">
+<div class="container">
+    <div fxLayout="column">
 
-    <!-- https://developer.okta.com/blog/2020/01/21/angular-material-login ...to be continued.....-->
+        <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="0px" fxLayoutGap.xs="0px">
 
-    <mat-card class="login-card">
-        <h1>Login</h1>
-        <!--<mat-card-title class="card-title">Login</mat-card-title>-->
-        <mat-card-content>
-            <mat-error *ngIf="loginInvalid" class="login-error-message">
-                {{signinServerError}}
-            </mat-error>
-            <form [formGroup]="loginForm" novalidate (ngSubmit)="onSubmit()">
-                <mat-form-field appearance="outline" class="login-formfield">
-                    <mat-label>Username</mat-label>
-                    <input matInput placeholder="Username" type="text" formControlName="username" required>
-                    <mat-error>
-                        Please provide a valid email address
-                    </mat-error>
-                    <!--<mat-icon matSuffix>sentiment_very_satisfied</mat-icon>-->
-                    <!--<mat-hint>Hint</mat-hint>-->
-                </mat-form-field>
+        <!-- https://developer.okta.com/blog/2020/01/21/angular-material-login ...to be continued.....-->
 
-                <mat-form-field type="password" appearance="outline" class="login-formfield">
-                    <mat-label>Password</mat-label>
-                    <input matInput placeholder="Password" type="password" formControlName="password" required>
-                    <mat-error>
-                        Please provide a valid password
-                    </mat-error>
-                    <!--<mat-icon matSuffix>sentiment_very_satisfied</mat-icon>-->
-                    <!--<mat-hint>Hint</mat-hint>-->
-                </mat-form-field>
-                <!--<mat-divider></mat-divider>-->
-                <button mat-button>SUBMIT</button>
-            </form>
-        </mat-card-content>
+        <mat-card class="login-card">
+            <h1>Login</h1>
+            <!--<mat-card-title class="card-title">Login</mat-card-title>-->
+            <mat-card-content>
+                <mat-error *ngIf="loginInvalid" class="login-error-message">
+                    {{signinServerError}}
+                </mat-error>
+                <form [formGroup]="loginForm" novalidate (ngSubmit)="onSubmit()">
+                    <mat-form-field appearance="outline" class="login-formfield">
+                        <mat-label>Username</mat-label>
+                        <input matInput placeholder="Username" type="text" formControlName="username" required>
+                        <mat-error>
+                            Please provide a valid email address
+                        </mat-error>
+                        <!--<mat-icon matSuffix>sentiment_very_satisfied</mat-icon>-->
+                        <!--<mat-hint>Hint</mat-hint>-->
+                    </mat-form-field>
 
-        <!--<mat-divider></mat-divider>
-        <mat-card-actions>
-            <button mat-button>SUBMIT</button>
-        </mat-card-actions>-->
-    </mat-card>
+                    <mat-form-field type="password" appearance="outline" class="login-formfield">
+                        <mat-label>Password</mat-label>
+                        <input matInput placeholder="Password" type="password" formControlName="password" required>
+                        <mat-error>
+                            Please provide a valid password
+                        </mat-error>
+                        <!--<mat-icon matSuffix>sentiment_very_satisfied</mat-icon>-->
+                        <!--<mat-hint>Hint</mat-hint>-->
+                    </mat-form-field>
+                    <!--<mat-divider></mat-divider>-->
+                    <!-- https://stackoverflow.com/questions/32062051/how-to-make-submit-button-disabled -->
+                    <button mat-button
+                        [disabled]="loginForm.invalid && (loginForm.touched || loginForm.dirty)">SUBMIT</button>
+                </form>
+            </mat-card-content>
+        </mat-card>
 
+    </div>
+    <div fxLayout="row" fxLayoutAlign="center" class="have-an-account">
+        <h1>Don't have an account?</h1>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="center">
+        <button mat-stroked-button mat-large color="primary">Sign Up</button>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="center" class="have-an-account">
+        <a>Forgot your password?</a>
+    </div>
 </div>

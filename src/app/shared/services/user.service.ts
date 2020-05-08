@@ -251,7 +251,7 @@ export class UserService {
     
     // some useful information about map, etc.:
     // https://stackoverflow.com/questions/40029986/how-does-map-subscribe-on-angular2-work
-    return this.http.get<any>(
+    return this.http.get<User>(
       UsersUrl + userID + "/",
       httpOptions
     )
@@ -328,8 +328,7 @@ export class UserService {
     }
   }
 
-  /*
-  fetchUsers() {
+  fetchUsers(): Observable<any>  {
 
     if (this.tokenExpired()) {
       this.router.navigate(['/login']);
@@ -342,26 +341,23 @@ export class UserService {
 
     //https://stackoverflow.com/questions/45286764/angular-httpclient-doesnt-send-header
 
-    let headers = new Headers();
     let authToken = sessionStorage.getItem('auth_token');
-    headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', `JWT ${authToken}`);
+    let httpOptions = this.buildHttpOptionsSecure(authToken);
 
-    //eventually will be required to switch to HttpClient; then this will be how to set the headers:
-    //let headers = new HttpHeaders(); // this is the
-    //headers = headers.set('Content-Type', 'application/json').set('Authorization', `JWT ${authToken}`);
-
-    return this.http
-      .get(
+    return this.http.get<any>(
         UsersUrl,
-        { headers }
+        httpOptions
       )
       .pipe(
-        map(res => res.json())
+        tap(users => {
+          console.log('users: ',users);
+          return users;
+        }),
+        catchError(this.errorHandler)
       );
   }
 
-  fetchUsersThisInstitution() {
+  fetchUsersThisInstitution(): Observable<any> {
     if (this.tokenExpired()) {
       this.router.navigate(['/login']);
     }
@@ -373,10 +369,8 @@ export class UserService {
 
     // https://blog.hackages.io/angular-http-httpclient-same-but-different-86a50bbcc450
 
-    let headers = new Headers();
     let authToken = sessionStorage.getItem('auth_token');
-    headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', `JWT ${authToken}`);
+    let httpOptions = this.buildHttpOptionsSecure(authToken);
 
     //eventually will be required to switch to HttpClient; then this will be how to set the headers:
     //let headers = new HttpHeaders(); // this is the
@@ -387,13 +381,17 @@ export class UserService {
     return this.http
       .get(
         UsersThisInstitutionUrl,
-        { headers: headers }
+        httpOptions
       )
       .pipe(
-        map(res => res.json())
+        tap(users => {
+          console.log('users: ',users);
+          return users;
+        }),
+        catchError(this.errorHandler)
       );
   }
-  */
+  
 
   /*
   fetchUser(userId: number) {
@@ -428,22 +426,21 @@ export class UserService {
     this.userAnnouncedSource.next(user);
   }
 
-  /*
   fetchInstitutions() {
-    let headers = new Headers();
-
-    headers.append('Content-Type', 'application/json');
-
+    let httpOptions = this.buildHttpOptions();
     return this.http
       .get(
         InstitutionsUrl,
-        { headers }
+        httpOptions
       )
       .pipe(
-        map(res => res.json())
+        tap(institutions => {
+          console.log('institutions: ', institutions);
+          return institutions;
+        }),
+        catchError(this.errorHandler)
       );
   }
-  */
 
 
 }

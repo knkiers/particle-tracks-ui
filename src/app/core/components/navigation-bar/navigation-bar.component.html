@@ -10,8 +10,8 @@
 
   <!-- This fills the remaining space of the current row -->
     <span class="fill-space"></span>
-
-    <span>
+    <span>logged in?: {{isLoggedIn}}</span>
+    <span *ngIf="isLoggedIn">
         <button mat-menu-item (click)="logout()">
             <mat-icon>exit_to_app</mat-icon>
             Sign out
@@ -19,49 +19,6 @@
     </span>
     
     <span>Right Aligned Text</span>
-
-  <!--
-      <div fxFlex fxLayout fxLayoutAlign="flex-end">
-  
-        <ul fxLayout fxLayoutGap="20px" class="navigation-items">
-
-            <li fxHide.xs>
-              <button mat-icon-button>
-                <mat-icon>settings</mat-icon>
-              </button>
-            </li>
-    
-            <li fxHide.xs>
-              <button mat-icon-button>
-                <mat-icon>help_outline</mat-icon>
-              </button>
-            </li>
-    
-            <li>
-              <button mat-icon-button [matMenuTriggerFor]="auth">
-                <mat-icon>person_outline</mat-icon>
-              </button>
-              <mat-menu #auth="matMenu">
-    
-                <button mat-menu-item (click)="onProfile()">
-                  <mat-icon>person_outline</mat-icon>
-                  <span>Profile</span>
-                </button>
-    
-                <mat-divider></mat-divider>
-    
-                <button mat-menu-item (click)="logout()">
-                  <mat-icon>exit_to_app</mat-icon>
-                  <span>Sign out</span>
-                </button>
-    
-              </mat-menu>
-            </li>
-    
-          </ul>
-  
-      </div>
-    -->
   
     </mat-toolbar-row>
   
