@@ -44,14 +44,9 @@ import { UpdateUserData } from '../interfaces/update-user-data';
 })
 export class UserService {
 
-
-  //jwtHelper: JwtHelper = new JwtHelper();
-
   jwtHelper = new JwtHelperService();
 
   currentUser: User = null;
-
-  //private loggedIn = false;
 
   // Observable user source
   private userAnnouncedSource = new Subject<User>();
@@ -151,6 +146,7 @@ export class UserService {
   }  
   */
 
+  // example from: https://www.positronx.io/angular-8-httpclient-http-tutorial-build-consume-restful-api/
   login(username: string, password: string): Observable<any> {
     console.log('inside service: ', username, password);
     let httpOptions = this.buildHttpOptions();
