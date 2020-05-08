@@ -1,15 +1,18 @@
 import { Injectable } from '@angular/core';
 
 // deprecated: import {Http, Response, Headers} from '@angular/http';
-import {Router} from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
-import {Subject, Observable, pipe, forkJoin } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Subject, Observable, pipe, forkJoin } from 'rxjs';
+// not used: import { map } from 'rxjs/operators';
+import { tap, retry, catchError } from 'rxjs/operators';
 
-import {AnalyzedEventsUrl, UserEventsUrl} from './urls';
+import { AnalyzedEventsUrl, UserEventsUrl } from './urls';
 
-import {UnitConversionService} from './unit-conversion.service';
-import {UserService} from './user.service';
+import { UnitConversionService } from './unit-conversion.service';
+import { UserService } from './user.service';
+import { HttpService } from './http.service';
 
 @Injectable()
 export class EventAnalysisService {
@@ -22,10 +25,12 @@ export class EventAnalysisService {
   tokenExpired$ = this.tokenExpiredSource.asObservable();
   analysisDisplayClosed$ = this.analysisDisplayClosedSource.asObservable();
 
-  constructor(private http:Http,
-              private unitConversionService:UnitConversionService,
-              private router: Router,
-              private userService: UserService) {}
+  constructor(
+    private httpService: HttpService,
+    private http: HttpClient,
+    private unitConversionService: UnitConversionService,
+    private router: Router,
+    private userService: UserService) { }
 
   /*
    looks at the 'gridItemList' array and determines which have been selected for fitting a circle;
@@ -47,8 +52,8 @@ export class EventAnalysisService {
       circleDataPx = this.unitConversionService.translateCircleDatatoPixels(circleDatacm, boundaries, dotIndices);
     }
     dataDict = {
-      circle:      circleDataPx,
-      error:        error,
+      circle: circleDataPx,
+      error: error,
       errorMessage: errorMessage
     };
     return dataDict;
@@ -71,22 +76,23 @@ export class EventAnalysisService {
     var i;
     var circleData;
 
-    if (nMax < 3 ) {
-      circleData = {xc: 0, yc: 0, r: 0,
+    if (nMax < 3) {
+      circleData = {
+        xc: 0, yc: 0, r: 0,
         error: true,
         errorMessage: 'You must choose at least three points.'
       };
       return circleData;
     }
 
-    for (i=0; i < nMax; i++) {
+    for (i = 0; i < nMax; i++) {
       uList.push(data.x[i] - xBar);
       vList.push(data.y[i] - yBar);
     }
 
-    var Suu =  this.SCalculator([uList, uList]);
-    var Svv =  this.SCalculator([vList, vList]);
-    var Suv =  this.SCalculator([uList, vList]);
+    var Suu = this.SCalculator([uList, uList]);
+    var Svv = this.SCalculator([vList, vList]);
+    var Suv = this.SCalculator([uList, vList]);
     var Suuu = this.SCalculator([uList, uList, uList]);
     var Svvv = this.SCalculator([vList, vList, vList]);
     var Suvv = this.SCalculator([uList, vList, vList]);
@@ -94,19 +100,20 @@ export class EventAnalysisService {
 
     var mInv = this.inverseTwoByTwo([[Suu, Suv], [Suv, Svv]]);
     if (mInv.error) {
-      circleData = {xc: 0, yc: 0, r: 0,
+      circleData = {
+        xc: 0, yc: 0, r: 0,
         error: true,
         errorMessage: 'You must choose non-colinear points.'
       };
     } else {
       var inverseMatrix = mInv.inverse;
-      var coeffs = [(Suuu+Suvv)/2, (Svvv+Svuu)/2];
-      var uc = inverseMatrix[0][0]*coeffs[0]+inverseMatrix[0][1]*coeffs[1];
-      var vc = inverseMatrix[1][0]*coeffs[0]+inverseMatrix[1][1]*coeffs[1];
+      var coeffs = [(Suuu + Suvv) / 2, (Svvv + Svuu) / 2];
+      var uc = inverseMatrix[0][0] * coeffs[0] + inverseMatrix[0][1] * coeffs[1];
+      var vc = inverseMatrix[1][0] * coeffs[0] + inverseMatrix[1][1] * coeffs[1];
       var xc = uc + xBar;
       var yc = vc + yBar;
-      var r = Math.sqrt(uc*uc + vc*vc + (Suu+Svv)/nMax);
-      circleData = {xc: xc, yc: yc, r: r, error: false, errorMessage: ''};
+      var r = Math.sqrt(uc * uc + vc * vc + (Suu + Svv) / nMax);
+      circleData = { xc: xc, yc: yc, r: r, error: false, errorMessage: '' };
     }
     return circleData;
   }
@@ -114,10 +121,10 @@ export class EventAnalysisService {
   mean(list) {
     var total = 0;
     var i;
-    for (i=0; i<list.length; i++) {
+    for (i = 0; i < list.length; i++) {
       total += list[i];
     }
-    return total/list.length;
+    return total / list.length;
   }
 
   /*
@@ -130,10 +137,10 @@ export class EventAnalysisService {
     var sublistLengths = listOfLists[0].length; //they'd better be the same length!
     var total = 0;
     var product;
-    for (j=0; j < sublistLengths; j++){
+    for (j = 0; j < sublistLengths; j++) {
       product = 1;
-      for (i=0; i < numLists; i++){
-        product = product*listOfLists[i][j];
+      for (i = 0; i < numLists; i++) {
+        product = product * listOfLists[i][j];
       }
       total += product;
     }
@@ -145,7 +152,7 @@ export class EventAnalysisService {
    *
    */
   inverseTwoByTwo(matrix) {
-    var a,b,c,d;
+    var a, b, c, d;
     var eps = 0.000000001;
     var error = false;
     var returnObject;
@@ -153,7 +160,7 @@ export class EventAnalysisService {
     b = matrix[0][1];
     c = matrix[1][0];
     d = matrix[1][1];
-    var det = a*d - b*c;
+    var det = a * d - b * c;
     if (Math.abs(det) < eps) {
       returnObject = {
         error: true,
@@ -161,7 +168,7 @@ export class EventAnalysisService {
       };
       return returnObject;
     } else {
-      var inverse = [[d/det, -b/det],[-c/det, a/det]];
+      var inverse = [[d / det, -b / det], [-c / det, a / det]];
       returnObject = {
         error: false,
         inverse: inverse
@@ -199,40 +206,42 @@ export class EventAnalysisService {
   computeTangentAngle(axisLocation, circle) {
     var theta;
     var PI = Math.acos(-1);
-    var phi = Math.atan2(axisLocation.y-circle.yc, axisLocation.x-circle.xc);
+    var phi = Math.atan2(axisLocation.y - circle.yc, axisLocation.x - circle.xc);
     if (!circle.CW) {
-      theta = (phi+PI/2+2*PI) % (2*PI);
+      theta = (phi + PI / 2 + 2 * PI) % (2 * PI);
     } else {
-      theta = (phi+3*PI/2+2*PI) % (2*PI);
+      theta = (phi + 3 * PI / 2 + 2 * PI) % (2 * PI);
     }
     return theta;
   }
 
-
-
   saveAnalyzedEvent(title: string, data) {
-    let headers = new Headers();
     let authToken = sessionStorage.getItem('auth_token');
-    let eventData = JSON.stringify(data);
+    let httpOptions = this.httpService.buildHttpOptionsSecure(authToken);
 
-    headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', `JWT ${authToken}`);
+    let eventData = JSON.stringify(data);
 
     if (this.userService.tokenExpired()) {
       this.router.navigate(['/login']);
     }
 
     return this.http
-      .post(
+      .post<any>(
         AnalyzedEventsUrl,
         JSON.stringify({
           'title': title,
           'event_data': eventData
         }),
-        { headers }
+        httpOptions
       )
       .pipe(
-        map(res => res.json())
+        retry(1),
+        tap(response => {
+          console.log('new event: ', response);
+          return response;
+          //sessionStorage.setItem('auth_token', res.token);
+        }),
+        catchError(this.httpService.errorHandler)
       );
   }
 
@@ -241,40 +250,45 @@ export class EventAnalysisService {
    * @returns {Observable<R>}
    */
   getAnalyzedEvents() {
-    let headers = new Headers();
     let authToken = sessionStorage.getItem('auth_token');
-
-    headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', `JWT ${authToken}`);
+    let httpOptions = this.httpService.buildHttpOptionsSecure(authToken);
 
     if (this.userService.tokenExpired()) {
       this.router.navigate(['/login']);
     }
 
     return this.http
-      .get(UserEventsUrl, {headers})
+      .get<any>(UserEventsUrl, httpOptions)
       .pipe(
-        map(response => response.json())
+        retry(1),
+        tap(response => {
+          console.log('new event: ', response);
+          return response;
+          //sessionStorage.setItem('auth_token', res.token);
+        }),
+        catchError(this.httpService.errorHandler)
       );
-
   }
 
   getAnalyzedEvent(id: number) {
-    let headers = new Headers();
     let authToken = sessionStorage.getItem('auth_token');
-    headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', `JWT ${authToken}`);
+    let httpOptions = this.httpService.buildHttpOptionsSecure(authToken);
 
     if (this.userService.tokenExpired()) {
       this.router.navigate(['/login']);
     }
 
     return this.http
-      .get(AnalyzedEventsUrl+id+'/', {headers})
+      .get<any>(AnalyzedEventsUrl + id + '/', httpOptions)
       .pipe(
-        map(response => response.json())
+        retry(1),
+        tap(response => {
+          console.log('new event: ', response);
+          return response;
+          //sessionStorage.setItem('auth_token', res.token);
+        }),
+        catchError(this.httpService.errorHandler)
       );
-
   }
 
   /**
@@ -289,10 +303,8 @@ export class EventAnalysisService {
    *
    */
   getAnalyzedUserEvents(idList: number[]): Observable<Array<any>> {
-    let headers = new Headers();
     let authToken = sessionStorage.getItem('auth_token');
-    headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', `JWT ${authToken}`);
+    let httpOptions = this.httpService.buildHttpOptionsSecure(authToken);
 
     if (this.userService.tokenExpired()) {
       this.router.navigate(['/login']);
@@ -302,20 +314,23 @@ export class EventAnalysisService {
     idList.forEach(id => {
       observableBatch.push(
         this.http
-          .get(AnalyzedEventsUrl+id+'/', {headers})
+          .get<any>(AnalyzedEventsUrl + id + '/', httpOptions)
           .pipe(
-            map(response => response.json())
+            retry(1),
+            tap(response => {
+              console.log('new event: ', response);
+              return response;
+              //sessionStorage.setItem('auth_token', res.token);
+            }),
+            catchError(this.httpService.errorHandler)
           ));
     });
     return forkJoin(observableBatch);
   }
 
   submitAnalyzedEvent(id, submit: boolean) {
-    let headers = new Headers();
     let authToken = sessionStorage.getItem('auth_token');
-
-    headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', `JWT ${authToken}`);
+    let httpOptions = this.httpService.buildHttpOptionsSecure(authToken);
 
     if (this.userService.tokenExpired()) {
       this.tokenExpiredSource.next(null);
@@ -323,17 +338,23 @@ export class EventAnalysisService {
     }
 
     return this.http
-      .patch(
-        AnalyzedEventsUrl+id+'/',
+      .patch<any>(
+        AnalyzedEventsUrl + id + '/',
         JSON.stringify({
           //'title': title,
           //'event_data': eventData,
           'submitted': submit
         }),
-        { headers }
+        httpOptions
       )
       .pipe(
-        map(res => res.json())
+        retry(1),
+        tap(response => {
+          console.log('new event: ', response);
+          return response;
+          //sessionStorage.setItem('auth_token', res.token);
+        }),
+        catchError(this.httpService.errorHandler)
       );
   }
 

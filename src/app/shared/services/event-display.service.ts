@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subject, Observable, pipe } from 'rxjs';
 // note used: import { map } from 'rxjs/operators';
 
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { throwError } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { tap, retry, catchError } from 'rxjs/operators';
 
 import { Router } from '@angular/router';
@@ -68,12 +67,6 @@ export class EventDisplayService {
     this.gridActivationAnnouncedSource.next(gridIndices);
   }
 
-  //  getEvent() {
-  //    console.log(EventUrl);
-  //    this.http
-  //      .get(EventUrl)
-  //      .map((response:Response) => response.json());
-  //  }
   getStringEventDisplay(bFieldStrength, bFieldDirection,
     dots,
     boundaries, interactionLocation,
