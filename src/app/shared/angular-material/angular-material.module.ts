@@ -18,6 +18,7 @@ import { MatListModule } from '@angular/material/list';
 
 
 import { MatCardModule } from '@angular/material/card';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 // Forms
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -31,6 +32,7 @@ const modules: any[] = [
   MatIconModule,
   MatListModule,
   MatCardModule,
+  MatExpansionModule,
   MatFormFieldModule,
   MatInputModule
 ]

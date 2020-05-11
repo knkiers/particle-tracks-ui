@@ -9,9 +9,10 @@ import { EndUserComponent } from './end-user.component';
 import { AngularMaterialModule } from '../shared/angular-material/angular-material.module';
 import { AnalysisDisplayComponent } from './analysis-display/analysis-display.component';
 import { CircleItemComponent } from './circle-item/circle-item.component';
+import { CircleTableComponent } from './circle-table/circle-table.component';
 
 @NgModule({
-  declarations: [EndUserComponent, AnalysisDisplayComponent, CircleItemComponent],
+  declarations: [EndUserComponent, AnalysisDisplayComponent, CircleItemComponent, CircleTableComponent],
   imports: [
     CommonModule,
     EndUserRoutingModule,

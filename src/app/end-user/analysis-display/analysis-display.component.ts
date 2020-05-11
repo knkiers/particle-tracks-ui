@@ -15,6 +15,7 @@ import { CircleBindingService } from '../circle-binding.service';
 
 import {Event} from '../../shared/models/event';
 import { Dot } from '../../shared/models/dot';
+import { Circle } from '../../shared/models/circle';
 
 import { POINT_THREE, R_MIN, R_MAX, B_MAX} from '../../shared/services/unit-conversion.service';
 
@@ -62,7 +63,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   private svgRegion: any;
 
   dots: Dot[] = [];
-  circles = [];
+  circles: Circle[] = [];
   private numberCircles = 0;
   boundaries: any;
   momentumDiagramBoundaries: any;
@@ -107,6 +108,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       });
     this.circleSubscription = circleBindingService.circleUpdated$.subscribe(
       updateData=> {
+        console.log('circle subscription!!!!!!!!!!');
         this.editCircleProperty(updateData);
         this.updateCircleTangentAngles();
         this.circleChange = -this.circleChange;
@@ -419,7 +421,8 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       this.openCircleErrorModal();
     }
     if (!dataDict.error){
-      this.circles.push(dataDict.circle);
+      this.circles.push(new Circle(dataDict.circle));
+      console.log('circles: ', this.circles);
       this.clearDotsForFit();
       this.numberCircles = this.circles.length;
       //console.log(this.numberCircles);
@@ -470,7 +473,10 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
    */
 
 
+  
   hoverCircle(i: number) {
+    console.log('hover circle');
+    /*
     if (this.circles[i]!==undefined) {// in case the circle was deleted in the meantime, or something
       this.circles[i].hovered = true;
       this.clearDotsForFit();
@@ -480,16 +486,22 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
         //this.selectDotByIndex(dotIndex);
       }
     }
+    */
   }
 
   unhoverCircle(i: number) {
+    console.log('unhover circle');
+    /*
     if (this.circles[i]!==undefined) {// in case the circle was deleted in the meantime, or something
       this.circles[i].hovered = false;
       this.clearDotsForFit();
     }
+    */
   }
 
   deleteCircle(i: number) {
+    console.log('delete circle');
+    /*
     if (this.circles[i]!==undefined) {// in case the circle was deleted in the meantime, or something
       this.circles.splice(i,1);
       this.numberCircles = this.circles.length;
@@ -501,15 +513,21 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
         this.circleChange = -this.circleChange;
       }
     }
+    */
   }
 
   toggleCircleRotationDirection(i: number) {
+    console.log('toggle circle rotation');
+    /*
     if (this.circles[i]!==undefined) {// in case the circle was deleted in the meantime, or something
       this.circles[i].CW = !this.circles[i].CW;
     }
+    */
   }
 
   updateCircleTangentAngles() {
+    console.log('update circle tangent angles');
+    /*
     if (!this.showAxes) {
       for (let i in this.circles) {
         this.circles[i].theta = null;
@@ -520,7 +538,9 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
         this.circles[i].theta = theta;
       }
     }
+    */
   }
+  
 
   /*
   addCircleTangentAngles() {
@@ -687,6 +707,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
 
   openCircleErrorModal() {
     //this.modalCircleActions.emit({action:"modal",params:['open']});
+    console.log('open circle error modal');
   }
 
   closeAnalysisDisplay() {

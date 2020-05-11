@@ -1,6 +1,7 @@
 <div class="container">
-
-    <mat-card class="example-card">
+    <div fxLayout="row" fxLayoutAlign="space-around center" >
+        <div fxFlex="40%">
+    <mat-card >
         <mat-card-header>
             <mat-card-title class="card-title-container">
                 <span *ngIf="!noEventRetrieved && event !== null; else no_event_container">
@@ -57,6 +58,12 @@
                             stroke-dasharray="10, 5" stroke-width="3">
                         </path>
                     </g>
+                    <g *ngFor="let circle of circles">
+                        <circle [attr.r]="circle.rPx" [attr.cx]="circle.xcPx" [attr.cy]="circle.ycPx"
+                            [attr.stroke-width]="2" stroke-dasharray="3, 7, 10, 7" [attr.stroke]="'grey'" fill="none">
+                        </circle>
+                    </g>
+
 
                     <!--
                   <g *ngFor="let circle of circles" app-circle-item
@@ -64,10 +71,7 @@
                   </g>
                 -->
                     <!--
-                  <g *ngIf="eventDisplay && ((!editModeOn)||revealEvent)" app-event
-                     [eventDisplay]="eventDisplay"
-                     [dots]="dots">
-                  </g>
+                  
         
                   <g *ngIf="eventDisplay && editModeOn && showAxes" app-axis
                      [boundaries]="boundaries"
@@ -101,7 +105,26 @@
         -->
 
 
-            <button mat-stroked-button color="primary" (click)="fetchNewEvent()">Get Event</button>
+            <div *ngIf="!userIsReadOnly">
+                <div *ngIf="!editModeOn">
+                    <button mat-stroked-button color="primary" (click)="fetchNewEvent()">Get Event</button>
+                    <button *ngIf="event" mat-stroked-button color="primary" (click)="turnOnEditMode()">Analyze This
+                        Event</button>
+                </div>
+                <div *ngIf="editModeOn">
+                    <button *ngIf="!userIsReadOnly" mat-stroked-button color="primary" (click)="addCircle()">Add
+                        Circle</button>
+                    <button *ngIf="!userIsReadOnly" mat-stroked-button color="primary" (mouseenter)="showEvent()"
+                        (mouseout)="hideEvent()">
+                        Show Event
+                    </button>
+
+                </div>
+            </div>
+
+           
+
+        
 
 
         </mat-card-content>
@@ -191,4 +214,27 @@
 
 
     <button mat-stroked-button color="primary" (click)="fetchNewEvent()">Get Event</button>
+
+
+
+    <!--<div fxLayout="column">-->
+        <div fxLayout="row" fxLayoutAlign="space-around center" >
+        
+            <div fxFlex="20%">
+                one
+            </div>
+            <div fxFlex="60%">
+                two
+            </div>
+            <div fxFlex>
+                three
+            </div>
+        
+        <!--</div>-->space-around
+
+
+
+
+
+
 </div>

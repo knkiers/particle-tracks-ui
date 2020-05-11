@@ -155,7 +155,8 @@ export class UnitConversionService {
       (y-boundaries.ymin)*(boundaries.yminPx-boundaries.ymaxPx)/
       (boundaries.ymax-boundaries.ymin);
 
-    var pixelCoordsString = {'x': xPx.toString(), 'y': yPx.toString()};
+    //var pixelCoordsString = {'x': xPx.toString(), 'y': yPx.toString()};
+    var pixelCoordsString = {'x': xPx, 'y': yPx};
     return pixelCoordsString;
   }
 
