@@ -1,36 +1,39 @@
 <div class="container">
-    <div fxLayout="row" fxLayoutAlign="space-around center" >
-        <div fxFlex="40%">
-    <mat-card >
-        <mat-card-header>
-            <mat-card-title class="card-title-container">
-                <span *ngIf="!noEventRetrieved && event !== null; else no_event_container">
-                    <span [innerHTML]="event.name">
-                    </span>
-                </span>
-                <ng-template #no_event_container>
-                    <span *ngIf="noEventRetrieved">
-                        No Process Selected
-                    </span>
-                </ng-template>
-            </mat-card-title>
-            <mat-card-subtitle>
-                <span *ngIf="!noEventRetrieved">
-                    B = {{bFieldStrength}} kG
-                </span>
-            </mat-card-subtitle>
-        </mat-card-header>
+    <div fxLayout="row" fxLayoutAlign="space-around center">
+        <div fxFlex.gt-sm="800px">
+            <mat-card class="example-card">
+                <mat-card-header>
+                    <mat-card-title class="card-title-container">
+                        <span *ngIf="!noEventRetrieved && event !== null; else no_event_container">
+                            <span [innerHTML]="event.name">
+                            </span>
+                        </span>
+                        <ng-template #no_event_container>
+                            <span *ngIf="noEventRetrieved">
+                                No Process Selected
+                            </span>
+                        </ng-template>
+                    </mat-card-title>
+                    <mat-card-subtitle>
+                        <span *ngIf="!noEventRetrieved">
+                            B = {{bFieldStrength}} kG
+                        </span>
+                    </mat-card-subtitle>
+                </mat-card-header>
 
-        <mat-card-content>
+                <mat-card-content>
+                    <div fxLayout="row" fxLayoutAlign="space-around center">
+                        <div fxFlex="60%">
+                            <div fxLayout="row" fxLayoutAlign="space-around center">
+                                <div *ngIf="boundaries && dots">
+                                    <svg [attr.height]="boundaries.height" [attr.width]="boundaries.width">
+                                        <rect [attr.x]="boundaries.xminPx" [attr.y]="boundaries.ymaxPx"
+                                            [attr.width]="boundaries.widthDisplay"
+                                            [attr.height]="boundaries.heightDisplay"
+                                            style="fill:blue;stroke:grey;stroke-width:5;fill-opacity:0.1;stroke-opacity:0.9" />
 
-            <div *ngIf="boundaries && dots">
-                <svg [attr.height]="boundaries.height" [attr.width]="boundaries.width">
-                    <rect [attr.x]="boundaries.xminPx" [attr.y]="boundaries.ymaxPx"
-                        [attr.width]="boundaries.widthDisplay" [attr.height]="boundaries.heightDisplay"
-                        style="fill:blue;stroke:grey;stroke-width:5;fill-opacity:0.1;stroke-opacity:0.9" />
 
-
-                    <!--
+                                        <!--
                     <g *ngFor="let dot of dots" app-grid-item
                         [colourModeOn]="colourModeOn"
                         [params]="dot"
@@ -38,39 +41,41 @@
                         (dotDeselected)="dotDeselected($event)" >
                 </g>
             -->
-                    <g *ngFor="let dot of dots">
-                        <circle (mouseover)="dot.checkDot(colourModeOn)" [attr.r]="dot.findRadius()" [attr.cx]="dot.x"
-                            [attr.cy]="dot.y" [attr.stroke-width]="dot.findStrokeWidth()" stroke="red" fill="grey">
-                        </circle>
-                    </g>
+                                        <g *ngFor="let dot of dots">
+                                            <circle (mouseover)="dot.checkDot(colourModeOn)" [attr.r]="dot.findRadius()"
+                                                [attr.cx]="dot.x" [attr.cy]="dot.y"
+                                                [attr.stroke-width]="dot.findStrokeWidth()" stroke="red" fill="grey">
+                                            </circle>
+                                        </g>
 
-                    <g *ngIf="eventDisplay && ((!editModeOn)||revealEvent)">
-                        <path *ngIf="eventDisplay" [attr.d]="eventDisplay.inCharged" stroke="green" stroke-width="3"
-                            fill="none">
-                        </path>
-                        <path *ngIf="eventDisplay" [attr.d]="eventDisplay.inNeutral" stroke="green"
-                            stroke-dasharray="10, 5" stroke-width="3">
-                        </path>
-                        <path *ngIf="eventDisplay" [attr.d]="eventDisplay.outCharged" stroke="grey" stroke-width="3"
-                            fill="none">
-                        </path>
-                        <path *ngIf="eventDisplay" [attr.d]="eventDisplay.outNeutral" stroke="grey"
-                            stroke-dasharray="10, 5" stroke-width="3">
-                        </path>
-                    </g>
-                    <g *ngFor="let circle of circles">
-                        <circle [attr.r]="circle.rPx" [attr.cx]="circle.xcPx" [attr.cy]="circle.ycPx"
-                            [attr.stroke-width]="2" stroke-dasharray="3, 7, 10, 7" [attr.stroke]="'grey'" fill="none">
-                        </circle>
-                    </g>
+                                        <g *ngIf="eventDisplay && ((!editModeOn)||revealEvent)">
+                                            <path *ngIf="eventDisplay" [attr.d]="eventDisplay.inCharged" stroke="green"
+                                                stroke-width="3" fill="none">
+                                            </path>
+                                            <path *ngIf="eventDisplay" [attr.d]="eventDisplay.inNeutral" stroke="green"
+                                                stroke-dasharray="10, 5" stroke-width="3">
+                                            </path>
+                                            <path *ngIf="eventDisplay" [attr.d]="eventDisplay.outCharged" stroke="grey"
+                                                stroke-width="3" fill="none">
+                                            </path>
+                                            <path *ngIf="eventDisplay" [attr.d]="eventDisplay.outNeutral" stroke="grey"
+                                                stroke-dasharray="10, 5" stroke-width="3">
+                                            </path>
+                                        </g>
+                                        <g *ngFor="let circle of circles">
+                                            <circle [attr.r]="circle.rPx" [attr.cx]="circle.xcPx"
+                                                [attr.cy]="circle.ycPx" [attr.stroke-width]="2"
+                                                stroke-dasharray="3, 7, 10, 7" [attr.stroke]="'grey'" fill="none">
+                                            </circle>
+                                        </g>
 
 
-                    <!--
+                                        <!--
                   <g *ngFor="let circle of circles" app-circle-item
                      [params]="circle">
                   </g>
                 -->
-                    <!--
+                                        <!--
                   
         
                   <g *ngIf="eventDisplay && editModeOn && showAxes" app-axis
@@ -89,11 +94,16 @@
 
 
 
-                </svg>
+                                    </svg>
 
+                                </div>
+                            </div>
+                        </div>
+                        <div fxFlex="40%">
+                            adsfasdf
+                        </div>
 
-            </div>
-            <!--
+                        <!--
             <div *ngFor="let dot of dots">
                 <app-grid-item
                 [colourModeOn]="colourModeOn"
@@ -103,36 +113,41 @@
                 </app-grid-item> 
             </div>
         -->
+                    </div>
+
+                    <div *ngIf="!userIsReadOnly">
+                        <div *ngIf="!editModeOn">
+                            <button mat-stroked-button color="primary" (click)="fetchNewEvent()">Get Event</button>
+                            <button *ngIf="event" mat-stroked-button color="primary" (click)="turnOnEditMode()">Analyze
+                                This
+                                Event</button>
+                        </div>
+                        <div *ngIf="editModeOn">
+                            <button *ngIf="!userIsReadOnly" mat-stroked-button color="primary" (click)="addCircle()">Add
+                                Circle</button>
+                            <button *ngIf="!userIsReadOnly" mat-stroked-button color="primary"
+                                (mouseenter)="showEvent()" (mouseout)="hideEvent()">
+                                Show Event
+                            </button>
+
+                        </div>
+                    </div>
 
 
-            <div *ngIf="!userIsReadOnly">
-                <div *ngIf="!editModeOn">
-                    <button mat-stroked-button color="primary" (click)="fetchNewEvent()">Get Event</button>
-                    <button *ngIf="event" mat-stroked-button color="primary" (click)="turnOnEditMode()">Analyze This
-                        Event</button>
-                </div>
-                <div *ngIf="editModeOn">
-                    <button *ngIf="!userIsReadOnly" mat-stroked-button color="primary" (click)="addCircle()">Add
-                        Circle</button>
-                    <button *ngIf="!userIsReadOnly" mat-stroked-button color="primary" (mouseenter)="showEvent()"
-                        (mouseout)="hideEvent()">
-                        Show Event
-                    </button>
-
-                </div>
-            </div>
-
-           
-
-        
 
 
-        </mat-card-content>
-        <mat-card-actions>
-            <button mat-button>LIKE</button>
-            <button mat-button>SHARE</button>
-        </mat-card-actions>
-    </mat-card>
+
+
+                </mat-card-content>
+                <mat-card-actions>
+                    <button mat-button>LIKE</button>
+                    <button mat-button>SHARE</button>
+                </mat-card-actions>
+            </mat-card>
+
+        </div>
+    </div>
+
 
     <span *ngIf="event">
         <span [innerHTML]="event.name">
@@ -218,18 +233,18 @@
 
 
     <!--<div fxLayout="column">-->
-        <div fxLayout="row" fxLayoutAlign="space-around center" >
-        
-            <div fxFlex="20%">
-                one
-            </div>
-            <div fxFlex="60%">
-                two
-            </div>
-            <div fxFlex>
-                three
-            </div>
-        
+    <div fxLayout="row" fxLayoutAlign="space-around center">
+
+        <div fxFlex="20%">
+            one
+        </div>
+        <div fxFlex="60%">
+            two
+        </div>
+        <div fxFlex>
+            three
+        </div>
+
         <!--</div>-->space-around
 
 
@@ -237,4 +252,4 @@
 
 
 
-</div>
+    </div>
