@@ -16,7 +16,9 @@ import { UnitConversionService } from './unit-conversion.service';
 import { UserService } from './user.service';
 import { HttpService } from './http.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class EventDisplayService {
 
   // Observable source
@@ -54,7 +56,7 @@ export class EventDisplayService {
       .pipe(
         retry(1),
         tap(response => {
-          console.log('new event: ', response);
+          console.log('new event: ', response, typeof response);
           return response;
           //sessionStorage.setItem('auth_token', res.token);
         }),

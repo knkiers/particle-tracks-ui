@@ -14,7 +14,9 @@ import { UnitConversionService } from './unit-conversion.service';
 import { UserService } from './user.service';
 import { HttpService } from './http.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class EventAnalysisService {
 
   // Observable sources

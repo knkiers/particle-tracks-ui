@@ -1,0 +1,194 @@
+<div class="container">
+
+    <mat-card class="example-card">
+        <mat-card-header>
+            <mat-card-title class="card-title-container">
+                <span *ngIf="!noEventRetrieved && event !== null; else no_event_container">
+                    <span [innerHTML]="event.name">
+                    </span>
+                </span>
+                <ng-template #no_event_container>
+                    <span *ngIf="noEventRetrieved">
+                        No Process Selected
+                    </span>
+                </ng-template>
+            </mat-card-title>
+            <mat-card-subtitle>
+                <span *ngIf="!noEventRetrieved">
+                    B = {{bFieldStrength}} kG
+                </span>
+            </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+
+            <div *ngIf="boundaries && dots">
+                <svg [attr.height]="boundaries.height" [attr.width]="boundaries.width">
+                    <rect [attr.x]="boundaries.xminPx" [attr.y]="boundaries.ymaxPx"
+                        [attr.width]="boundaries.widthDisplay" [attr.height]="boundaries.heightDisplay"
+                        style="fill:blue;stroke:grey;stroke-width:5;fill-opacity:0.1;stroke-opacity:0.9" />
+
+
+                    <!--
+                    <g *ngFor="let dot of dots" app-grid-item
+                        [colourModeOn]="colourModeOn"
+                        [params]="dot"
+                        (dotSelected)="dotSelected($event)"
+                        (dotDeselected)="dotDeselected($event)" >
+                </g>
+            -->
+                    <g *ngFor="let dot of dots">
+                        <circle (mouseover)="dot.checkDot(colourModeOn)" [attr.r]="dot.findRadius()" [attr.cx]="dot.x"
+                            [attr.cy]="dot.y" [attr.stroke-width]="dot.findStrokeWidth()" stroke="red" fill="grey">
+                        </circle>
+                    </g>
+
+                    <g *ngIf="eventDisplay && ((!editModeOn)||revealEvent)">
+                        <path *ngIf="eventDisplay" [attr.d]="eventDisplay.inCharged" stroke="green" stroke-width="3"
+                            fill="none">
+                        </path>
+                        <path *ngIf="eventDisplay" [attr.d]="eventDisplay.inNeutral" stroke="green"
+                            stroke-dasharray="10, 5" stroke-width="3">
+                        </path>
+                        <path *ngIf="eventDisplay" [attr.d]="eventDisplay.outCharged" stroke="grey" stroke-width="3"
+                            fill="none">
+                        </path>
+                        <path *ngIf="eventDisplay" [attr.d]="eventDisplay.outNeutral" stroke="grey"
+                            stroke-dasharray="10, 5" stroke-width="3">
+                        </path>
+                    </g>
+
+                    <!--
+                  <g *ngFor="let circle of circles" app-circle-item
+                     [params]="circle">
+                  </g>
+                -->
+                    <!--
+                  <g *ngIf="eventDisplay && ((!editModeOn)||revealEvent)" app-event
+                     [eventDisplay]="eventDisplay"
+                     [dots]="dots">
+                  </g>
+        
+                  <g *ngIf="eventDisplay && editModeOn && showAxes" app-axis
+                     [boundaries]="boundaries"
+                     [interactionLocation]="interactionLocation"
+                     [wakeUp]="circleChange">
+                  </g>
+        
+                  maybe this will work? https://www.codeproject.com/Articles/5249902/Creating-Amazing-Diagrams-using-Angular-and-SVG
+        
+                   https://www.chrisjmendez.com/2017/06/17/angular-dynamically-inserting-svg-into-an-element/
+        
+                -->
+
+
+
+
+
+                </svg>
+
+
+            </div>
+            <!--
+            <div *ngFor="let dot of dots">
+                <app-grid-item
+                [colourModeOn]="colourModeOn"
+                [params]="dot"
+                (dotSelected)="dotSelected($event)"
+                (dotDeselected)="dotDeselected($event)">
+                </app-grid-item> 
+            </div>
+        -->
+
+
+            <button mat-stroked-button color="primary" (click)="fetchNewEvent()">Get Event</button>
+
+
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-button>LIKE</button>
+            <button mat-button>SHARE</button>
+        </mat-card-actions>
+    </mat-card>
+
+    <span *ngIf="event">
+        <span [innerHTML]="event.name">
+        </span>
+        <span class="right right-space">
+            B = {{bFieldStrength}} kG
+        </span>
+    </span>
+    <span *ngIf="!event">
+        No Process Selected
+    </span>
+
+
+
+    <div *ngIf="boundaries && dots">
+        <svg [attr.height]="boundaries.height" [attr.width]="boundaries.width">
+            <rect [attr.x]="boundaries.xminPx" [attr.y]="boundaries.ymaxPx" [attr.width]="boundaries.widthDisplay"
+                [attr.height]="boundaries.heightDisplay"
+                style="fill:blue;stroke:grey;stroke-width:5;fill-opacity:0.1;stroke-opacity:0.9" />
+
+
+            <!--
+            <g *ngFor="let dot of dots" app-grid-item
+                [colourModeOn]="colourModeOn"
+                [params]="dot"
+                (dotSelected)="dotSelected($event)"
+                (dotDeselected)="dotDeselected($event)" >
+        </g>
+    -->
+            <g *ngFor="let dot of dots">
+                <circle (mouseover)="dot.checkDot(colourModeOn)" [attr.r]="dot.findRadius()" [attr.cx]="dot.x"
+                    [attr.cy]="dot.y" [attr.stroke-width]="dot.findStrokeWidth()" stroke="red" fill="grey">
+                </circle>
+            </g>
+
+
+
+            <!--
+          <g *ngFor="let circle of circles" app-circle-item
+             [params]="circle">
+          </g>
+        -->
+            <!--
+          <g *ngIf="eventDisplay && ((!editModeOn)||revealEvent)" app-event
+             [eventDisplay]="eventDisplay"
+             [dots]="dots">
+          </g>
+
+          <g *ngIf="eventDisplay && editModeOn && showAxes" app-axis
+             [boundaries]="boundaries"
+             [interactionLocation]="interactionLocation"
+             [wakeUp]="circleChange">
+          </g>
+
+          maybe this will work? https://www.codeproject.com/Articles/5249902/Creating-Amazing-Diagrams-using-Angular-and-SVG
+
+           https://www.chrisjmendez.com/2017/06/17/angular-dynamically-inserting-svg-into-an-element/
+
+        -->
+
+
+
+
+
+        </svg>
+
+
+    </div>
+    <!--
+    <div *ngFor="let dot of dots">
+        <app-grid-item
+        [colourModeOn]="colourModeOn"
+        [params]="dot"
+        (dotSelected)="dotSelected($event)"
+        (dotDeselected)="dotDeselected($event)">
+        </app-grid-item> 
+    </div>
+-->
+
+
+    <button mat-stroked-button color="primary" (click)="fetchNewEvent()">Get Event</button>
+</div>

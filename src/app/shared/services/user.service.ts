@@ -138,7 +138,7 @@ export class UserService {
       .pipe(
       retry(5),
       tap(res => {
-        console.log('here is what we got back: ',res);
+        console.log('here is what we got back: ',res, typeof res);
         sessionStorage.setItem('auth_token', res.token);
       }),
       catchError(this.httpService.loginErrorHandler)
@@ -214,7 +214,7 @@ export class UserService {
     .pipe(
       retry(5),
       tap(userData => {
-        console.log('here is what we got back: ',userData);
+        console.log('here is what we got back: ',userData, typeof userData);
         this.currentUser = new User(userData);
         //console.log('user data: ', userData);
         this.announceUser(this.currentUser);

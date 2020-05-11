@@ -69,7 +69,9 @@ const INTERACTION_REGION = {// this is the region within which the interaction p
 
 export const POINT_THREE = 0.299792;
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class UnitConversionService {
 
   constructor() {}

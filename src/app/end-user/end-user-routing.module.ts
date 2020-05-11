@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { EndUserComponent } from './end-user.component';
+import { AnalysisDisplayComponent } from './analysis-display/analysis-display.component';
+
 import { LoggedInGuard } from '../shared/guards/logged-in.guard';
 
 const authenticationRoutes: Routes = [
@@ -8,15 +10,12 @@ const authenticationRoutes: Routes = [
     path: 'events', 
     component: EndUserComponent,
     canActivate: [LoggedInGuard],
-    /*
     children: [
-    {
-      path: '',
-      component: AnalyzeEventComponent,
-    },
-
+      {
+        path: '',
+        component: AnalysisDisplayComponent,
+      },
     ]
-    */
   },
 ];
 
