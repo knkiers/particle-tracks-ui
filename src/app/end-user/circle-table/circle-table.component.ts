@@ -1,7 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import { CircleBindingService } from '../circle-binding.service';
-import { Subscription }   from 'rxjs';
+import {EventAnalysisService} from '../../shared/services/event-analysis.service';
+//import { CircleBindingService } from '../circle-binding.service';
+//import { Subscription }   from 'rxjs';
 import { Circle } from '../../shared/models/circle';
 
 @Component({
@@ -14,8 +15,12 @@ export class CircleTableComponent implements OnInit {
   @Input() circles: Circle[];
   @Input() event: any;
   @Input() userIsReadOnly: boolean = false;
+  @Input() interactionLocation: any;
+  @Output() circleChanged = new EventEmitter<void>();
 
-  constructor(private circleBindingService:CircleBindingService) { }
+  constructor(
+    private eventAnalysisService:EventAnalysisService
+    /*private circleBindingService:CircleBindingService*/) { }
 
   ngOnInit(): void {
   }
@@ -25,7 +30,8 @@ export class CircleTableComponent implements OnInit {
       index: i,
       command: 'delete'
     };
-    this.circleBindingService.announceCircleUpdate(updateData);
+    //this.circleBindingService.announceCircleUpdate(updateData);
+    this.circleChanged.emit();
   }
 
   /* Changes are now made directly to the object via one of its methods, so we no longer use the service for this....
@@ -48,6 +54,27 @@ export class CircleTableComponent implements OnInit {
   }
   */
 
+  resetRotationDirection(circle: Circle) {
+    let currentRotationDirection = circle.CW;
+    circle.setRotationDirection(!currentRotationDirection);
+    let theta = this.eventAnalysisService.computeTangentAngle(this.interactionLocation, circle);
+        circle.setAngle(theta);
+    console.log('rotn direction changed! ', circle);
+    this.circleChanged.emit();
+  }
+  resetParticleDirection(circle: Circle) {
+    let currentParticleDirection = circle.incoming;
+    circle.setParticleDirection(!currentParticleDirection);
+    console.log('particle direction changed! ', circle);
+    this.circleChanged.emit();
+    //var updateData = {
+    //  index: i,
+    //  command: 'toggleIncomingOutgoing'
+    //};
+    //this.circleBindingService.announceCircleUpdate(updateData);
+  }
+
+  /*
   toggleRotationDirection(i: number){
     console.log('toggle rotn dirn!');
     var updateData = {
@@ -65,6 +92,7 @@ export class CircleTableComponent implements OnInit {
     };
     this.circleBindingService.announceCircleUpdate(updateData);
   }
+  */
 
 
 }

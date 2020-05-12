@@ -1,0 +1,6 @@
+// https://stackoverflow.com/questions/58204128/how-to-label-both-sides-of-a-mat-slide-toggle-control-in-angular-material-8
+.mat-slide-toggle-content {
+    vertical-align: top;
+    display: inline-block;
+    line-height: 24px; // this is defined in .mat-slide-toggle
+}   

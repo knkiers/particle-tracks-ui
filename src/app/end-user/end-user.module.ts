@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 
+import { SharedModule } from '../shared/shared.module';
+
 import { EndUserRoutingModule } from './end-user-routing.module';
 import { EndUserComponent } from './end-user.component';
 
@@ -18,7 +20,8 @@ import { MomentumAxisComponent } from './momentum-axis/momentum-axis.component';
     CommonModule,
     EndUserRoutingModule,
     FlexLayoutModule,
-    AngularMaterialModule
+    AngularMaterialModule,
+    SharedModule
   ],
   exports: []
 })

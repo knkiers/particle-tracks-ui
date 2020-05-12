@@ -51,18 +51,62 @@
   </mat-accordion>
 -->
 
-  <mat-accordion>
-    <mat-expansion-panel *ngFor="let circle of circles; let i=index" (mouseenter)="circle.setHovered()" (mouseleave)="circle.setUnhovered()">
-      <mat-expansion-panel-header>
-          <mat-panel-title>
-            Circle {{i+1}}
-          </mat-panel-title>
-        <mat-panel-description>
-            Edit circle data
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-      
-      asdfsfdadsf
+<mat-accordion>
+    <mat-expansion-panel *ngFor="let circle of circles; let i=index" (mouseenter)="circle.setHovered()"
+        (mouseleave)="circle.setUnhovered()">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Circle #{{i+1}}
+            </mat-panel-title>
+            <mat-panel-description>
+                Edit circle properties
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div fxLayout="row wrap" fxLayoutAlign="start">
+            <div fxFlex="30%">
+                r:
+            </div>
+            <div fxFlex="70%">
+                {{circle.r | roundReal : 4}} cm
+            </div>
+        </div>
+        <div *ngIf="circle.theta">
+            <div fxLayout="row wrap" fxLayoutAlign="start">
+                <div fxFlex="30%">
+                    &theta;:
+                </div>
+                <div fxFlex="70%">
+                    {{circle.theta | roundReal : 4}} rad
+                </div>
+            </div>
+        </div>
+        <div fxLayout="row wrap" fxLayoutAlign="start">
+            <div fxFlex="30%">
+                rotn:
+            </div>
+            <div fxFlex="70%">
+                <!--https://stackoverflow.com/questions/58204128/how-to-label-both-sides-of-a-mat-slide-toggle-control-in-angular-material-8-->
+                <mat-label class="mat-slide-toggle-content">
+                    <mat-icon>undo</mat-icon>&nbsp;
+                </mat-label>
+                <mat-slide-toggle [checked]="circle.CW" (change)="resetRotationDirection(circle)"></mat-slide-toggle>
+                <mat-label class="mat-slide-toggle-content">&nbsp;<mat-icon>redo</mat-icon>
+                </mat-label>
+            </div>
+        </div>
+        <div fxLayout="row wrap" fxLayoutAlign="start">
+            <div fxFlex="30%">
+                in/out:
+            </div>
+            <div fxFlex="70%">
+                <mat-label class="mat-slide-toggle-content">
+                    outgoing&nbsp;
+                </mat-label>
+                <mat-slide-toggle [checked]="circle.incoming" (change)="resetParticleDirection(circle)">
+                </mat-slide-toggle>
+                <mat-label class="mat-slide-toggle-content">&nbsp;incoming</mat-label>
+            </div>
+        </div>
     </mat-expansion-panel>
-  
-  </mat-accordion>
+
+</mat-accordion>

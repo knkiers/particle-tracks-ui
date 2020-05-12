@@ -23,6 +23,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 // Forms
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 const modules: any[] = [
   MatMenuModule,
@@ -34,7 +35,8 @@ const modules: any[] = [
   MatCardModule,
   MatExpansionModule,
   MatFormFieldModule,
-  MatInputModule
+  MatInputModule,
+  MatSlideToggleModule
 ]
 
 

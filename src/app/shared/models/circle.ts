@@ -47,5 +47,11 @@ export class Circle {
     setAngle(theta: number) {
         this.theta = theta;
     }
+    setRotationDirection(isCW: boolean) {
+        this.CW = isCW;
+    }
+    setParticleDirection(isIncoming: boolean) {
+        this.incoming = isIncoming;
+    }
 
 }

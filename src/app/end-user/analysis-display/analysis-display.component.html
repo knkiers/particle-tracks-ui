@@ -97,13 +97,16 @@
                             </div>
                         </div>
                         <div fxFlex="40%">
-                            <div *ngIf="momentumDiagramBoundaries && eventDisplay && editModeOn && showAxes" class="row">
-                                <app-momentum-axis
-                                    [circles]="circles"
-                                    [boundaries]="momentumDiagramBoundaries">
-                                </app-momentum-axis>
+                            <div *ngIf="momentumDiagramBoundaries && eventDisplay && editModeOn && showAxes"
+                                class="row">
+                                <div fxLayout="row" fxLayoutAlign="space-around center">
+                                    <app-momentum-axis [circles]="circles" [boundaries]="momentumDiagramBoundaries"
+                                        [wakeUp]="circleChange">
+                                    </app-momentum-axis>
+                                </div>
                             </div>
-                            <app-circle-table [circles]="circles" [event]="event" [userIsReadOnly]="userIsReadOnly">
+                            <app-circle-table [circles]="circles" [event]="event" [userIsReadOnly]="userIsReadOnly"
+                                [interactionLocation]="interactionLocation" (circleChanged)="onChangedCircles()">
                             </app-circle-table>
                         </div>
 
@@ -119,6 +122,19 @@
                         <div *ngIf="editModeOn">
                             <button *ngIf="!userIsReadOnly" mat-stroked-button color="primary" (click)="addCircle()">Add
                                 Circle</button>
+                            <button mat-stroked-button color="primary" [disabled]="circles.length === 0"
+                                [matMenuTriggerFor]="menu">Delete Circle</button>
+                            <mat-menu #menu="matMenu">
+                                <div *ngFor="let circle of circles; let i=index">
+                                    <button 
+                                        mat-menu-item 
+                                        (mouseenter)="circle.setHovered()" 
+                                        (mouseout)="circle.setUnhovered()"
+                                        (click)="deleteCircle(i)">
+                                        Circle #{{i+1}}
+                                    </button>
+                                </div>
+                            </mat-menu>
                             <button *ngIf="!userIsReadOnly" mat-stroked-button color="primary"
                                 (mouseenter)="showEvent()" (mouseout)="hideEvent()">
                                 Show Event

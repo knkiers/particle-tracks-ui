@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 
 import {Circle } from '../../shared/models/circle';
 const ARROW_HEAD_WIDTH = 0.03; //width of arrow head compared to size of window (assumed square)
@@ -15,7 +15,7 @@ export class MomentumAxisComponent implements OnInit {
 
   @Input() boundaries: any;//momentumDiagramBoundaries in the parent component
   @Input() circles: Circle[];
-  //@Input() wakeUp: number;
+  @Input() wakeUp: number;
 
   hAxisParams: any;
   vAxisParams: any;
@@ -30,8 +30,18 @@ export class MomentumAxisComponent implements OnInit {
     this.computeAxisCoordinates();
   }
 
+  ngOnChanges() {
+    console.log('change detected by momentum axis!');
+    this.computeAxisCoordinates();
+  }
+
   computeAxisCoordinates(){
 
+    console.log('inside compute axis coords')
+    this.circles.forEach(circle => {
+      console.log('incoming?: ', circle.incoming);
+      console.log('CW? ', circle.CW);
+    });
     let rmax = 0;
     let momentumVectors = [];
     this.momentumVectorParams = [];

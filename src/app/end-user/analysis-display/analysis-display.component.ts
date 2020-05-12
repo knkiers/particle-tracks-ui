@@ -11,7 +11,7 @@ import {EventDisplayService} from '../../shared/services/event-display.service';
 import {UnitConversionService} from '../../shared/services/unit-conversion.service';
 import {EventAnalysisService} from '../../shared/services/event-analysis.service';
 
-import { CircleBindingService } from '../circle-binding.service';
+//import { CircleBindingService } from '../circle-binding.service';
 
 import {Event} from '../../shared/models/event';
 import { Dot } from '../../shared/models/dot';
@@ -52,7 +52,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   modalCircleActions = new EventEmitter<string>();
 
   subscription: Subscription;
-  circleSubscription: Subscription;
+  //circleSubscription: Subscription;
   tokenExpiredSubscription: Subscription;
 
   event: Event;
@@ -60,7 +60,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   private eventJSON: any;
   //private eventType: any;
   private eventTypeJSON: any;
-  private circleChange = 1;//changed when a circle is changed...to wake up one or more components....
+  circleChange: number = 1;//changed when a circle is changed...to wake up one or more components....
   private svgRegion: any;
 
   dots: Dot[] = [];
@@ -69,7 +69,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   boundaries: any;
   momentumDiagramBoundaries: any;
   private interactionRegion: any;
-  private interactionLocation: any;
+  interactionLocation: any;
 
   hAxisParams: any;
   vAxisParams: any;
@@ -105,12 +105,13 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   constructor(
     private unitConversionService:UnitConversionService,
     private eventAnalysisService:EventAnalysisService,
-    private circleBindingService:CircleBindingService,
+    //private circleBindingService:CircleBindingService,
     private eventDisplayService:EventDisplayService) {
     this.subscription = eventDisplayService.gridActivationAnnounced$.subscribe(
       gridIndices => {
         this.activateDots(gridIndices);
       });
+    /*
     this.circleSubscription = circleBindingService.circleUpdated$.subscribe(
       updateData=> {
         console.log('circle subscription!!!!!!!!!!');
@@ -118,6 +119,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
         this.updateCircleTangentAngles();
         this.circleChange = -this.circleChange;
       });
+      */
     this.tokenExpiredSubscription = eventAnalysisService.tokenExpired$.subscribe(
       (data) => {
         console.log('token timed out!');
@@ -341,6 +343,11 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     }
   }
 
+  onChangedCircles() {
+    //this.updateCircleTangentAngles();
+    this.circleChange = -this.circleChange;// used to wake up one or more child components
+  }
+
   resetCircles(){
     this.circles = [];
   }
@@ -507,8 +514,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   }
 
   deleteCircle(i: number) {
-    console.log('delete circle');
-    /*
+    console.log('delete circle #',i);
     if (this.circles[i]!==undefined) {// in case the circle was deleted in the meantime, or something
       this.circles.splice(i,1);
       this.numberCircles = this.circles.length;
@@ -520,7 +526,6 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
         this.circleChange = -this.circleChange;
       }
     }
-    */
   }
 
   toggleCircleRotationDirection(i: number) {
@@ -756,7 +761,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-    this.circleSubscription.unsubscribe();
+    //this.circleSubscription.unsubscribe();
     this.tokenExpiredSubscription.unsubscribe();
   }
 
