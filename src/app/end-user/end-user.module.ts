@@ -12,7 +12,7 @@ import { CircleItemComponent } from './circle-item/circle-item.component';
 import { CircleTableComponent } from './circle-table/circle-table.component';
 
 @NgModule({
-  declarations: [EndUserComponent, AnalysisDisplayComponent, CircleItemComponent, CircleTableComponent],
+  declarations: [EndUserComponent, AnalysisDisplayComponent, CircleItemComponent, CircleTableComponent ],
   imports: [
     CommonModule,
     EndUserRoutingModule,

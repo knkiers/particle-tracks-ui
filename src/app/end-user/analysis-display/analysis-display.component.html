@@ -32,15 +32,6 @@
                                             [attr.height]="boundaries.heightDisplay"
                                             style="fill:blue;stroke:grey;stroke-width:5;fill-opacity:0.1;stroke-opacity:0.9" />
 
-
-                                        <!--
-                    <g *ngFor="let dot of dots" app-grid-item
-                        [colourModeOn]="colourModeOn"
-                        [params]="dot"
-                        (dotSelected)="dotSelected($event)"
-                        (dotDeselected)="dotDeselected($event)" >
-                </g>
-            -->
                                         <g *ngFor="let dot of dots">
                                             <circle (mouseover)="dot.checkDot(colourModeOn)" [attr.r]="dot.findRadius()"
                                                 [attr.cx]="dot.x" [attr.cy]="dot.y"
@@ -69,12 +60,17 @@
                                             </circle>
                                         </g>
 
+                                        <g *ngIf="eventDisplay && editModeOn && showAxes">
+                                            <line [attr.x1]="hAxisParams.x1" [attr.x2]="hAxisParams.x2"
+                                                [attr.y1]="hAxisParams.y1" [attr.y2]="hAxisParams.y2"
+                                                [attr.stroke-width]="1" [attr.stroke]="'grey'">
+                                            </line>
+                                            <line [attr.x1]="vAxisParams.x1" [attr.x2]="vAxisParams.x2"
+                                                [attr.y1]="vAxisParams.y1" [attr.y2]="vAxisParams.y2"
+                                                [attr.stroke-width]="1" [attr.stroke]="'grey'">
+                                            </line>
+                                        </g>
 
-                                        <!--
-                  <g *ngFor="let circle of circles" app-circle-item
-                     [params]="circle">
-                  </g>
-                -->
                                         <!--
                   
         
@@ -100,19 +96,10 @@
                             </div>
                         </div>
                         <div fxFlex="40%">
-                            adsfasdf
+                            <app-circle-table [circles]="circles" [event]="event" [userIsReadOnly]="userIsReadOnly">
+                            </app-circle-table>
                         </div>
 
-                        <!--
-            <div *ngFor="let dot of dots">
-                <app-grid-item
-                [colourModeOn]="colourModeOn"
-                [params]="dot"
-                (dotSelected)="dotSelected($event)"
-                (dotDeselected)="dotDeselected($event)">
-                </app-grid-item> 
-            </div>
-        -->
                     </div>
 
                     <div *ngIf="!userIsReadOnly">
@@ -139,117 +126,10 @@
 
 
                 </mat-card-content>
-                <mat-card-actions>
-                    <button mat-button>LIKE</button>
-                    <button mat-button>SHARE</button>
-                </mat-card-actions>
+
             </mat-card>
 
         </div>
     </div>
 
-
-    <span *ngIf="event">
-        <span [innerHTML]="event.name">
-        </span>
-        <span class="right right-space">
-            B = {{bFieldStrength}} kG
-        </span>
-    </span>
-    <span *ngIf="!event">
-        No Process Selected
-    </span>
-
-
-
-    <div *ngIf="boundaries && dots">
-        <svg [attr.height]="boundaries.height" [attr.width]="boundaries.width">
-            <rect [attr.x]="boundaries.xminPx" [attr.y]="boundaries.ymaxPx" [attr.width]="boundaries.widthDisplay"
-                [attr.height]="boundaries.heightDisplay"
-                style="fill:blue;stroke:grey;stroke-width:5;fill-opacity:0.1;stroke-opacity:0.9" />
-
-
-            <!--
-            <g *ngFor="let dot of dots" app-grid-item
-                [colourModeOn]="colourModeOn"
-                [params]="dot"
-                (dotSelected)="dotSelected($event)"
-                (dotDeselected)="dotDeselected($event)" >
-        </g>
-    -->
-            <g *ngFor="let dot of dots">
-                <circle (mouseover)="dot.checkDot(colourModeOn)" [attr.r]="dot.findRadius()" [attr.cx]="dot.x"
-                    [attr.cy]="dot.y" [attr.stroke-width]="dot.findStrokeWidth()" stroke="red" fill="grey">
-                </circle>
-            </g>
-
-
-
-            <!--
-          <g *ngFor="let circle of circles" app-circle-item
-             [params]="circle">
-          </g>
-        -->
-            <!--
-          <g *ngIf="eventDisplay && ((!editModeOn)||revealEvent)" app-event
-             [eventDisplay]="eventDisplay"
-             [dots]="dots">
-          </g>
-
-          <g *ngIf="eventDisplay && editModeOn && showAxes" app-axis
-             [boundaries]="boundaries"
-             [interactionLocation]="interactionLocation"
-             [wakeUp]="circleChange">
-          </g>
-
-          maybe this will work? https://www.codeproject.com/Articles/5249902/Creating-Amazing-Diagrams-using-Angular-and-SVG
-
-           https://www.chrisjmendez.com/2017/06/17/angular-dynamically-inserting-svg-into-an-element/
-
-        -->
-
-
-
-
-
-        </svg>
-
-
-    </div>
-    <!--
-    <div *ngFor="let dot of dots">
-        <app-grid-item
-        [colourModeOn]="colourModeOn"
-        [params]="dot"
-        (dotSelected)="dotSelected($event)"
-        (dotDeselected)="dotDeselected($event)">
-        </app-grid-item> 
-    </div>
--->
-
-
-    <button mat-stroked-button color="primary" (click)="fetchNewEvent()">Get Event</button>
-
-
-
-    <!--<div fxLayout="column">-->
-    <div fxLayout="row" fxLayoutAlign="space-around center">
-
-        <div fxFlex="20%">
-            one
-        </div>
-        <div fxFlex="60%">
-            two
-        </div>
-        <div fxFlex>
-            three
-        </div>
-
-        <!--</div>-->space-around
-
-
-
-
-
-
-    </div>
+</div>

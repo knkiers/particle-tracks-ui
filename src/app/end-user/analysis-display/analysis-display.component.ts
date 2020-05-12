@@ -27,6 +27,7 @@ import { POINT_THREE, R_MIN, R_MAX, B_MAX} from '../../shared/services/unit-conv
 //    refreshed the page or something, go fetch their info from the db and refresh
 //    the user's login name in the nav bar, etc.
 
+const AXIS_FRACTION = 0.8;
 
 declare var $: any; // for using jQuery within this angular component
 
@@ -69,6 +70,10 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   momentumDiagramBoundaries: any;
   private interactionRegion: any;
   private interactionLocation: any;
+
+  hAxisParams: any;
+  vAxisParams: any;
+
   eventDisplay: any;
 
   editModeOn = false;
@@ -133,6 +138,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       boundaries => {
         this.boundaries = boundaries.boundaries;
         this.momentumDiagramBoundaries = boundaries.momentumDiagramBoundaries;
+        //this.computeAxisCoordinates();
       },
       err => console.log("ERROR", err),
       () => console.log("Boundaries fetched"));
@@ -247,6 +253,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       this.interactionLocation,
       this.event);
 
+    this.computeAxisCoordinates();
     console.log('event display: ', this.eventDisplay);
   }
 
@@ -585,6 +592,41 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     }
   }
 
+  computeAxisCoordinates(){
+    let xmin = this.boundaries.xmin;
+    let xmax = this.boundaries.xmax;
+    let ymin = this.boundaries.ymin;
+    let ymax = this.boundaries.ymax;
+    let x = this.interactionLocation.x;
+    let y = this.interactionLocation.y;
+
+    let axisLength = (Math.min(xmax-x, x-xmin, ymax-y, y-ymin))*AXIS_FRACTION;
+    //console.log(axisLength);
+
+    // in the following, x and y are not really the x and y coords of a single point, but
+    // that turns out not to matter for the conversion of the coordinates....
+    var hLineStart = this.unitConversionService.translatecmtoPixels(x-axisLength, y, this.boundaries);
+    var hLineEnd = this.unitConversionService.translatecmtoPixels(x+axisLength, y, this.boundaries);
+    var vLineStart = this.unitConversionService.translatecmtoPixels(x, y-axisLength, this.boundaries);
+    var vLineEnd = this.unitConversionService.translatecmtoPixels(x, y+axisLength, this.boundaries);
+
+
+    this.hAxisParams = {
+      x1: hLineStart.x,
+      y1: hLineStart.y,
+      x2: hLineEnd.x,
+      y2: hLineEnd.y
+    };
+
+    this.vAxisParams = {
+      x1: vLineStart.x,
+      y1: vLineStart.y,
+      x2: vLineEnd.x,
+      y2: vLineEnd.y
+    };
+  }
+
+
   turnOnEditMode(){
     //console.log('inside toggle edit mode fn');
     if (!this.editModeOn) {
@@ -659,6 +701,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     this.momentumDiagramBoundaries = eventData.momentumDiagramBoundaries;
     this.interactionRegion = eventData.interactionRegion;
     this.interactionLocation = eventData.interactionLocation;
+    this.computeAxisCoordinates();
 
     this.eventDisplay = eventData.eventDisplay;
 
