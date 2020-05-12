@@ -52,8 +52,8 @@
 -->
 
 <mat-accordion>
-    <mat-expansion-panel *ngFor="let circle of circles; let i=index" (mouseenter)="circle.setHovered()"
-        (mouseleave)="circle.setUnhovered()">
+    <mat-expansion-panel *ngFor="let circle of circles; let i=index" (mouseenter)="highlight(circle)"
+        (mouseleave)="unhighlight(circle)">
         <mat-expansion-panel-header>
             <mat-panel-title>
                 Circle #{{i+1}}
@@ -89,7 +89,7 @@
                 <mat-label class="mat-slide-toggle-content">
                     <mat-icon>undo</mat-icon>&nbsp;
                 </mat-label>
-                <mat-slide-toggle [checked]="circle.CW" (change)="resetRotationDirection(circle)"></mat-slide-toggle>
+                <mat-slide-toggle color="primary" [checked]="circle.CW" (change)="resetRotationDirection(circle)"></mat-slide-toggle>
                 <mat-label class="mat-slide-toggle-content">&nbsp;<mat-icon>redo</mat-icon>
                 </mat-label>
             </div>
@@ -102,7 +102,7 @@
                 <mat-label class="mat-slide-toggle-content">
                     outgoing&nbsp;
                 </mat-label>
-                <mat-slide-toggle [checked]="circle.incoming" (change)="resetParticleDirection(circle)">
+                <mat-slide-toggle color="primary" [checked]="circle.incoming" (change)="resetParticleDirection(circle)">
                 </mat-slide-toggle>
                 <mat-label class="mat-slide-toggle-content">&nbsp;incoming</mat-label>
             </div>

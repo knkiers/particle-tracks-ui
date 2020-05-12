@@ -37,6 +37,9 @@ export class Dot {
     findStrokeWidth() {
         return this.useForFit ? STROKE_WIDTH_USED_FOR_FIT : STROKE_WIDTH_NOT_USED_FOR_FIT;
     }
+    findStrokeColour() {
+        
+    }
     deactivate() {
         this.activated = false;
     }
@@ -45,6 +48,9 @@ export class Dot {
     }
     unsetUseForFit() {
         this.useForFit = false;
+    }
+    setUseForFit() {
+        this.useForFit = true;
     }
 
 }

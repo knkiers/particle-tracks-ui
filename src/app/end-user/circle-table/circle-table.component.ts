@@ -17,6 +17,8 @@ export class CircleTableComponent implements OnInit {
   @Input() userIsReadOnly: boolean = false;
   @Input() interactionLocation: any;
   @Output() circleChanged = new EventEmitter<void>();
+  @Output() highlightDots = new EventEmitter<number[]>();
+  @Output() unhighlightDots = new EventEmitter<number[]>();
 
   constructor(
     private eventAnalysisService:EventAnalysisService
@@ -32,6 +34,16 @@ export class CircleTableComponent implements OnInit {
     };
     //this.circleBindingService.announceCircleUpdate(updateData);
     this.circleChanged.emit();
+  }
+
+  highlight(circle: Circle) {
+    circle.setHovered();
+    this.highlightDots.emit(circle.dotIndices);
+  }
+
+  unhighlight(circle: Circle) {
+    circle.setUnhovered();
+    this.unhighlightDots.emit(circle.dotIndices);
   }
 
   /* Changes are now made directly to the object via one of its methods, so we no longer use the service for this....

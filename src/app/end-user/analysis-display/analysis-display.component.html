@@ -32,6 +32,21 @@
                                             [attr.height]="boundaries.heightDisplay"
                                             style="fill:blue;stroke:grey;stroke-width:5;fill-opacity:0.1;stroke-opacity:0.9" />
 
+                                        <g *ngIf="eventDisplay && ((!editModeOn)||revealEvent)">
+                                            <path *ngIf="eventDisplay" [attr.d]="eventDisplay.inCharged"
+                                                stroke="darkgreen" stroke-width="3" fill="none">
+                                            </path>
+                                            <path *ngIf="eventDisplay" [attr.d]="eventDisplay.inNeutral"
+                                                stroke="darkgreen" stroke-dasharray="10, 5" stroke-width="3">
+                                            </path>
+                                            <path *ngIf="eventDisplay" [attr.d]="eventDisplay.outCharged"
+                                                stroke="darkslateblue" stroke-width="3" fill="none">
+                                            </path>
+                                            <path *ngIf="eventDisplay" [attr.d]="eventDisplay.outNeutral"
+                                                stroke="darkslateblue" stroke-dasharray="10, 5" stroke-width="3">
+                                            </path>
+                                        </g>
+
                                         <g *ngFor="let dot of dots">
                                             <circle (mouseover)="dot.checkDot(colourModeOn)" [attr.r]="dot.findRadius()"
                                                 [attr.cx]="dot.x" [attr.cy]="dot.y"
@@ -39,20 +54,7 @@
                                             </circle>
                                         </g>
 
-                                        <g *ngIf="eventDisplay && ((!editModeOn)||revealEvent)">
-                                            <path *ngIf="eventDisplay" [attr.d]="eventDisplay.inCharged" stroke="green"
-                                                stroke-width="3" fill="none">
-                                            </path>
-                                            <path *ngIf="eventDisplay" [attr.d]="eventDisplay.inNeutral" stroke="green"
-                                                stroke-dasharray="10, 5" stroke-width="3">
-                                            </path>
-                                            <path *ngIf="eventDisplay" [attr.d]="eventDisplay.outCharged" stroke="grey"
-                                                stroke-width="3" fill="none">
-                                            </path>
-                                            <path *ngIf="eventDisplay" [attr.d]="eventDisplay.outNeutral" stroke="grey"
-                                                stroke-dasharray="10, 5" stroke-width="3">
-                                            </path>
-                                        </g>
+
                                         <g *ngFor="let circle of circles">
                                             <circle [attr.r]="circle.rPx" [attr.cx]="circle.xcPx"
                                                 [attr.cy]="circle.ycPx" [attr.stroke-width]="circle.strokeWidth()"
@@ -106,7 +108,8 @@
                                 </div>
                             </div>
                             <app-circle-table [circles]="circles" [event]="event" [userIsReadOnly]="userIsReadOnly"
-                                [interactionLocation]="interactionLocation" (circleChanged)="onChangedCircles()">
+                                [interactionLocation]="interactionLocation" (circleChanged)="onChangedCircles()"
+                                (highlightDots)="highlightFitDots($event)" (unhighlightDots)="unhighlightFitDots($event)">
                             </app-circle-table>
                         </div>
 
@@ -126,18 +129,19 @@
                                 [matMenuTriggerFor]="menu">Delete Circle</button>
                             <mat-menu #menu="matMenu">
                                 <div *ngFor="let circle of circles; let i=index">
-                                    <button 
-                                        mat-menu-item 
-                                        (mouseenter)="circle.setHovered()" 
-                                        (mouseout)="circle.setUnhovered()"
-                                        (click)="deleteCircle(i)">
+                                    <button mat-menu-item (mouseenter)="highlight(circle)"
+                                        (mouseout)="unhighlight(circle)" (click)="deleteCircle(i)">
                                         Circle #{{i+1}}
                                     </button>
                                 </div>
                             </mat-menu>
-                            <button *ngIf="!userIsReadOnly" mat-stroked-button color="primary"
-                                (mouseenter)="showEvent()" (mouseout)="hideEvent()">
+                            <button *ngIf="!userIsReadOnly && !revealEvent" mat-stroked-button color="primary"
+                                (click)="showEvent()">
                                 Show Event
+                            </button>
+                            <button *ngIf="!userIsReadOnly && revealEvent" mat-stroked-button color="primary"
+                                (click)="hideEvent()">
+                                Hide Event
                             </button>
 
                         </div>

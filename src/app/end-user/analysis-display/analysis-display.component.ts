@@ -331,7 +331,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     via the subscription service (following the generation of a new event)
    */
   activateDots(gridIndices) {
-    console.log(gridIndices);
+    console.log('activated dots:', gridIndices);
     if (this.dots !== []) {// in principle possible(?) that dots has not yet been initialized....
       this.dots.forEach( dot => {// deactivate all dots and unset useForFit as well
         dot.deactivate();
@@ -339,6 +339,34 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       });
       for (let i of gridIndices) { // now activate the ones indicated in gridIndices
         this.dots[i].activate();
+      }
+    }
+  }
+
+  highlight(circle: Circle) {
+    circle.setHovered();
+    this.highlightFitDots(circle.dotIndices);
+  }
+
+  unhighlight(circle: Circle) {
+    circle.setUnhovered();
+    this.unhighlightFitDots(circle.dotIndices);
+  }
+
+  highlightFitDots(gridIndices: number[]) {
+    console.log('fit dots: ', gridIndices);
+    if (this.dots !== []) {// in principle possible(?) that dots has not yet been initialized....
+      for (let i of gridIndices) { // now activate the ones indicated in gridIndices
+        this.dots[i].setUseForFit();
+      }
+    }
+  }
+
+  unhighlightFitDots(gridIndices: number[]) {
+    console.log('fit dots: ', gridIndices);
+    if (this.dots !== []) {// in principle possible(?) that dots has not yet been initialized....
+      for (let i of gridIndices) { // now activate the ones indicated in gridIndices
+        this.dots[i].unsetUseForFit();
       }
     }
   }
@@ -429,6 +457,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
      errorMessage: errorMessage
      };
      */
+    this.hideEvent();
     var dataDict = this.eventAnalysisService.fitCircleToData(this.dots, this.boundaries);
     //var circleInputData = this.eventAnalysisService.gatherDataFromDots(this.dots);
     if (dataDict.error) {
