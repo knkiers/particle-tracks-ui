@@ -534,18 +534,14 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
 
   updateCircleTangentAngles() {
     console.log('update circle tangent angles');
-    /*
-    if (!this.showAxes) {
-      for (let i in this.circles) {
-        this.circles[i].theta = null;
+    this.circles.forEach((circle: Circle) => {
+      if (!this.showAxes) {
+        circle.unsetAngle();
+      } else {
+        let theta = this.eventAnalysisService.computeTangentAngle(this.interactionLocation, circle);
+        circle.setAngle(theta);
       }
-    } else {
-      for (let i in this.circles) {
-        var theta = this.eventAnalysisService.computeTangentAngle(this.interactionLocation, this.circles[i]);
-        this.circles[i].theta = theta;
-      }
-    }
-    */
+    });
   }
   
 
@@ -573,12 +569,13 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     var command = updateData.command;
     if (this.circles[i] !== undefined) {
       switch (command) {
-        case "hover":
-          this.hoverCircle(i);
-          break;
-        case "unhover":
-          this.unhoverCircle(i);
-          break;
+        // now done directly on the object, from inside the child component....
+        //case "hover":
+        //  this.hoverCircle(i);
+        //  break;
+        //case "unhover":
+        //  this.unhoverCircle(i);
+        //  break;
         case "delete":
           this.deleteCircle(i);
           break;

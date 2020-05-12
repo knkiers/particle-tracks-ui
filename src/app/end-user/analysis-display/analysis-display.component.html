@@ -55,8 +55,9 @@
                                         </g>
                                         <g *ngFor="let circle of circles">
                                             <circle [attr.r]="circle.rPx" [attr.cx]="circle.xcPx"
-                                                [attr.cy]="circle.ycPx" [attr.stroke-width]="2"
-                                                stroke-dasharray="3, 7, 10, 7" [attr.stroke]="'grey'" fill="none">
+                                                [attr.cy]="circle.ycPx" [attr.stroke-width]="circle.strokeWidth()"
+                                                stroke-dasharray="3, 7, 10, 7" [attr.stroke]="circle.circleColour()"
+                                                fill="none">
                                             </circle>
                                         </g>
 
@@ -96,6 +97,12 @@
                             </div>
                         </div>
                         <div fxFlex="40%">
+                            <div *ngIf="momentumDiagramBoundaries && eventDisplay && editModeOn && showAxes" class="row">
+                                <app-momentum-axis
+                                    [circles]="circles"
+                                    [boundaries]="momentumDiagramBoundaries">
+                                </app-momentum-axis>
+                            </div>
                             <app-circle-table [circles]="circles" [event]="event" [userIsReadOnly]="userIsReadOnly">
                             </app-circle-table>
                         </div>

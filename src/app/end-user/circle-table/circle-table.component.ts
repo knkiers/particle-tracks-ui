@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 
 import { CircleBindingService } from '../circle-binding.service';
 import { Subscription }   from 'rxjs';
+import { Circle } from '../../shared/models/circle';
 
 @Component({
   selector: 'app-circle-table',
@@ -10,25 +11,13 @@ import { Subscription }   from 'rxjs';
 })
 export class CircleTableComponent implements OnInit {
 
-  @Input() circles: any;
+  @Input() circles: Circle[];
   @Input() event: any;
   @Input() userIsReadOnly: boolean = false;
 
   constructor(private circleBindingService:CircleBindingService) { }
 
   ngOnInit(): void {
-  }
-
-  panelOpenState = false;
-
-  panels = [
-  ];
-
-  addPanel() {
-    this.panels.push({
-      title: 'panel 2',
-      content: 'content 2'
-    })
   }
 
   deleteCircle(i: number){
@@ -39,6 +28,7 @@ export class CircleTableComponent implements OnInit {
     this.circleBindingService.announceCircleUpdate(updateData);
   }
 
+  /* Changes are now made directly to the object via one of its methods, so we no longer use the service for this....
   highlightCircle(i: number){
     console.log('hovering me!');
     var updateData = {
@@ -56,6 +46,7 @@ export class CircleTableComponent implements OnInit {
     };
     this.circleBindingService.announceCircleUpdate(updateData);
   }
+  */
 
   toggleRotationDirection(i: number){
     console.log('toggle rotn dirn!');

@@ -52,7 +52,7 @@
 -->
 
   <mat-accordion>
-    <mat-expansion-panel *ngFor="let circle of circles; let i=index" (mouseenter)="highlightCircle(i)" (mouseleave)="unhighlightCircle(i)">
+    <mat-expansion-panel *ngFor="let circle of circles; let i=index" (mouseenter)="circle.setHovered()" (mouseleave)="circle.setUnhovered()">
       <mat-expansion-panel-header>
           <mat-panel-title>
             Circle {{i+1}}

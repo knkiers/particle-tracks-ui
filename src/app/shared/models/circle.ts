@@ -1,3 +1,8 @@
+const HOVER_COLOUR: string = 'red';
+const NON_HOVER_COLOUR: string = 'grey';
+const HOVER_STROKE_WIDTH: number = 3;
+const NON_HOVER_STROKE_WIDTH: number = 2;
+
 export class Circle {
     CW: boolean; //clockwise
     incoming: boolean;
@@ -8,7 +13,8 @@ export class Circle {
     xcPx: number;
     yc: number;
     ycPx: number;
-    dotIndices: number[]
+    dotIndices: number[];
+    hovered: boolean;
     constructor(obj: any) {
         this.CW = obj.CW;
         this.incoming = obj.incoming;
@@ -20,35 +26,26 @@ export class Circle {
         this.yc = obj.yc;
         this.ycPx = obj.ycPx;
         this.dotIndices = obj.dotIndices;
+        this.hovered = false;
+        this.theta = null;
     }
-    /*
-    checkDot(colourModeOn: boolean) {
-        console.log('moused!');
-        if (colourModeOn) {
-            if (this.activated && (!this.useForFit)) {
-                this.useForFit = true;
-            }
-        } else {
-            if (this.activated && (this.useForFit)) {
-                this.useForFit = true;
-            }
-        }
+    circleColour() {
+        return this.hovered ? HOVER_COLOUR : NON_HOVER_COLOUR;
     }
-    findRadius() {
-        return this.activated ? RADIUS_ACTIVATED : RADIUS_NOT_ACTIVATED;
+    strokeWidth() {
+        return this.hovered ? HOVER_STROKE_WIDTH : NON_HOVER_STROKE_WIDTH;
     }
-    findStrokeWidth() {
-        return this.useForFit ? STROKE_WIDTH_USED_FOR_FIT : STROKE_WIDTH_NOT_USED_FOR_FIT;
+    setHovered() {
+        this.hovered = true;
     }
-    deactivate() {
-        this.activated = false;
+    setUnhovered() {
+        this.hovered = false;
     }
-    activate() {
-        this.activated = true;
+    unsetAngle() {
+        this.theta = null;
     }
-    unsetUseForFit() {
-        this.useForFit = false;
+    setAngle(theta: number) {
+        this.theta = theta;
     }
 
-    */
 }

@@ -1,0 +1,30 @@
+<svg [attr.height]="boundaries.height" [attr.width]="boundaries.width">
+    <rect [attr.x]="boundaries.xminPx" [attr.y]="boundaries.ymaxPx" [attr.width]="boundaries.widthDisplay"
+        [attr.height]="boundaries.heightDisplay"
+        style="fill:blue;stroke:grey;stroke-width:5;fill-opacity:0.1;stroke-opacity:0.9" />
+
+    <line [attr.x1]="hAxisParams.x1" [attr.x2]="hAxisParams.x2" [attr.y1]="hAxisParams.y1" [attr.y2]="hAxisParams.y2"
+        [attr.stroke-width]="1" [attr.stroke]="'grey'">
+    </line>
+    <line [attr.x1]="vAxisParams.x1" [attr.x2]="vAxisParams.x2" [attr.y1]="vAxisParams.y1" [attr.y2]="vAxisParams.y2"
+        [attr.stroke-width]="1" [attr.stroke]="'grey'">
+    </line>
+
+    <line *ngFor="let mV of momentumVectorParams; let i = index" [attr.x1]="mV.x1" [attr.x2]="mV.x2" [attr.y1]="mV.y1"
+        [attr.y2]="mV.y2" [attr.stroke-width]="strokeWidth(i)" [attr.stroke]="lineColor(i)">
+    </line>
+
+    <polygon *ngFor="let mV of momentumVectorParams; let i = index" [attr.points]="arrowHeadCoords"
+        [attr.stroke]="lineColor(i)" [attr.stroke-width]="strokeWidth(i)" [attr.fill]="lineColor(i)"
+        [attr.transform]="mV.arrowHeadTranslateRotate">
+    </polygon>
+
+
+</svg>
+
+<!--<g *ngIf="eventDisplay && editModeOn && showAxes" app-momentum-axis
+       [boundaries]="momentumDiagramBoundaries"
+       [circles]="circles"
+       [wakeUp]="circleChange">
+    </g>
+-->
