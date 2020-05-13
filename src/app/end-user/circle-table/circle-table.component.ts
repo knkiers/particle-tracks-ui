@@ -27,6 +27,7 @@ export class CircleTableComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  /*
   deleteCircle(i: number){
     var updateData = {
       index: i,
@@ -35,6 +36,7 @@ export class CircleTableComponent implements OnInit {
     //this.circleBindingService.announceCircleUpdate(updateData);
     this.circleChanged.emit();
   }
+  */
 
   highlight(circle: Circle) {
     circle.setHovered();
@@ -69,8 +71,10 @@ export class CircleTableComponent implements OnInit {
   resetRotationDirection(circle: Circle) {
     let currentRotationDirection = circle.CW;
     circle.setRotationDirection(!currentRotationDirection);
-    let theta = this.eventAnalysisService.computeTangentAngle(this.interactionLocation, circle);
-        circle.setAngle(theta);
+    if (this.circles.length>=2) {
+      let theta = this.eventAnalysisService.computeTangentAngle(this.interactionLocation, circle);
+      circle.setAngle(theta);
+    }
     console.log('rotn direction changed! ', circle);
     this.circleChanged.emit();
   }

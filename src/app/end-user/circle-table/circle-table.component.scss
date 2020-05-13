@@ -4,3 +4,7 @@
     display: inline-block;
     line-height: 24px; // this is defined in .mat-slide-toggle
 }   
+
+.mat-slide-text-label {
+    vertical-align: top;
+}

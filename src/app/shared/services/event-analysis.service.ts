@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 
 import { Subject, Observable, pipe, forkJoin } from 'rxjs';
 // not used: import { map } from 'rxjs/operators';
-import { tap, retry, catchError } from 'rxjs/operators';
+import { map, tap, retry, catchError } from 'rxjs/operators';
 
 import { AnalyzedEventsUrl, UserEventsUrl } from './urls';
 
@@ -239,8 +239,8 @@ export class EventAnalysisService {
       .pipe(
         retry(1),
         tap(response => {
-          console.log('new event: ', response);
-          return response;
+          console.log('response after saving event: ', response);
+          //return response;
           //sessionStorage.setItem('auth_token', res.token);
         }),
         catchError(this.httpService.errorHandler)
@@ -259,14 +259,63 @@ export class EventAnalysisService {
       this.router.navigate(['/login']);
     }
 
+    // first fetch the events; then do some clean-up...deleting the older saved versions for the same UUID (keep 3 at most; discard the rest)
+
     return this.http
       .get<any>(UserEventsUrl, httpOptions)
       .pipe(
         retry(1),
         tap(response => {
-          console.log('new event: ', response);
-          return response;
+          console.log('analyzed events for this user: ', response);
+          //return response;
           //sessionStorage.setItem('auth_token', res.token);
+        }),
+        map( userEvents => {
+
+          let mostRecentUserEvents: {[index: string]: any} = {};// object to sort through events
+          let olderUserEventIds: number[] = [];//array of ids of events to delete
+          userEvents.forEach( event => {
+            let uuid = event.uuid;
+            console.log('uuid: ', uuid);
+            // https://stackoverflow.com/questions/1098040/checking-if-a-key-exists-in-a-javascript-object
+            if (!mostRecentUserEvents.hasOwnProperty(uuid)) {
+              mostRecentUserEvents[uuid] = event;
+              console.log('uuid not in list....added it');
+            } else {
+              console.log('uuid was in list');
+              let dateInRecentEvents = new Date(mostRecentUserEvents[uuid].created);
+              let dateInEvents = new Date(event.created);
+              console.log('date of most recent event so far: ', dateInRecentEvents);
+              console.log('date of event we are looking at: ', dateInEvents);
+              if (dateInEvents>dateInRecentEvents) {
+                console.log('event we are looking at is more recent; swap it in and add id of former recent event to delete list');
+                let olderEventId: number = mostRecentUserEvents[uuid].id;
+                mostRecentUserEvents[uuid] = event;
+                olderUserEventIds.push(olderEventId);
+              } else {
+                console.log('add event id to delete list');
+                olderUserEventIds.push(event.id);
+              }
+            }
+          });
+          let userEventsToKeep = [];
+          //https://stackoverflow.com/questions/43389414/how-to-iterate-over-keys-of-a-generic-object-in-typescript
+          Object.keys(mostRecentUserEvents).forEach(key => {
+            userEventsToKeep.push(mostRecentUserEvents[key]);
+          });
+          
+          
+          if (olderUserEventIds.length > 0) {
+            console.log('do some clean-up....');
+            this.deleteAnalyzedEvents(olderUserEventIds)
+            .subscribe(
+              response => { console.log('returned from clean-up: ', response) }
+            );
+          }
+          
+
+          return userEventsToKeep;
+
         }),
         catchError(this.httpService.errorHandler)
       );
@@ -291,6 +340,33 @@ export class EventAnalysisService {
         }),
         catchError(this.httpService.errorHandler)
       );
+  }
+
+  deleteAnalyzedEvents(ids: number[]) {
+    let authToken = sessionStorage.getItem('auth_token');
+    let httpOptions = this.httpService.buildHttpOptionsSecure(authToken);
+    if (this.userService.tokenExpired()) {
+      this.router.navigate(['/login']);
+    }
+
+    let observableBatch = [];
+
+    ids.forEach( id => {
+      observableBatch.push(
+        this.http
+          .delete<any>(AnalyzedEventsUrl + id + '/', httpOptions)
+          .pipe(
+            retry(1),
+            tap(response => {
+              console.log('deleted event: ', response);
+              //return response;
+              //sessionStorage.setItem('auth_token', res.token);
+            }),
+            catchError(this.httpService.errorHandler)
+          )
+      );
+    });
+    return forkJoin(observableBatch);
   }
 
   /**

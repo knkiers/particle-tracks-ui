@@ -80,23 +80,31 @@
                 </div>
             </div>
         </div>
-        <div fxLayout="row wrap" fxLayoutAlign="start">
+        <div fxLayout="row wrap" fxLayoutAlign="start center">
             <div fxFlex="30%">
                 rotn:
             </div>
             <div fxFlex="70%">
                 <!--https://stackoverflow.com/questions/58204128/how-to-label-both-sides-of-a-mat-slide-toggle-control-in-angular-material-8-->
                 <mat-label class="mat-slide-toggle-content">
-                    <mat-icon>undo</mat-icon>&nbsp;
+                    <svg height="24" width="24">
+                        <!-- arc generator: http://xahlee.info/js/svg_circle_arc.html-->
+                        <path d=" M 12 5 A 7 7 0 1 1 7 8" stroke="black" stroke-width="2" fill="none"></path>
+                        <polygon points="9,5,12,2,12,8" stroke="black" fill="black"></polygon>
+                    </svg>&nbsp;
                 </mat-label>
                 <mat-slide-toggle color="primary" [checked]="circle.CW" (change)="resetRotationDirection(circle)"></mat-slide-toggle>
-                <mat-label class="mat-slide-toggle-content">&nbsp;<mat-icon>redo</mat-icon>
+                <mat-label class="mat-slide-toggle-content">
+                    &nbsp;<svg height="24" width="24">
+                        <path d=" M 17 8 A 7 7 0 1 1 12 5" stroke="black" stroke-width="2" fill="none"></path>
+                        <polygon points="15,5,12,2,12,8" stroke="black" fill="black"></polygon>
+                    </svg>
                 </mat-label>
             </div>
         </div>
-        <div fxLayout="row wrap" fxLayoutAlign="start">
+        <div fxLayout="row wrap" fxLayoutAlign="start center">
             <div fxFlex="30%">
-                in/out:
+                direction:
             </div>
             <div fxFlex="70%">
                 <mat-label class="mat-slide-toggle-content">
