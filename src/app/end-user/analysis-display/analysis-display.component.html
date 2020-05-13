@@ -23,7 +23,18 @@
 
                 <mat-card-content>
                     <div fxLayout="row" fxLayoutAlign="space-around center">
-                        <div fxFlex="60%">
+                        <div fxFlex="55%">
+                            <div fxLayout="row" fxLayoutAlign="end" >
+                                <span *ngIf="editModeOn" class="negative-top-margin">
+                                    <mat-label class="mat-slide-toggle-content">
+                                        Deselect&nbsp;
+                                    </mat-label>
+                                    <mat-slide-toggle color="primary" [checked]="colourModeOn"
+                                        (change)="toggleColourMode()"></mat-slide-toggle>
+                                    <mat-label class="mat-slide-toggle-content">&nbsp;Select
+                                    </mat-label>
+                                </span>
+                            </div>
                             <div fxLayout="row" fxLayoutAlign="space-around center">
                                 <div *ngIf="boundaries && dots">
                                     <svg [attr.height]="boundaries.height" [attr.width]="boundaries.width">
@@ -34,32 +45,31 @@
 
                                         <g *ngIf="eventDisplay && ((!editModeOn)||revealEvent)">
                                             <path *ngIf="eventDisplay" [attr.d]="eventDisplay.inCharged"
-                                                stroke="darkgreen" stroke-width="3" fill="none">
+                                                stroke="olivedrab" stroke-width="4" fill="none">
                                             </path>
                                             <path *ngIf="eventDisplay" [attr.d]="eventDisplay.inNeutral"
-                                                stroke="darkgreen" stroke-dasharray="10, 5" stroke-width="3">
+                                                stroke="olivedrab" stroke-dasharray="10, 5" stroke-width="4">
                                             </path>
                                             <path *ngIf="eventDisplay" [attr.d]="eventDisplay.outCharged"
-                                                stroke="darkslateblue" stroke-width="3" fill="none">
+                                                stroke="sandybrown" stroke-width="4" fill="none">
                                             </path>
                                             <path *ngIf="eventDisplay" [attr.d]="eventDisplay.outNeutral"
-                                                stroke="darkslateblue" stroke-dasharray="10, 5" stroke-width="3">
+                                                stroke="sandybrown" stroke-dasharray="10, 5" stroke-width="4">
                                             </path>
                                         </g>
-
-                                        <g *ngFor="let dot of dots">
-                                            <circle (mouseover)="dot.checkDot(colourModeOn)" [attr.r]="dot.findRadius()"
-                                                [attr.cx]="dot.x" [attr.cy]="dot.y"
-                                                [attr.stroke-width]="dot.findStrokeWidth()" stroke="red" fill="grey">
-                                            </circle>
-                                        </g>
-
 
                                         <g *ngFor="let circle of circles">
                                             <circle [attr.r]="circle.rPx" [attr.cx]="circle.xcPx"
                                                 [attr.cy]="circle.ycPx" [attr.stroke-width]="circle.strokeWidth()"
                                                 stroke-dasharray="3, 7, 10, 7" [attr.stroke]="circle.circleColour()"
                                                 fill="none">
+                                            </circle>
+                                        </g>
+
+                                        <g *ngFor="let dot of dots">
+                                            <circle (mouseover)="dot.checkDot(colourModeOn)" [attr.r]="dot.findRadius()"
+                                                [attr.cx]="dot.x" [attr.cy]="dot.y"
+                                                [attr.stroke-width]="dot.findStrokeWidth()" [attr.stroke]="dot.findStrokeColour()" [attr.fill]="dot.findFillColour()">
                                             </circle>
                                         </g>
 
@@ -109,7 +119,8 @@
                             </div>
                             <app-circle-table [circles]="circles" [event]="event" [userIsReadOnly]="userIsReadOnly"
                                 [interactionLocation]="interactionLocation" (circleChanged)="onChangedCircles()"
-                                (highlightDots)="highlightFitDots($event)" (unhighlightDots)="unhighlightFitDots($event)">
+                                (highlightDots)="highlightFitDots($event)"
+                                (unhighlightDots)="unhighlightFitDots($event)">
                             </app-circle-table>
                         </div>
 

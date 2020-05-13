@@ -1,6 +1,6 @@
-const HOVER_COLOUR: string = 'red';
-const NON_HOVER_COLOUR: string = 'grey';
-const HOVER_STROKE_WIDTH: number = 3;
+const HOVER_COLOUR: string = 'mediumpurple';
+const NON_HOVER_COLOUR: string = 'darkslateblue';
+const HOVER_STROKE_WIDTH: number = 4;
 const NON_HOVER_STROKE_WIDTH: number = 2;
 
 export class Circle {

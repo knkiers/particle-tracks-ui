@@ -2,6 +2,12 @@ const RADIUS_ACTIVATED = 3;//px
 const RADIUS_NOT_ACTIVATED = 0.5;
 const STROKE_WIDTH_USED_FOR_FIT = 2;
 const STROKE_WIDTH_NOT_USED_FOR_FIT = 0;
+const STROKE_COLOUR_ACTIVATED = 'darkslateblue';
+const STROKE_COLOUR_NOT_ACTIVATED = 'grey';
+const FILL_COLOUR_ACTIVATED = 'darkslateblue';
+const FILL_COLOUR_NOT_ACTIVATED = 'grey';
+const FILL_COLOUR_USED_FOR_FIT = 'white';
+
 export class Dot {
     id: number;
     activated: boolean;
@@ -27,7 +33,7 @@ export class Dot {
             }
         } else {
             if (this.activated && (this.useForFit)) {
-                this.useForFit = true;
+                this.useForFit = false;
             }
         }
     }
@@ -38,7 +44,18 @@ export class Dot {
         return this.useForFit ? STROKE_WIDTH_USED_FOR_FIT : STROKE_WIDTH_NOT_USED_FOR_FIT;
     }
     findStrokeColour() {
-        
+        return this.activated ? STROKE_COLOUR_ACTIVATED : STROKE_COLOUR_NOT_ACTIVATED;
+    }
+    findFillColour() {
+        if (!this.activated) {
+            return FILL_COLOUR_NOT_ACTIVATED;
+        } else {
+            if (this.useForFit) {
+                return FILL_COLOUR_USED_FOR_FIT;
+            } else {
+                return FILL_COLOUR_ACTIVATED;
+            }
+        }
     }
     deactivate() {
         this.activated = false;
