@@ -78,7 +78,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
 
   editModeOn = false;
   revealEvent = false;
-  colourModeOn: boolean = true;
+  colourModeOn: boolean = false;
   showAxes = false;
 
   userEvents: any = [];
@@ -227,59 +227,13 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       .subscribe(
         userEvents => {
           console.log(userEvents);
-          // now do some clean-up on older versions of analyzed events...don't need to have large numbers of older versions (just keep the most recent one)
-          /*
-          let mostRecentUserEvents: {[index: string]: any} = {};// object to sort through events
-          let olderUserEventIds: number[] = [];//array of ids of events to delete
-          userEvents.forEach( event => {
-            let uuid = event.uuid;
-            console.log('uuid: ', uuid);
-            // https://stackoverflow.com/questions/1098040/checking-if-a-key-exists-in-a-javascript-object
-            if (!mostRecentUserEvents.hasOwnProperty(uuid)) {
-              mostRecentUserEvents[uuid] = event;
-              console.log('uuid not in list....added it');
-            } else {
-              console.log('uuid was in list');
-              dateInRecentEvents = new Date(mostRecentUserEvents[uuid].created);
-              dateInEvents = new Date(event.created);
-              console.log('date of most recent event so far: ', dateInRecentEvents);
-              console.log('date of event we are looking at: ', dateInEvents);
-              if (dateInEvents>dateInRecentEvents) {
-                console.log('event we are looking at is more recent; swap it in and add id of former recent event to delete list');
-                let olderEventId: number = mostRecentUserEvents[uuid].id;
-                mostRecentUserEvents[uuid] = event;
-                olderUserEventIds.push(olderEventId);
-              } else {
-                console.log('add event id to delete list');
-                olderUserEventIds.push(event.id);
-              }
-            }
-          });
-          this.userEvents = [];
-          //https://stackoverflow.com/questions/43389414/how-to-iterate-over-keys-of-a-generic-object-in-typescript
-          Object.keys(mostRecentUserEvents).forEach(key => {
-            this.userEvents.push(mostRecentUserEvents[key]);
-          });
-          */
           this.userEvents = userEvents;
           for (var i in this.userEvents) {
             date = new Date(this.userEvents[i].created);
             //console.log(date);
             this.userEvents[i].createdFormatted = date.toLocaleTimeString("en-us", options);// makes the date a bit more human-readable
           }
-          console.log('userEvents: ', this.userEvents);
-          
-          //console.log('ids to delete: ', olderUserEventIds);
-          /*
-          if (olderUserEventIds.length > 0) {
-            console.log('do some clean-up....');
-            this.eventAnalysisService.deleteAnalyzedEvents(olderUserEventIds)
-            .subscribe(
-              response => { console.log('returned from clean-up: ', response) }
-            );
-          }
-          */
-          
+          console.log('userEvents: ', this.userEvents);          
         }
       );
   }
@@ -424,7 +378,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   onChangedCircles() {
     //this.updateCircleTangentAngles();
     this.saveEvent(false);
-    this.circleChange = -this.circleChange;// used to wake up one or more child components
+    this.circleChange = this.circleChange+1;// used to wake up one or more child components
   }
 
   resetCircles(){
@@ -524,7 +478,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       if (this.numberCircles >= 2) {
         this.showAxes = true;
         this.updateCircleTangentAngles();
-        this.circleChange = -this.circleChange;
+        this.circleChange = this.circleChange+1;
       }
     }
 
@@ -598,6 +552,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     console.log('delete circle #',i);
     if (this.circles[i]!==undefined) {// in case the circle was deleted in the meantime, or something
       this.circles.splice(i,1);
+      this.circleChange = this.circleChange+1;
       this.numberCircles = this.circles.length;
       this.clearDotsForFit();
       //console.log(this.numberCircles);
@@ -605,7 +560,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       if (this.numberCircles < 2) {
         this.showAxes = false;
         this.updateCircleTangentAngles();
-        this.circleChange = -this.circleChange;
+        this.circleChange = this.circleChange+1;
       }
     }
   }
@@ -799,10 +754,10 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     if (this.numberCircles >= 2) {
       this.showAxes = true;
       this.updateCircleTangentAngles();
-      this.circleChange = -this.circleChange;
+      this.circleChange = this.circleChange+1;
     } else {
       this.showAxes = false;
-      this.circleChange = -this.circleChange;
+      this.circleChange = this.circleChange+1;
     }
 
 

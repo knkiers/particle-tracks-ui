@@ -145,9 +145,18 @@ export class MomentumAxisComponent implements OnInit {
 
   lineColor(i: number){
     if (this.circles[i].hovered) {
-      return 'red';
+      if (this.circles[i].incoming) {
+        return 'olivedrab';
+      } else {
+        return 'sandybrown';
+      }
+      //return 'mediumpurple';
     } else {
-      return 'grey';
+      if (this.circles[i].incoming) {
+        return 'olivedrab';
+      } else {
+        return 'sandybrown';
+      }
     }
   }
 
