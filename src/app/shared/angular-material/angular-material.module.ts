@@ -24,6 +24,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatStepperModule } from '@angular/material/stepper';
 
 const modules: any[] = [
   MatMenuModule,
@@ -36,7 +37,8 @@ const modules: any[] = [
   MatExpansionModule,
   MatFormFieldModule,
   MatInputModule,
-  MatSlideToggleModule
+  MatSlideToggleModule,
+  MatStepperModule
 ]
 
 

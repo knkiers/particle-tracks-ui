@@ -1,23 +1,25 @@
 import { Component, OnInit, OnDestroy, Input, EventEmitter } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 //import { ROUTER_DIRECTIVES } from '@angular/router';
-import { Subscription }   from 'rxjs';
+import { Subscription } from 'rxjs';
 //import {FormsModule} from '@angular/forms';
 
 //import {MaterializeDirective} from "angular2-materialize";
 
 //import {MaterializeDirective,MaterializeAction} from "angular2-materialize";
 
-import {EventDisplayService} from '../../shared/services/event-display.service';
-import {UnitConversionService} from '../../shared/services/unit-conversion.service';
-import {EventAnalysisService} from '../../shared/services/event-analysis.service';
+import { EventDisplayService } from '../../shared/services/event-display.service';
+import { UnitConversionService } from '../../shared/services/unit-conversion.service';
+import { EventAnalysisService } from '../../shared/services/event-analysis.service';
 
 //import { CircleBindingService } from '../circle-binding.service';
 
-import {Event} from '../../shared/models/event';
+import { Event } from '../../shared/models/event';
 import { Dot } from '../../shared/models/dot';
 import { Circle } from '../../shared/models/circle';
 
-import { POINT_THREE, R_MIN, R_MAX, B_MAX} from '../../shared/services/unit-conversion.service';
+import { POINT_THREE, R_MIN, R_MAX, B_MAX } from '../../shared/services/unit-conversion.service';
 
 // 1. QUESTION: should js-base64 be added to package.json?
 // 2. TODO: If jwt times out (currently set for 10 days), give an error message
@@ -37,6 +39,9 @@ declare var $: any; // for using jQuery within this angular component
   styleUrls: ['analysis-display.component.scss']
 })
 export class AnalysisDisplayComponent implements OnInit, OnDestroy {
+
+  firstFormGroup: FormGroup;
+  secondFormGroup: FormGroup;
 
   // TODO: Should make circles and dots objects with methods; then they can 'do' things
   // to themselves, like set hovering, selecting dots, etc.;
@@ -71,6 +76,9 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   private interactionRegion: any;
   interactionLocation: any;
 
+  //analysisComplete: boolean = false; // changed to true once enough circles (minNumberCircles) have been added
+  //minNumberCircles: number = 0; // set to the # of charged particles in the event
+
   hAxisParams: any;
   vAxisParams: any;
 
@@ -90,7 +98,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     {
       dismissible: false,
       alignment: 'right',
-      complete: function() { console.log('Closed'); }
+      complete: function () { console.log('Closed'); }
     }
   ]
 
@@ -98,15 +106,16 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     {
       dismissible: false,
       alignment: 'right',
-      complete: function() { console.log('Closed'); }
+      complete: function () { console.log('Closed'); }
     }
   ]
 
   constructor(
-    private unitConversionService:UnitConversionService,
-    private eventAnalysisService:EventAnalysisService,
+    private _formBuilder: FormBuilder,
+    private unitConversionService: UnitConversionService,
+    private eventAnalysisService: EventAnalysisService,
     //private circleBindingService:CircleBindingService,
-    private eventDisplayService:EventDisplayService) {
+    private eventDisplayService: EventDisplayService) {
     this.subscription = eventDisplayService.gridActivationAnnounced$.subscribe(
       gridIndices => {
         this.activateDots(gridIndices);
@@ -128,6 +137,12 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.firstFormGroup = this._formBuilder.group({
+      firstCtrl: ['', Validators.required]
+    });
+    this.secondFormGroup = this._formBuilder.group({
+      secondCtrl: ['', Validators.required]
+    });
     this.unitConversionService.getGrid().subscribe(
       dots => {
         this.dots = [];
@@ -164,13 +179,14 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
           //console.log(JSON.parse(this.eventJSON));
           //console.log(JSON.parse(this.event));
           //this.event = JSON.parse(this.eventJSON);
-          console.log('this.event: ', this.event, typeof this.event);
+          console.log('this.event: ', this.event);
           //console.log(this.event);
-          
+
+          //this.calculateMinNumberCircles();
           this.resetCircles();
           this.setBFieldByEvent(this.event);
           this.initializeEvent();
-          
+
         }
       );
   }
@@ -233,14 +249,30 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
             //console.log(date);
             this.userEvents[i].createdFormatted = date.toLocaleTimeString("en-us", options);// makes the date a bit more human-readable
           }
-          console.log('userEvents: ', this.userEvents);          
+          console.log('userEvents: ', this.userEvents);
         }
       );
   }
 
-  listEvents(){
+  listEvents() {
     console.log(this.userEvents);
   }
+
+  /*
+  calculateMinNumberCircles() {
+    let minNumCircles: number = 0;
+    this.event.decay_products.forEach( (decayProduct: any) => {
+      if (decayProduct.charge !== 0) {
+        minNumCircles = minNumCircles + 1;
+      }
+    });
+    if (this.event.parent.charge !== 0) {
+      minNumCircles = minNumCircles + 1;
+    }
+    this.minNumberCircles = minNumCircles;
+    console.log('MIN NUMBER CIRCLES: ', this.minNumberCircles);
+  }
+  */
 
   initializeEvent() {
     this.interactionLocation = {
@@ -278,7 +310,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     for (let particle of event.decay_products) {
       px = particle.energy_momentum[1];
       py = particle.energy_momentum[2];
-      pmag = Math.sqrt(px*px+py*py);
+      pmag = Math.sqrt(px * px + py * py);
       if (particle.charge !== 0) {
         if (pmax === null) {
           pmax = pmag;
@@ -292,7 +324,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     }
     px = event.parent.energy_momentum[1];
     py = event.parent.energy_momentum[2];
-    pmag = Math.sqrt(px*px+py*py);
+    pmag = Math.sqrt(px * px + py * py);
     if (event.parent.charge !== 0) {
       if (pmax === null) {
         pmax = pmag;
@@ -307,8 +339,8 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     console.log('pmax: ', pmax);
     console.log('pmin: ', pmin);
 
-    let bmin = pmax/(POINT_THREE*R_MAX);
-    let bmax = pmin/(POINT_THREE*R_MIN);
+    let bmin = pmax / (POINT_THREE * R_MAX);
+    let bmax = pmin / (POINT_THREE * R_MIN);
 
     console.log('bmin: ', bmin);
     console.log('bmax: ', bmax);
@@ -323,9 +355,9 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       bmax = bmin;
     }
 
-    let bFieldInitialCalc = bmin + (bmax-bmin)*Math.random();
+    let bFieldInitialCalc = bmin + (bmax - bmin) * Math.random();
     // https://stackoverflow.com/questions/11832914/round-to-at-most-2-decimal-places-only-if-necessary
-    this.bFieldStrength = Math.round((bFieldInitialCalc+0.00000001)*10)/10;
+    this.bFieldStrength = Math.round((bFieldInitialCalc + 0.00000001) * 10) / 10;
 
   }
 
@@ -337,7 +369,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   activateDots(gridIndices) {
     console.log('activated dots:', gridIndices);
     if (this.dots !== []) {// in principle possible(?) that dots has not yet been initialized....
-      this.dots.forEach( dot => {// deactivate all dots and unset useForFit as well
+      this.dots.forEach(dot => {// deactivate all dots and unset useForFit as well
         dot.deactivate();
         dot.unsetUseForFit();
       });
@@ -378,20 +410,20 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   onChangedCircles() {
     //this.updateCircleTangentAngles();
     this.saveEvent(false);
-    this.circleChange = this.circleChange+1;// used to wake up one or more child components
+    this.circleChange = this.circleChange + 1;// used to wake up one or more child components
   }
 
-  resetCircles(){
+  resetCircles() {
     this.circles = [];
   }
 
-  resetAxes(){
+  resetAxes() {
     this.showAxes = false;
   }
 
-  clearDotsForFit(){
+  clearDotsForFit() {
     var i;
-    for (i=0; i<this.dots.length; i++) {
+    for (i = 0; i < this.dots.length; i++) {
       this.dots[i].useForFit = false;
     }
     //this.eventAnalysisService.clearDotsForFit(this.dots);
@@ -454,7 +486,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   }
   */
 
-  addCircle(){
+  addCircle() {
     /*
      dataDict = {
      circle:      circleDataPx,
@@ -468,17 +500,20 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     if (dataDict.error) {
       this.openCircleErrorModal();
     }
-    if (!dataDict.error){
+    if (!dataDict.error) {
       this.circles.push(new Circle(dataDict.circle));
       console.log('circles: ', this.circles);
       this.clearDotsForFit();
       this.numberCircles = this.circles.length;
       this.saveEvent(false);
+      //if (this.circles.length >= this.minNumberCircles) {
+      //  this.analysisComplete = true;
+      //}
       //console.log(this.numberCircles);
       if (this.numberCircles >= 2) {
         this.showAxes = true;
         this.updateCircleTangentAngles();
-        this.circleChange = this.circleChange+1;
+        this.circleChange = this.circleChange + 1;
       }
     }
 
@@ -522,7 +557,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
    */
 
 
-  
+
   hoverCircle(i: number) {
     console.log('hover circle');
     /*
@@ -549,18 +584,21 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   }
 
   deleteCircle(i: number) {
-    console.log('delete circle #',i);
-    if (this.circles[i]!==undefined) {// in case the circle was deleted in the meantime, or something
-      this.circles.splice(i,1);
-      this.circleChange = this.circleChange+1;
+    console.log('delete circle #', i);
+    if (this.circles[i] !== undefined) {// in case the circle was deleted in the meantime, or something
+      this.circles.splice(i, 1);
+      this.circleChange = this.circleChange + 1;
       this.numberCircles = this.circles.length;
       this.clearDotsForFit();
       //console.log(this.numberCircles);
       this.saveEvent(false);
+      //if (this.circles.length < this.minNumberCircles) {
+      //  this.analysisComplete = false;
+      //}
       if (this.numberCircles < 2) {
         this.showAxes = false;
         this.updateCircleTangentAngles();
-        this.circleChange = this.circleChange+1;
+        this.circleChange = this.circleChange + 1;
       }
     }
   }
@@ -585,7 +623,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       }
     });
   }
-  
+
 
   /*
   addCircleTangentAngles() {
@@ -597,7 +635,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   */
 
   toggleParticleIncomingOutgoing(i: number) {
-    if (this.circles[i]!==undefined) {// in case the circle was deleted in the meantime, or something
+    if (this.circles[i] !== undefined) {// in case the circle was deleted in the meantime, or something
       this.circles[i].incoming = !this.circles[i].incoming;
     }
   }
@@ -631,7 +669,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     }
   }
 
-  computeAxisCoordinates(){
+  computeAxisCoordinates() {
     let xmin = this.boundaries.xmin;
     let xmax = this.boundaries.xmax;
     let ymin = this.boundaries.ymin;
@@ -639,15 +677,15 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     let x = this.interactionLocation.x;
     let y = this.interactionLocation.y;
 
-    let axisLength = (Math.min(xmax-x, x-xmin, ymax-y, y-ymin))*AXIS_FRACTION;
+    let axisLength = (Math.min(xmax - x, x - xmin, ymax - y, y - ymin)) * AXIS_FRACTION;
     //console.log(axisLength);
 
     // in the following, x and y are not really the x and y coords of a single point, but
     // that turns out not to matter for the conversion of the coordinates....
-    var hLineStart = this.unitConversionService.translatecmtoPixels(x-axisLength, y, this.boundaries);
-    var hLineEnd = this.unitConversionService.translatecmtoPixels(x+axisLength, y, this.boundaries);
-    var vLineStart = this.unitConversionService.translatecmtoPixels(x, y-axisLength, this.boundaries);
-    var vLineEnd = this.unitConversionService.translatecmtoPixels(x, y+axisLength, this.boundaries);
+    var hLineStart = this.unitConversionService.translatecmtoPixels(x - axisLength, y, this.boundaries);
+    var hLineEnd = this.unitConversionService.translatecmtoPixels(x + axisLength, y, this.boundaries);
+    var vLineStart = this.unitConversionService.translatecmtoPixels(x, y - axisLength, this.boundaries);
+    var vLineEnd = this.unitConversionService.translatecmtoPixels(x, y + axisLength, this.boundaries);
 
 
     this.hAxisParams = {
@@ -666,7 +704,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   }
 
 
-  turnOnEditMode(){
+  turnOnEditMode() {
     //console.log('inside toggle edit mode fn');
     if (!this.editModeOn) {
       this.editModeOn = true;
@@ -674,21 +712,21 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     }
   }
 
-  turnOffEditMode(){
+  turnOffEditMode() {
     this.editModeOn = false;
   }
 
-  showEvent(){
+  showEvent() {
     this.revealEvent = true;
   }
 
-  hideEvent(){
+  hideEvent() {
     this.revealEvent = false;
   }
 
   // the following can be used to close a modal programmatically....
   // (see Galilee webapp -- update resource collection)
-  onModalFinished(eventID: string){
+  onModalFinished(eventID: string) {
     // Note: must include the following declaration (above) in component:
     //          declare var $: any;
     this.closeBrowseEventsModal();
@@ -754,19 +792,19 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     if (this.numberCircles >= 2) {
       this.showAxes = true;
       this.updateCircleTangentAngles();
-      this.circleChange = this.circleChange+1;
+      this.circleChange = this.circleChange + 1;
     } else {
       this.showAxes = false;
-      this.circleChange = this.circleChange+1;
+      this.circleChange = this.circleChange + 1;
     }
 
 
   }
 
 
-  toggleColourMode(){
+  toggleColourMode() {
     console.log('colour mode toggled!');
-    this.colourModeOn =!this.colourModeOn;
+    this.colourModeOn = !this.colourModeOn;
     console.log('colour mode is on? ', this.colourModeOn);
   }
 
