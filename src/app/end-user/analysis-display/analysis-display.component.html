@@ -1,101 +1,82 @@
-<div class="container">
+<mat-card-header>
+    <mat-card-title class="card-title-container">
+        <span *ngIf="!noEventRetrieved && event !== null; else no_event_container">
+            <span [innerHTML]="event.name">
+            </span>
+        </span>
+        <ng-template #no_event_container>
+            <span *ngIf="noEventRetrieved">
+                No Process Selected
+            </span>
+        </ng-template>
+    </mat-card-title>
+    <mat-card-subtitle>
+        <span *ngIf="!noEventRetrieved">
+            B = {{bFieldStrength}} kG
+        </span>
+    </mat-card-subtitle>
+</mat-card-header>
+
+<mat-card-content>
     <div fxLayout="row" fxLayoutAlign="space-around center">
-        <div fxFlex.gt-sm="900px">
-            <mat-card>
-                <mat-vertical-stepper linear #stepper>
-                    <mat-step >
-                        <!--<form [formGroup]="firstFormGroup">-->
-                            <ng-template matStepLabel>Choose and Analyze Event</ng-template>
+        <div fxFlex="55%">
+            <div fxLayout="row" fxLayoutAlign="end">
+                <span *ngIf="editModeOn" class="negative-top-margin">
+                    <mat-label class="mat-slide-toggle-content">
+                        Deselect&nbsp;
+                    </mat-label>
+                    <mat-slide-toggle color="primary" [checked]="colourModeOn" (change)="toggleColourMode()">
+                    </mat-slide-toggle>
+                    <mat-label class="mat-slide-toggle-content">&nbsp;Select
+                    </mat-label>
+                </span>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="space-around center">
+                <div *ngIf="boundaries && dots">
+                    <svg [attr.height]="boundaries.height" [attr.width]="boundaries.width">
+                        <rect [attr.x]="boundaries.xminPx" [attr.y]="boundaries.ymaxPx"
+                            [attr.width]="boundaries.widthDisplay" [attr.height]="boundaries.heightDisplay"
+                            style="fill:blue;stroke:grey;stroke-width:5;fill-opacity:0.1;stroke-opacity:0.9" />
 
-                            <mat-card-header>
-                                <mat-card-title class="card-title-container">
-                                    <span *ngIf="!noEventRetrieved && event !== null; else no_event_container">
-                                        <span [innerHTML]="event.name">
-                                        </span>
-                                    </span>
-                                    <ng-template #no_event_container>
-                                        <span *ngIf="noEventRetrieved">
-                                            No Process Selected
-                                        </span>
-                                    </ng-template>
-                                </mat-card-title>
-                                <mat-card-subtitle>
-                                    <span *ngIf="!noEventRetrieved">
-                                        B = {{bFieldStrength}} kG
-                                    </span>
-                                </mat-card-subtitle>
-                            </mat-card-header>
+                        <g *ngIf="eventDisplay && ((!editModeOn)||revealEvent)">
+                            <path *ngIf="eventDisplay" [attr.d]="eventDisplay.inCharged" stroke="olivedrab"
+                                stroke-width="4" fill="none">
+                            </path>
+                            <path *ngIf="eventDisplay" [attr.d]="eventDisplay.inNeutral" stroke="olivedrab"
+                                stroke-dasharray="10, 5" stroke-width="4">
+                            </path>
+                            <path *ngIf="eventDisplay" [attr.d]="eventDisplay.outCharged" stroke="sandybrown"
+                                stroke-width="4" fill="none">
+                            </path>
+                            <path *ngIf="eventDisplay" [attr.d]="eventDisplay.outNeutral" stroke="sandybrown"
+                                stroke-dasharray="10, 5" stroke-width="4">
+                            </path>
+                        </g>
 
-                            <mat-card-content>
-                                <div fxLayout="row" fxLayoutAlign="space-around center">
-                                    <div fxFlex="55%">
-                                        <div fxLayout="row" fxLayoutAlign="end">
-                                            <span *ngIf="editModeOn" class="negative-top-margin">
-                                                <mat-label class="mat-slide-toggle-content">
-                                                    Deselect&nbsp;
-                                                </mat-label>
-                                                <mat-slide-toggle color="primary" [checked]="colourModeOn"
-                                                    (change)="toggleColourMode()"></mat-slide-toggle>
-                                                <mat-label class="mat-slide-toggle-content">&nbsp;Select
-                                                </mat-label>
-                                            </span>
-                                        </div>
-                                        <div fxLayout="row" fxLayoutAlign="space-around center">
-                                            <div *ngIf="boundaries && dots">
-                                                <svg [attr.height]="boundaries.height" [attr.width]="boundaries.width">
-                                                    <rect [attr.x]="boundaries.xminPx" [attr.y]="boundaries.ymaxPx"
-                                                        [attr.width]="boundaries.widthDisplay"
-                                                        [attr.height]="boundaries.heightDisplay"
-                                                        style="fill:blue;stroke:grey;stroke-width:5;fill-opacity:0.1;stroke-opacity:0.9" />
+                        <g *ngFor="let circle of circles">
+                            <circle [attr.r]="circle.rPx" [attr.cx]="circle.xcPx" [attr.cy]="circle.ycPx"
+                                [attr.stroke-width]="circle.strokeWidth()" stroke-dasharray="3, 7, 10, 7"
+                                [attr.stroke]="circle.circleColour()" fill="none">
+                            </circle>
+                        </g>
 
-                                                    <g *ngIf="eventDisplay && ((!editModeOn)||revealEvent)">
-                                                        <path *ngIf="eventDisplay" [attr.d]="eventDisplay.inCharged"
-                                                            stroke="olivedrab" stroke-width="4" fill="none">
-                                                        </path>
-                                                        <path *ngIf="eventDisplay" [attr.d]="eventDisplay.inNeutral"
-                                                            stroke="olivedrab" stroke-dasharray="10, 5"
-                                                            stroke-width="4">
-                                                        </path>
-                                                        <path *ngIf="eventDisplay" [attr.d]="eventDisplay.outCharged"
-                                                            stroke="sandybrown" stroke-width="4" fill="none">
-                                                        </path>
-                                                        <path *ngIf="eventDisplay" [attr.d]="eventDisplay.outNeutral"
-                                                            stroke="sandybrown" stroke-dasharray="10, 5"
-                                                            stroke-width="4">
-                                                        </path>
-                                                    </g>
+                        <g *ngFor="let dot of dots">
+                            <circle (mouseover)="dot.checkDot(colourModeOn)" [attr.r]="dot.findRadius()"
+                                [attr.cx]="dot.x" [attr.cy]="dot.y" [attr.stroke-width]="dot.findStrokeWidth()"
+                                [attr.stroke]="dot.findStrokeColour()" [attr.fill]="dot.findFillColour()">
+                            </circle>
+                        </g>
 
-                                                    <g *ngFor="let circle of circles">
-                                                        <circle [attr.r]="circle.rPx" [attr.cx]="circle.xcPx"
-                                                            [attr.cy]="circle.ycPx"
-                                                            [attr.stroke-width]="circle.strokeWidth()"
-                                                            stroke-dasharray="3, 7, 10, 7"
-                                                            [attr.stroke]="circle.circleColour()" fill="none">
-                                                        </circle>
-                                                    </g>
+                        <g *ngIf="eventDisplay && editModeOn && showAxes">
+                            <line [attr.x1]="hAxisParams.x1" [attr.x2]="hAxisParams.x2" [attr.y1]="hAxisParams.y1"
+                                [attr.y2]="hAxisParams.y2" [attr.stroke-width]="1" [attr.stroke]="'grey'">
+                            </line>
+                            <line [attr.x1]="vAxisParams.x1" [attr.x2]="vAxisParams.x2" [attr.y1]="vAxisParams.y1"
+                                [attr.y2]="vAxisParams.y2" [attr.stroke-width]="1" [attr.stroke]="'grey'">
+                            </line>
+                        </g>
 
-                                                    <g *ngFor="let dot of dots">
-                                                        <circle (mouseover)="dot.checkDot(colourModeOn)"
-                                                            [attr.r]="dot.findRadius()" [attr.cx]="dot.x"
-                                                            [attr.cy]="dot.y"
-                                                            [attr.stroke-width]="dot.findStrokeWidth()"
-                                                            [attr.stroke]="dot.findStrokeColour()"
-                                                            [attr.fill]="dot.findFillColour()">
-                                                        </circle>
-                                                    </g>
-
-                                                    <g *ngIf="eventDisplay && editModeOn && showAxes">
-                                                        <line [attr.x1]="hAxisParams.x1" [attr.x2]="hAxisParams.x2"
-                                                            [attr.y1]="hAxisParams.y1" [attr.y2]="hAxisParams.y2"
-                                                            [attr.stroke-width]="1" [attr.stroke]="'grey'">
-                                                        </line>
-                                                        <line [attr.x1]="vAxisParams.x1" [attr.x2]="vAxisParams.x2"
-                                                            [attr.y1]="vAxisParams.y1" [attr.y2]="vAxisParams.y2"
-                                                            [attr.stroke-width]="1" [attr.stroke]="'grey'">
-                                                        </line>
-                                                    </g>
-
-                                                    <!--
+                        <!--
                   
         
                   <g *ngIf="eventDisplay && editModeOn && showAxes" app-axis
@@ -114,104 +95,67 @@
 
 
 
-                                                </svg>
+                    </svg>
 
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div fxFlex="40%">
-                                        <div *ngIf="momentumDiagramBoundaries && eventDisplay && editModeOn && showAxes"
-                                            class="row">
-                                            <div fxLayout="row" fxLayoutAlign="space-around center">
-                                                <app-momentum-axis [circles]="circles"
-                                                    [boundaries]="momentumDiagramBoundaries" [wakeUp]="circleChange">
-                                                </app-momentum-axis>
-                                            </div>
-                                        </div>
-                                        <app-circle-table [circles]="circles" [event]="event"
-                                            [userIsReadOnly]="userIsReadOnly"
-                                            [interactionLocation]="interactionLocation"
-                                            (circleChanged)="onChangedCircles()"
-                                            (highlightDots)="highlightFitDots($event)"
-                                            (unhighlightDots)="unhighlightFitDots($event)">
-                                        </app-circle-table>
-                                    </div>
+                </div>
+            </div>
+        </div>
+        <div fxFlex="40%">
+            <div *ngIf="momentumDiagramBoundaries && eventDisplay && editModeOn && showAxes" class="row">
+                <div fxLayout="row" fxLayoutAlign="space-around center">
+                    <app-momentum-axis [circles]="circles" [boundaries]="momentumDiagramBoundaries"
+                        [wakeUp]="circleChange">
+                    </app-momentum-axis>
+                </div>
+            </div>
+            <app-circle-table [circles]="circles" [event]="event" [userIsReadOnly]="userIsReadOnly"
+                [interactionLocation]="interactionLocation" (circleChanged)="onChangedCircles()"
+                (highlightDots)="highlightFitDots($event)" (unhighlightDots)="unhighlightFitDots($event)">
+            </app-circle-table>
+        </div>
 
-                                </div>
+    </div>
 
-                                <div *ngIf="!userIsReadOnly">
-                                    <div *ngIf="!editModeOn">
-                                        <button mat-stroked-button color="primary" (click)="fetchNewEvent()">Get
-                                            Event</button>
-                                        <button *ngIf="event" mat-stroked-button color="primary"
-                                            (click)="turnOnEditMode()">Analyze
-                                            This
-                                            Event</button>
-                                    </div>
-                                    <div *ngIf="editModeOn">
-                                        <button *ngIf="!userIsReadOnly" mat-stroked-button color="primary"
-                                            (click)="addCircle()">Add
-                                            Circle</button>
-                                        <button mat-stroked-button color="primary" [disabled]="circles.length === 0"
-                                            [matMenuTriggerFor]="menu">Delete Circle</button>
-                                        <mat-menu #menu="matMenu">
-                                            <div *ngFor="let circle of circles; let i=index">
-                                                <button mat-menu-item (mouseenter)="highlight(circle)"
-                                                    (mouseout)="unhighlight(circle)" (click)="deleteCircle(i)">
-                                                    Circle #{{i+1}}
-                                                </button>
-                                            </div>
-                                        </mat-menu>
-                                        <button *ngIf="!userIsReadOnly && !revealEvent" mat-stroked-button
-                                            color="primary" (click)="showEvent()">
-                                            Show Event
-                                        </button>
-                                        <button *ngIf="!userIsReadOnly && revealEvent" mat-stroked-button
-                                            color="primary" (click)="hideEvent()">
-                                            Hide Event
-                                        </button>
+    <div *ngIf="!userIsReadOnly">
+        <div *ngIf="!editModeOn">
+            <button mat-stroked-button color="primary" (click)="fetchNewEvent()">Get
+                Event</button>
+            <button *ngIf="event" mat-stroked-button color="primary" (click)="turnOnEditMode()">Analyze
+                This
+                Event</button>
+        </div>
+        <div *ngIf="editModeOn">
+            <button *ngIf="!userIsReadOnly" mat-stroked-button color="primary" (click)="addCircle()">Add
+                Circle</button>
+            <button mat-stroked-button color="primary" [disabled]="circles.length === 0"
+                [matMenuTriggerFor]="menu">Delete Circle</button>
+            <mat-menu #menu="matMenu">
+                <div *ngFor="let circle of circles; let i=index">
+                    <button mat-menu-item (mouseenter)="highlight(circle)" (mouseout)="unhighlight(circle)"
+                        (click)="deleteCircle(i)">
+                        Circle #{{i+1}}
+                    </button>
+                </div>
+            </mat-menu>
+            <button *ngIf="!userIsReadOnly && !revealEvent" mat-stroked-button color="primary" (click)="showEvent()">
+                Show Event
+            </button>
+            <button *ngIf="!userIsReadOnly && revealEvent" mat-stroked-button color="primary" (click)="hideEvent()">
+                Hide Event
+            </button>
 
-                                    </div>
-                                </div>
+        </div>
+    </div>
 
 
 
 
 
 
-                            </mat-card-content>
-                            <!--
+</mat-card-content>
+<!--
                             <div>
                                 <button mat-button matStepperNext>Next</button>
                             </div>
                         -->
-                        <!--</form>-->
-                    </mat-step>
-                    <mat-step >
-                        <!--<form [formGroup]="secondFormGroup">-->
-                            <ng-template matStepLabel>Review</ng-template>
-
-                            Looks like you're ready to submit!
-
-                            <div>
-                                <button mat-button matStepperPrevious>Back</button>
-                                <button mat-button matStepperNext>Next</button>
-                            </div>
-                        <!--</form>-->
-                    </mat-step>
-                    <mat-step>
-                        <ng-template matStepLabel>Submit Event</ng-template>
-                        <p>Click Submit to submit your analyzed event.</p>
-                        <div>
-                            <button mat-button matStepperPrevious>Back</button>
-                            <button mat-button (click)="stepper.reset()">Reset</button>
-                        </div>
-                    </mat-step>
-                </mat-vertical-stepper>
-            </mat-card>
-        </div>
-    </div>
-
-    <button *ngIf="event" mat-stroked-button color="primary" (click)="saveEvent(false)">Save Event</button>
-
-</div>
+<!--</form>-->

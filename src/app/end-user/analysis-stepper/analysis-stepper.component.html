@@ -1,0 +1,39 @@
+<div class="container">
+    <div fxLayout="row" fxLayoutAlign="space-around center">
+        <div fxFlex.gt-sm="900px">
+            <mat-card>
+                <mat-vertical-stepper linear #stepper>
+                    <mat-step>
+                        <!--<form [formGroup]="firstFormGroup">-->
+                        <ng-template matStepLabel>Choose and Analyze Event</ng-template>
+
+                        <app-analysis-display></app-analysis-display>
+
+
+
+                    </mat-step>
+                    <mat-step>
+                        <!--<form [formGroup]="secondFormGroup">-->
+                        <ng-template matStepLabel>Review</ng-template>
+
+                        Looks like you're ready to submit!
+
+                        <div>
+                            <button mat-button matStepperPrevious>Back</button>
+                            <button mat-button matStepperNext>Next</button>
+                        </div>
+                        <!--</form>-->
+                    </mat-step>
+                    <mat-step>
+                        <ng-template matStepLabel>Submit Event</ng-template>
+                        <p>Click Submit to submit your analyzed event.</p>
+                        <div>
+                            <button mat-button matStepperPrevious>Back</button>
+                            <button mat-button (click)="stepper.reset()">Reset</button>
+                        </div>
+                    </mat-step>
+                </mat-vertical-stepper>
+            </mat-card>
+        </div>
+    </div>
+</div>

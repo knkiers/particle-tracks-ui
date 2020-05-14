@@ -13,9 +13,10 @@ import { AnalysisDisplayComponent } from './analysis-display/analysis-display.co
 import { CircleItemComponent } from './circle-item/circle-item.component';
 import { CircleTableComponent } from './circle-table/circle-table.component';
 import { MomentumAxisComponent } from './momentum-axis/momentum-axis.component';
+import { AnalysisStepperComponent } from './analysis-stepper/analysis-stepper.component';
 
 @NgModule({
-  declarations: [EndUserComponent, AnalysisDisplayComponent, CircleItemComponent, CircleTableComponent, MomentumAxisComponent ],
+  declarations: [EndUserComponent, AnalysisDisplayComponent, CircleItemComponent, CircleTableComponent, MomentumAxisComponent, AnalysisStepperComponent ],
   imports: [
     CommonModule,
     EndUserRoutingModule,
