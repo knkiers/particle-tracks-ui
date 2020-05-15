@@ -16,7 +16,9 @@
                         <!--<form [formGroup]="secondFormGroup">-->
                         <ng-template matStepLabel>Review</ng-template>
 
-                        Looks like you're ready to submit!
+                        <app-review-event
+                            (reviewStatusAnalysisOK)="onReviewStatusUpdate($event)">
+                        </app-review-event>
 
                         <div>
                             <button mat-button matStepperPrevious>Back</button>
@@ -26,6 +28,7 @@
                     </mat-step>
                     <mat-step>
                         <ng-template matStepLabel>Submit Event</ng-template>
+                        <p>Analysis OK?  {{analysisOK}} </p>
                         <p>Click Submit to submit your analyzed event.</p>
                         <div>
                             <button mat-button matStepperPrevious>Back</button>

@@ -266,34 +266,33 @@ export class EventAnalysisService {
       .pipe(
         retry(1),
         tap(response => {
-          console.log('analyzed events for this user: ', response);
+          //console.log('analyzed events for this user: ', response);
           //return response;
           //sessionStorage.setItem('auth_token', res.token);
         }),
         map( userEvents => {
-
           let mostRecentUserEvents: {[index: string]: any} = {};// object to sort through events
           let olderUserEventIds: number[] = [];//array of ids of events to delete
           userEvents.forEach( event => {
             let uuid = event.uuid;
-            console.log('uuid: ', uuid);
+            //console.log('uuid: ', uuid);
             // https://stackoverflow.com/questions/1098040/checking-if-a-key-exists-in-a-javascript-object
             if (!mostRecentUserEvents.hasOwnProperty(uuid)) {
               mostRecentUserEvents[uuid] = event;
-              console.log('uuid not in list....added it');
+              //console.log('uuid not in list....added it');
             } else {
-              console.log('uuid was in list');
+              //console.log('uuid was in list');
               let dateInRecentEvents = new Date(mostRecentUserEvents[uuid].created);
               let dateInEvents = new Date(event.created);
-              console.log('date of most recent event so far: ', dateInRecentEvents);
-              console.log('date of event we are looking at: ', dateInEvents);
+              //console.log('date of most recent event so far: ', dateInRecentEvents);
+              //console.log('date of event we are looking at: ', dateInEvents);
               if (dateInEvents>dateInRecentEvents) {
-                console.log('event we are looking at is more recent; swap it in and add id of former recent event to delete list');
+                //console.log('event we are looking at is more recent; swap it in and add id of former recent event to delete list');
                 let olderEventId: number = mostRecentUserEvents[uuid].id;
                 mostRecentUserEvents[uuid] = event;
                 olderUserEventIds.push(olderEventId);
               } else {
-                console.log('add event id to delete list');
+                //console.log('add event id to delete list');
                 olderUserEventIds.push(event.id);
               }
             }
@@ -303,17 +302,15 @@ export class EventAnalysisService {
           Object.keys(mostRecentUserEvents).forEach(key => {
             userEventsToKeep.push(mostRecentUserEvents[key]);
           });
-          
-          
+
           if (olderUserEventIds.length > 0) {
-            console.log('do some clean-up....');
+            //console.log('do some clean-up....');
             this.deleteAnalyzedEvents(olderUserEventIds)
             .subscribe(
               response => { console.log('returned from clean-up: ', response) }
             );
           }
           
-
           return userEventsToKeep;
 
         }),

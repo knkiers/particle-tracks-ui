@@ -7,9 +7,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AnalysisStepperComponent implements OnInit {
 
+  analysisOK: boolean = false;
+
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  onReviewStatusUpdate(analysisOK: boolean) {
+    this.analysisOK = analysisOK;
+  }
 }

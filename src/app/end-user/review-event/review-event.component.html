@@ -1,0 +1,54 @@
+<mat-card-header>
+    <mat-card-title class="card-title-container">
+        <span *ngIf="event !== null; else no_event_container">
+            <span [innerHTML]="event.name">
+            </span>
+        </span>
+        <ng-template #no_event_container>
+            <span>
+                No process selected yet
+            </span>
+        </ng-template>
+    </mat-card-title>
+    <mat-card-subtitle *ngIf="event !== null">
+        A quick review of your data analysis for this event.
+    </mat-card-subtitle>
+</mat-card-header>
+
+<mat-card-content>
+
+    <div *ngIf="event !== null">
+        <div>
+            Number of charged particles: {{numberChargedParticles}}
+        </div>
+        <div>
+            Number of neutral particles: {{numberNeutralParticles}}
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="space-around center"
+            *ngFor="let correctFeatureMessage of correctFeatureMessages" class="card-top-space">
+            <div fxFlex.gt-sm="650px">
+                <mat-card class="all-is-well-card">
+                    <mat-card-content>
+                        <mat-icon class="warning-icon">check_circle_outline</mat-icon>&nbsp;{{correctFeatureMessage}}
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="space-around center" *ngFor="let errorMessage of errorMessages"
+            class="card-top-space">
+            <div fxFlex.gt-sm="650px">
+                <mat-card class="warning-card">
+                    <mat-card-content>
+                        <mat-icon class="warning-icon">warning</mat-icon>&nbsp;{{errorMessage}}
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</mat-card-content>

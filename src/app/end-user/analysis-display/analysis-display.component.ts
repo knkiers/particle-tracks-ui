@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy, Input, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 //import { ROUTER_DIRECTIVES } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -12,12 +11,15 @@ import { Subscription } from 'rxjs';
 import { EventDisplayService } from '../../shared/services/event-display.service';
 import { UnitConversionService } from '../../shared/services/unit-conversion.service';
 import { EventAnalysisService } from '../../shared/services/event-analysis.service';
+import { EventInfoService } from '../event-info.service';
 
 //import { CircleBindingService } from '../circle-binding.service';
 
 import { Event } from '../../shared/models/event';
 import { Dot } from '../../shared/models/dot';
 import { Circle } from '../../shared/models/circle';
+
+import { CircleActivatedDots } from '../../shared/interfaces/circle-activated-dots';
 
 import { POINT_THREE, R_MIN, R_MAX, B_MAX } from '../../shared/services/unit-conversion.service';
 
@@ -40,9 +42,6 @@ declare var $: any; // for using jQuery within this angular component
 })
 export class AnalysisDisplayComponent implements OnInit, OnDestroy {
 
-  firstFormGroup: FormGroup;
-  secondFormGroup: FormGroup;
-
   // TODO: Should make circles and dots objects with methods; then they can 'do' things
   // to themselves, like set hovering, selecting dots, etc.;
   // could refactor this on the next go-around....
@@ -62,6 +61,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
 
   event: Event;
   noEventRetrieved: boolean = true;
+  eventActivatedDots: CircleActivatedDots[] = [];
   private eventJSON: any;
   //private eventType: any;
   private eventTypeJSON: any;
@@ -111,14 +111,14 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   ]
 
   constructor(
-    private _formBuilder: FormBuilder,
+    private eventInfoService: EventInfoService,
     private unitConversionService: UnitConversionService,
     private eventAnalysisService: EventAnalysisService,
     //private circleBindingService:CircleBindingService,
     private eventDisplayService: EventDisplayService) {
     this.subscription = eventDisplayService.gridActivationAnnounced$.subscribe(
-      gridIndices => {
-        this.activateDots(gridIndices);
+      (gridData) => {
+        this.activateDots(gridData);
       });
     /*
     this.circleSubscription = circleBindingService.circleUpdated$.subscribe(
@@ -137,12 +137,6 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.firstFormGroup = this._formBuilder.group({
-      firstCtrl: ['', Validators.required]
-    });
-    this.secondFormGroup = this._formBuilder.group({
-      secondCtrl: ['', Validators.required]
-    });
     this.unitConversionService.getGrid().subscribe(
       dots => {
         this.dots = [];
@@ -186,7 +180,6 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
           this.resetCircles();
           this.setBFieldByEvent(this.event);
           this.initializeEvent();
-
         }
       );
   }
@@ -366,17 +359,20 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     this method is called after an array of activatedDots is received
     via the subscription service (following the generation of a new event)
    */
-  activateDots(gridIndices) {
-    console.log('activated dots:', gridIndices);
+  activateDots(gridData: any) {
+    console.log('grid indices:', gridData.gridIndices);
+    console.log('grid activated dots:', gridData.gridActivatedData);
     if (this.dots !== []) {// in principle possible(?) that dots has not yet been initialized....
       this.dots.forEach(dot => {// deactivate all dots and unset useForFit as well
         dot.deactivate();
         dot.unsetUseForFit();
       });
-      for (let i of gridIndices) { // now activate the ones indicated in gridIndices
+      for (let i of gridData.gridIndices) { // now activate the ones indicated in gridIndices
         this.dots[i].activate();
       }
     }
+    this.eventActivatedDots = gridData.eventActivatedDots;
+    this.eventInfoService.announceEventUpdate(this.event, this.circles, this.eventActivatedDots);
   }
 
   highlight(circle: Circle) {
@@ -411,6 +407,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     //this.updateCircleTangentAngles();
     this.saveEvent(false);
     this.circleChange = this.circleChange + 1;// used to wake up one or more child components
+    this.eventInfoService.announceEventUpdate(this.event, this.circles, this.eventActivatedDots);
   }
 
   resetCircles() {
@@ -505,7 +502,6 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       console.log('circles: ', this.circles);
       this.clearDotsForFit();
       this.numberCircles = this.circles.length;
-      this.saveEvent(false);
       //if (this.circles.length >= this.minNumberCircles) {
       //  this.analysisComplete = true;
       //}
@@ -513,8 +509,10 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       if (this.numberCircles >= 2) {
         this.showAxes = true;
         this.updateCircleTangentAngles();
-        this.circleChange = this.circleChange + 1;
       }
+      this.circleChange = this.circleChange + 1;
+      this.saveEvent(false);
+      this.eventInfoService.announceEventUpdate(this.event, this.circles, this.eventActivatedDots);
     }
 
   }
@@ -600,6 +598,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
         this.updateCircleTangentAngles();
         this.circleChange = this.circleChange + 1;
       }
+      this.eventInfoService.announceEventUpdate(this.event, this.circles, this.eventActivatedDots);
     }
   }
 

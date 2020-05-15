@@ -65,8 +65,11 @@ export class EventDisplayService {
   }
 
   // Service message command
-  announceGridActivation(gridIndices: number[]) {
-    this.gridActivationAnnouncedSource.next(gridIndices);
+  announceGridActivation(gridIndices: number[], eventActivatedDots: any) {
+    this.gridActivationAnnouncedSource.next({
+      gridIndices: gridIndices, 
+      eventActivatedDots: eventActivatedDots
+    });
   }
 
   getStringEventDisplay(bFieldStrength, bFieldDirection,
@@ -81,15 +84,28 @@ export class EventDisplayService {
     var particleDirection;
     var px, py, pathParams;
     var activatedGridIndices = [];
+    let eventActivatedDots: any[] = [];// useful for reviewing students' data....
 
     px = event.parent.energy_momentum[1];
     py = event.parent.energy_momentum[2];
 
+    let activatedDotIndex: number = 0;
     if (event.parent.charge != 0) {
       particleDirection = this.inOut(bFieldDirection, event.parent.charge);
       pathParams = this.curvedPathParams(bFieldStrength, dots, boundaries, interactionLocation,
         px, py, particleDirection, 'incoming');
       inChargedString += pathParams.string;
+      eventActivatedDots.push({
+        dotIndices: pathParams.activatedDots,
+        mass: event.parent.mass,
+        momentum: Math.sqrt(px * px + py * py),
+        radius: Math.sqrt(px * px + py * py)/(POINT_THREE * bFieldStrength),
+        index: activatedDotIndex,
+        name: event.parent.particle_name,
+        incoming: true,
+        CW: particleDirection === 'cw'
+      });
+      activatedDotIndex++;
       activatedGridIndices = this.concatenateTwoArrays(activatedGridIndices, pathParams.activatedDots);
     } else {
       inNeutralString += this.straightPathParams(boundaries, interactionLocation, px, py, 'incoming');
@@ -104,6 +120,17 @@ export class EventDisplayService {
         pathParams = this.curvedPathParams(bFieldStrength, dots, boundaries, interactionLocation,
           px, py, particleDirection, 'outgoing');
         outChargedString += pathParams.string;
+        eventActivatedDots.push({
+          dotIndices: pathParams.activatedDots,
+          mass: dP.mass,
+          momentum: Math.sqrt(px * px + py * py),
+          radius: Math.sqrt(px * px + py * py)/(POINT_THREE * bFieldStrength),
+          index: activatedDotIndex,
+          name: dP.particle_name,
+          incoming: false,
+          CW: particleDirection === 'cw'
+        });
+        activatedDotIndex++;
         activatedGridIndices = this.concatenateTwoArrays(activatedGridIndices, pathParams.activatedDots);
       } else {
         outNeutralString += this.straightPathParams(boundaries, interactionLocation, px, py, 'outgoing');
@@ -111,7 +138,7 @@ export class EventDisplayService {
     }
 
     // let AnalysisDisplayComponent know about the activated dots via a subscription....
-    this.announceGridActivation(activatedGridIndices);
+    this.announceGridActivation(activatedGridIndices, eventActivatedDots);
 
     var dString = {
       'inCharged': inChargedString, 'inNeutral': inNeutralString,
