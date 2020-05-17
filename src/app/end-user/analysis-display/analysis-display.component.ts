@@ -184,8 +184,8 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       );
   }
 
-  saveEvent(fetchAfterSave: boolean) {
-    //probably need to tweak this list, but OK for now....
+  saveEvent(submitEvent: boolean) {
+    //submitting an event is simply saving it with the submit flag set to true
 
     let reducedDots = [];
     for (let dot of this.dots) {
@@ -211,15 +211,15 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     };
     let filename = this.event.human_readable_name;
     console.log('about to save event.... ', eventData);
-    this.eventAnalysisService.saveAnalyzedEvent(filename, eventData)
+    this.eventAnalysisService.saveAnalyzedEvent(filename, eventData, submitEvent)
       .subscribe(
         savedEvent => {
           //console.log(savedEvent);
           this.getEvents();// update list of all events owned by user
           //console.log(JSON.parse(savedEvent));
-          if (fetchAfterSave) {
-            this.fetchNewEvent();
-          }
+          //if (fetchAfterSave) {
+          //  this.fetchNewEvent();
+          //}
         }
       );
   }

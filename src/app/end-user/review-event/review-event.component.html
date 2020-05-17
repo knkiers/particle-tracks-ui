@@ -18,13 +18,6 @@
 <mat-card-content>
 
     <div *ngIf="event !== null">
-        <div>
-            Number of charged particles: {{numberChargedParticles}}
-        </div>
-        <div>
-            Number of neutral particles: {{numberNeutralParticles}}
-        </div>
-
         <div fxLayout="row" fxLayoutAlign="space-around center"
             *ngFor="let correctFeatureMessage of correctFeatureMessages" class="card-top-space">
             <div fxFlex.gt-sm="650px">
@@ -42,6 +35,21 @@
                 <mat-card class="warning-card">
                     <mat-card-content>
                         <mat-icon class="warning-icon">warning</mat-icon>&nbsp;{{errorMessage}}
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="space-around center" *ngFor="let warningMessage of warningMessages"
+            class="card-top-space">
+            <div fxFlex.gt-sm="650px">
+                <mat-card class="mild-warning-card">
+                    <mat-card-content *ngFor="let message of warningMessage.messages; let i = index">
+                        <span *ngIf="i===0">
+                            <mat-icon class="warning-icon">warning</mat-icon>&nbsp;{{message}}
+                        </span>
+                        <span *ngIf="i>0">
+                            {{message}}
+                        </span>
                     </mat-card-content>
                 </mat-card>
             </div>

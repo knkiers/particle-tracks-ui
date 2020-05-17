@@ -217,7 +217,7 @@ export class EventAnalysisService {
     return theta;
   }
 
-  saveAnalyzedEvent(title: string, data) {
+  saveAnalyzedEvent(title: string, data: any, submit: boolean) {
     let authToken = sessionStorage.getItem('auth_token');
     let httpOptions = this.httpService.buildHttpOptionsSecure(authToken);
 
@@ -232,7 +232,8 @@ export class EventAnalysisService {
         AnalyzedEventsUrl,
         JSON.stringify({
           'title': title,
-          'event_data': eventData
+          'event_data': eventData,
+          'submitted': submit
         }),
         httpOptions
       )
