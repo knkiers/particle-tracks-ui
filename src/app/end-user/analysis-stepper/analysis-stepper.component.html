@@ -17,23 +17,63 @@
                         <ng-template matStepLabel>Review</ng-template>
 
                         <app-review-event
-                            (reviewStatusAnalysisOK)="onReviewStatusUpdate($event)">
+                            (reviewStatus)="onReviewStatusUpdate($event)">
                         </app-review-event>
 
+                        <!--
                         <div>
                             <button mat-button matStepperPrevious>Back</button>
                             <button mat-button matStepperNext>Next</button>
                         </div>
+                        -->
                         <!--</form>-->
                     </mat-step>
                     <mat-step>
                         <ng-template matStepLabel>Submit Event</ng-template>
                         
-                        <p>Analysis OK?  {{analysisOK}} </p>
-                        <p>Click Submit to submit your analyzed event.</p>
+                        <div *ngIf="canSubmit && (!errorsExist)" fxLayout="row" fxLayoutAlign="space-around center" class="card-top-space">
+                            <div fxFlex.gt-sm="650px">
+                                <mat-card class="ready-to-submit-card">
+                                    <mat-card-content>
+                                        <mat-icon class="align-icon">circle_check_outline</mat-icon>&nbsp;
+                                        The analysis of your event has passed all basic checks.  If you're happy with your analysis
+                                        please click on the Submit button below.  The next stage of your analysis is offline.  
+                                        If you need to look at or update your event analysis after it has been submitted, you can
+                                        always go back to the event using the menu on the left.
+                                    </mat-card-content>
+                                </mat-card>
+                            </div>
+                        </div>
+
+                        <div *ngIf="canSubmit && errorsExist" fxLayout="row" fxLayoutAlign="space-around center" class="card-top-space">
+                            <div fxFlex.gt-sm="650px">
+                                <mat-card class="warning-card">
+                                    <mat-card-content>
+                                        <mat-icon class="align-icon">send</mat-icon>&nbsp;
+                                        Your analysis appears to contain one or more errors (see the Review tab for details).  
+                                        You can still Submit your event if you like, but it is recommended that you first correct the issues.
+                                        The next stage of your analysis is offline.  
+                                        If you need to look at or update your event analysis after it has been submitted, you can
+                                        always go back to the event using the menu on the left.
+                                    </mat-card-content>
+                                </mat-card>
+                            </div>
+                        </div>
+
+                        <div *ngIf="!canSubmit" fxLayout="row" fxLayoutAlign="space-around center" class="card-top-space">
+                            <div fxFlex.gt-sm="650px">
+                                <mat-card class="warning-card">
+                                    <mat-card-content>
+                                        <mat-icon class="align-icon">send</mat-icon>&nbsp;
+                                        Your analysis appears to contain one or more errors that are preventing submission
+                                        of the event.  See the Review step for details.
+                                    </mat-card-content>
+                                </mat-card>
+                            </div>
+                        </div>
+
                         <div>
-                            <button mat-button matStepperPrevious>Back</button>
-                            <button mat-button (click)="stepper.reset()">Reset</button>
+                            <button mat-button (click)="submitEvent()" [disabled]="!canSubmit" class="button-top-margin">Submit</button>
                         </div>
                     </mat-step>
                 </mat-vertical-stepper>

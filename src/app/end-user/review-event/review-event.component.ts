@@ -16,7 +16,7 @@ import { RoundRealPipe } from 'src/app/shared/pipes/round-real.pipe';
 })
 export class ReviewEventComponent implements OnInit, OnDestroy {
 
-  @Output() reviewStatusAnalysisOK = new EventEmitter<boolean>();
+  @Output() reviewStatus = new EventEmitter<any>();
 
   subscription: Subscription;
   event: Event = null;
@@ -29,7 +29,7 @@ export class ReviewEventComponent implements OnInit, OnDestroy {
   errorMessages: string[] = [];
   warningMessages: any[] = [];
   correctFeatureMessages: string[] = [];
-  readyToSubmit: boolean = true;
+  canSubmit: boolean = true;
 
   
   constructor(
@@ -57,7 +57,7 @@ export class ReviewEventComponent implements OnInit, OnDestroy {
     this.errorMessages = [];
     this.correctFeatureMessages = [];
     this.warningMessages = [];
-    this.readyToSubmit = true;
+    this.canSubmit = true;
     let eventCharacterization = this.eventReviewService.characterizeEvent(this.event);
     console.log('data: ', eventCharacterization);
     this.numberChargedParticles = eventCharacterization.numberChargedParticles;
@@ -72,12 +72,19 @@ export class ReviewEventComponent implements OnInit, OnDestroy {
     //    - in/out property agrees for all circles
     //    - CW/CCW property agrees for all circles
 
-    this.reviewStatusAnalysisOK.emit(this.readyToSubmit);
+    // the user can submit an analyzed event as long as the number of circles matches the number of 
+    // charged particles; if there are warnings or errors, those will be noted on the "submit" page, but
+    // will not impede submission.
+    this.reviewStatus.emit({
+      canSubmit: this.canSubmit,
+      errorsExist: this.errorMessages.length > 0,
+      warningsExist: this.warningMessages.length > 0
+    });
   }
 
   checkNumberCircles() {
     if (this.circles.length !== this.numberChargedParticles) {
-      this.readyToSubmit = false;
+      this.canSubmit = false;
       this.errorMessages.push(`The number of circles (currently ${this.circles.length}) should agree with the number of charged particles (${this.numberChargedParticles}).`);
     } else {
       this.correctFeatureMessages.push("The number of circles matches the number of charged particles in the event.");
@@ -138,15 +145,15 @@ export class ReviewEventComponent implements OnInit, OnDestroy {
     });
     if (!indexNotRepeated) {
       this.errorMessages.push("It appears that at least one particle's track has two or more circles fit to it.  You should fit exactly one circle to each track.");
-      this.readyToSubmit = false;
+    }
+    if ((radiusChecks.length === 0) && (indexNotRepeated)) {
+      this.correctFeatureMessages.push("The fit radii of the various circles agree with the correct values to within 2%.");
     }
     if (!allRotnDirectionsCorrect) {
       this.errorMessages.push("It appears that the rotation direction (clockwise versus counterclockwise) is set incorrectly for one or more circles.  To fix this, go back to the previous step and click on 'Edit circle properties'.");
-      this.readyToSubmit = false;
     }
     if (!allIncomingDirectionsCorrect) {
       this.errorMessages.push("It appears that the particle direction (incoming versus outgoing) is set incorrectly for one or more circles.  To fix this, go back to the previous step and click on 'Edit circle properties'.");
-      this.readyToSubmit = false;
     }
     if (this.errorMessages.length === 0) {
       // if everything else agrees, do a check of the radii....

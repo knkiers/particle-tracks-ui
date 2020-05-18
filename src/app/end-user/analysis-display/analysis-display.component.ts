@@ -58,6 +58,8 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   //circleSubscription: Subscription;
   tokenExpiredSubscription: Subscription;
+  eventStagedForSubmitSubscription: Subscription;
+
 
   event: Event;
   noEventRetrieved: boolean = true;
@@ -120,6 +122,11 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       (gridData) => {
         this.activateDots(gridData);
       });
+    this.eventStagedForSubmitSubscription = eventInfoService.eventStagedForSubmit$.subscribe(
+      () => {
+        console.log('inside component -- event is ready to submit!');
+      }
+    )
     /*
     this.circleSubscription = circleBindingService.circleUpdated$.subscribe(
       updateData=> {
@@ -220,6 +227,9 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
           //if (fetchAfterSave) {
           //  this.fetchNewEvent();
           //}
+          
+
+
         }
       );
   }
@@ -837,6 +847,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
     //this.circleSubscription.unsubscribe();
     this.tokenExpiredSubscription.unsubscribe();
+    this.eventStagedForSubmitSubscription.unsubscribe();
   }
 
 }

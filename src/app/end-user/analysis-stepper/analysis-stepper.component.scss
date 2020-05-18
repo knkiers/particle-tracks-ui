@@ -2,3 +2,33 @@
     margin-top: 64px;
 }
 
+.warning-card {
+    background-color: #F4511E!important;
+    color: white !important;
+    margin: 0px;
+}
+
+.mild-warning-card {
+    background-color: #FFCCBC!important;
+    margin: 0px;
+}
+
+.all-is-well-card {
+    background-color: #673bb8 !important;
+    color: white !important;
+    margin: 0px;
+}
+
+.ready-to-submit-card {
+    background-color: #2E7D32 !important;
+    color: white !important;
+    margin: 0px;
+}
+
+.align-icon {
+    vertical-align: bottom;
+}
+
+.button-top-margin {
+    margin-top: 20px;
+}

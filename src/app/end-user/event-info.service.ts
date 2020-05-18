@@ -12,11 +12,13 @@ export class EventInfoService {
 
   constructor() { }
 
-  // Observable source
+  // Observable sources
   private eventUpdatedSource = new Subject<any>();
+  private eventStagedForSubmitSource = new Subject<void>();
 
-  // Observable stream
+  // Observable streams
   circleUpdated$ = this.eventUpdatedSource.asObservable();
+  eventStagedForSubmit$ = this.eventStagedForSubmitSource.asObservable();
 
   // Service message commands
   announceEventUpdate(event: Event, circles: Circle[], eventActivatedDots: CircleActivatedDots[]) {
@@ -27,6 +29,11 @@ export class EventInfoService {
       circles: circles,
       eventActivatedDots: eventActivatedDots
     });
+  }
+
+  announcedEventStagedForSubmit() {
+    console.log('inside service -- announcing event ready for submit!');
+    this.eventStagedForSubmitSource.next();
   }
 
 }

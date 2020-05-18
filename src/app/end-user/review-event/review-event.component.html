@@ -23,7 +23,7 @@
             <div fxFlex.gt-sm="650px">
                 <mat-card class="all-is-well-card">
                     <mat-card-content>
-                        <mat-icon class="warning-icon">check_circle_outline</mat-icon>&nbsp;{{correctFeatureMessage}}
+                        <mat-icon class="align-icon">check_circle_outline</mat-icon>&nbsp;{{correctFeatureMessage}}
                     </mat-card-content>
                 </mat-card>
             </div>
@@ -34,7 +34,7 @@
             <div fxFlex.gt-sm="650px">
                 <mat-card class="warning-card">
                     <mat-card-content>
-                        <mat-icon class="warning-icon">warning</mat-icon>&nbsp;{{errorMessage}}
+                        <mat-icon class="align-icon">warning</mat-icon>&nbsp;{{errorMessage}}
                     </mat-card-content>
                 </mat-card>
             </div>
@@ -45,11 +45,21 @@
                 <mat-card class="mild-warning-card">
                     <mat-card-content *ngFor="let message of warningMessage.messages; let i = index">
                         <span *ngIf="i===0">
-                            <mat-icon class="warning-icon">warning</mat-icon>&nbsp;{{message}}
+                            <mat-icon class="align-icon">warning</mat-icon>&nbsp;{{message}}
                         </span>
                         <span *ngIf="i>0">
                             {{message}}
                         </span>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+        <div *ngIf="canSubmit && (warningMessages.length === 0) && (errorMessages.length === 0)" fxLayout="row" fxLayoutAlign="space-around center" class="card-top-space">
+            <div fxFlex.gt-sm="650px">
+                <mat-card class="ready-to-submit-card">
+                    <mat-card-content>
+                        <mat-icon class="align-icon">send</mat-icon>&nbsp;
+                        You can submit your event if you are happy with the analysis!
                     </mat-card-content>
                 </mat-card>
             </div>

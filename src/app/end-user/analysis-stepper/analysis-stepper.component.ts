@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatStepper } from '@angular/material/stepper';
 
+import { EventInfoService } from '../event-info.service';
 @Component({
   selector: 'app-analysis-stepper',
   templateUrl: './analysis-stepper.component.html',
@@ -7,14 +9,29 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AnalysisStepperComponent implements OnInit {
 
-  analysisOK: boolean = false;
+  @ViewChild('stepper') private myStepper: MatStepper;
 
-  constructor() { }
+  canSubmit: boolean = false;
+  warningsExist: boolean = false;
+  errorsExist: boolean = false;
+
+  constructor(private eventInfoService: EventInfoService) { }
 
   ngOnInit(): void {
   }
 
-  onReviewStatusUpdate(analysisOK: boolean) {
-    this.analysisOK = analysisOK;
+  onReviewStatusUpdate(reviewStatus: any) {
+    this.canSubmit = reviewStatus.canSubmit;
+    this.errorsExist = reviewStatus.errorsExist;
+    this.warningsExist = reviewStatus.warningsExist;
   }
+
+  submitEvent() {
+    console.log('submit event!');
+    this.eventInfoService.announcedEventStagedForSubmit();
+    // https://stackoverflow.com/questions/46469233/can-i-programmatically-move-the-steps-of-a-mat-horizontal-stepper-in-angular-a
+    this.myStepper.reset();
+  }
+
+
 }
