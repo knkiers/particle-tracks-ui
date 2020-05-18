@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatStepper } from '@angular/material/stepper';
 
 import { EventInfoService } from '../event-info.service';
+
 @Component({
   selector: 'app-analysis-stepper',
   templateUrl: './analysis-stepper.component.html',

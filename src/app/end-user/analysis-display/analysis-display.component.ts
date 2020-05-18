@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 //import {MaterializeDirective} from "angular2-materialize";
 
 //import {MaterializeDirective,MaterializeAction} from "angular2-materialize";
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 import { EventDisplayService } from '../../shared/services/event-display.service';
 import { UnitConversionService } from '../../shared/services/unit-conversion.service';
@@ -117,7 +118,8 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     private unitConversionService: UnitConversionService,
     private eventAnalysisService: EventAnalysisService,
     //private circleBindingService:CircleBindingService,
-    private eventDisplayService: EventDisplayService) {
+    private eventDisplayService: EventDisplayService,
+    private _snackBar: MatSnackBar) {
     this.subscription = eventDisplayService.gridActivationAnnounced$.subscribe(
       (gridData) => {
         this.activateDots(gridData);
@@ -125,6 +127,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     this.eventStagedForSubmitSubscription = eventInfoService.eventStagedForSubmit$.subscribe(
       () => {
         console.log('inside component -- event is ready to submit!');
+        this.saveEvent(true);
       }
     )
     /*
@@ -227,11 +230,20 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
           //if (fetchAfterSave) {
           //  this.fetchNewEvent();
           //}
-          
+          if (submitEvent) {
+            // in this case the event was "submitted" (as opposed to just being auto-saved), so: 
+            //  - inform the user of successful submission (toast or something similar)
+            //  - reset all data for the page so that the user can start over
+            this.displayPostSubmitEventMessage();
+          }
 
 
         }
       );
+  }
+
+  displayPostSubmitEventMessage() {
+    this._snackBar.open('Event submitted successfully!  The next stage of your analysis is offline. You can access your submitted events using the menu in the navigation bar.', 'OK');
   }
 
   getEvents() {
