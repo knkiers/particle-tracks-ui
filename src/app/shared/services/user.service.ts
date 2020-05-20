@@ -12,7 +12,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 import { Observable, Subject, pipe, ObservableInput } from 'rxjs';
-//import { map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { tap, retry, catchError } from 'rxjs/operators';
 
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -37,6 +37,7 @@ import { ResetPasswordUrl } from './urls';
 import { ResetPasswordConfirmUrl } from './urls';
 
 import { User } from '../models/user';
+import { Institution } from '../interfaces/institution';
 import { UserNumberEvents } from '../interfaces/user-number-events';
 import { UpdateUserData } from '../interfaces/update-user-data';
 
@@ -61,11 +62,10 @@ export class UserService {
     private router: Router
   ) { }
 
-  /*
   register(username, password, email, firstName, lastName, institutionId): Observable<any> {
-    let headers = new Headers();
+    
+    let httpOptions = this.httpService.buildHttpOptions();
     let emptyList = [];
-    headers.append('Content-Type', 'application/json');
 
     return this.http
       .post(
@@ -79,13 +79,17 @@ export class UserService {
           'analyzed_events': emptyList,
           'institution_id': institutionId
         }),
-        { headers }
+        httpOptions
       )
       .pipe(
-        map(res => res)//.json())
+        retry(1),
+        tap(res => {
+          console.log('here is what we got back: ', res, typeof res);
+        }),
+        catchError(this.httpService.createAccountErrorHandler)
       );
   }
-  */
+
 
   /*
   update(updateUserData: UpdateUserData, userId: number): Observable<any> {
@@ -136,14 +140,14 @@ export class UserService {
     let httpOptions = this.httpService.buildHttpOptions();
     return this.http.post<any>(LoginUrl, JSON.stringify({ username, password }), httpOptions)
       .pipe(
-      retry(5),
-      tap(res => {
-        console.log('here is what we got back: ',res, typeof res);
-        sessionStorage.setItem('auth_token', res.token);
-      }),
-      catchError(this.httpService.loginErrorHandler)
-    )
-  }  
+        retry(5),
+        tap(res => {
+          console.log('here is what we got back: ', res, typeof res);
+          sessionStorage.setItem('auth_token', res.token);
+        }),
+        catchError(this.httpService.loginErrorHandler)
+      )
+  }
 
   /*
   resetPassword(email: string) {
@@ -199,30 +203,30 @@ export class UserService {
     }
   }
 
-  
+
   setUserData(authToken: string): Observable<any> {
     let decoded = this.jwtHelper.decodeToken(authToken);//localStorage.getItem('auth_token'));
     let userID = decoded.user_id;
     let httpOptions = this.httpService.buildHttpOptionsSecure(authToken);
-    
+
     // some useful information about map, etc.:
     // https://stackoverflow.com/questions/40029986/how-does-map-subscribe-on-angular2-work
     return this.http.get<User>(
       UsersUrl + userID + "/",
       httpOptions
     )
-    .pipe(
-      retry(5),
-      tap(userData => {
-        console.log('here is what we got back: ',userData, typeof userData);
-        this.currentUser = new User(userData);
-        //console.log('user data: ', userData);
-        this.announceUser(this.currentUser);
-        return userData;
-        //sessionStorage.setItem('auth_token', res.token);
-      }),
-      catchError(this.httpService.errorHandler)
-    );
+      .pipe(
+        retry(5),
+        tap(userData => {
+          console.log('here is what we got back: ', userData, typeof userData);
+          this.currentUser = new User(userData);
+          //console.log('user data: ', userData);
+          this.announceUser(this.currentUser);
+          return userData;
+          //sessionStorage.setItem('auth_token', res.token);
+        }),
+        catchError(this.httpService.errorHandler)
+      );
   }
 
   logout() {
@@ -262,7 +266,7 @@ export class UserService {
     }
   }
 
-  fetchUsers(): Observable<any>  {
+  fetchUsers(): Observable<any> {
 
     if (this.tokenExpired()) {
       this.router.navigate(['/login']);
@@ -279,12 +283,12 @@ export class UserService {
     let httpOptions = this.httpService.buildHttpOptionsSecure(authToken);
 
     return this.http.get<any>(
-        UsersUrl,
-        httpOptions
-      )
+      UsersUrl,
+      httpOptions
+    )
       .pipe(
         tap(users => {
-          console.log('users: ',users);
+          console.log('users: ', users);
           return users;
         }),
         catchError(this.httpService.errorHandler)
@@ -319,13 +323,13 @@ export class UserService {
       )
       .pipe(
         tap(users => {
-          console.log('users: ',users);
+          console.log('users: ', users);
           return users;
         }),
         catchError(this.httpService.errorHandler)
       );
   }
-  
+
 
   /*
   fetchUser(userId: number) {
@@ -363,14 +367,14 @@ export class UserService {
   fetchInstitutions() {
     let httpOptions = this.httpService.buildHttpOptions();
     return this.http
-      .get(
+      .get<Institution[]>(
         InstitutionsUrl,
         httpOptions
       )
       .pipe(
-        tap(institutions => {
+        tap((institutions: Institution[]) => {
           console.log('institutions: ', institutions);
-          return institutions;
+          //return institutions;
         }),
         catchError(this.httpService.errorHandler)
       );

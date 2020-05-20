@@ -1,0 +1,75 @@
+.login-card {
+    max-width: 400px;
+}
+
+.card-title {
+    padding-bottom: 20px;
+}
+
+.login-formfield {
+    width: 100%;
+}
+
+.signin-error-message {
+    padding-bottom: 20px;
+}
+
+.container {
+    width: 100%;
+    padding: 200px 10px 0px 10px;
+}
+
+.have-an-account {
+    margin-top: 40px;
+}
+
+.warning-background {
+    background-color: rgba(255,0,0,0.1);
+  }
+  
+  .user-exists-warning {
+    /*background: rgba(255,0,0,0.1);*/
+    /*border: 2px solid rgba(255,0,0,0.3);*/
+    padding: 10px 40px;
+    /*height: 100px;*/
+    border-radius: 25px;
+    /*color: #c62828;*/
+  }
+  
+  /* invalid color */
+  .warning {
+    color: #c62828;
+  }
+  
+  /*
+   https://answers.squarespace.com/questions/81339/form-font-size-is-too-small-how-can-i-change-it.html
+   https://stackoverflow.com/questions/32445707/is-there-any-way-to-change-the-caption-of-buttons-from-capital-letters-to-small8
+  */
+  .no-uppercase {
+    text-transform: none;
+    font-size:24px;
+    border: 1px solid #3f51b5;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  
+  .no-uppercase:hover {
+    text-transform: none;
+    font-size:24px;
+    border: 1px solid #4dd0e1;
+    margin-left: 10px;
+    margin-right: 10px;
+    color: #fff;
+  }
+  
+  .login-error {
+    /*background: rgba(255,0,0,0.1);*/
+    /*border: 2px solid rgba(255,0,0,0.3);*/
+    padding: 10px 40px;
+    /*height: 100px;*/
+    border-radius: 25px;
+    /*color: #c62828;*/
+  }
+  
+
+

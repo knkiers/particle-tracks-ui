@@ -9,9 +9,10 @@ import { LoginComponent } from './login/login.component';
 
 //import { MatCardModule } from '@angular/material/card';
 import { AngularMaterialModule } from '../shared/angular-material/angular-material.module';
+import { SignupComponent } from './signup/signup.component';
 
 @NgModule({
-  declarations: [LoginComponent],
+  declarations: [LoginComponent, SignupComponent],
   imports: [
     CommonModule,
     AuthenticationRoutingModule,
