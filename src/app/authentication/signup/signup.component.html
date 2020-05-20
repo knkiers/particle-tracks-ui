@@ -74,17 +74,24 @@
                             </mat-form-field>
                             <!--https://stackoverflow.com/questions/46926182/property-controls-does-not-exist-on-type-abstractcontrol-angular-4-->
                             <mat-error
-                                *ngIf="signupForm.get('passwords').errors && signupForm.get('passwords')['controls'].password.touched && signupForm.get('passwords')['controls'].password2.touched">
+                                *ngIf="signupForm.get('passwords').errors && signupForm.get('passwords')['controls'].password.touched && signupForm.get('passwords')['controls'].password2.touched"
+                                    class="error-margin-bottom">
                                 {{getPasswordErrorMessage()}}
                             </mat-error>
                         </div>
                         <div *ngIf="haveInstitutions" class="drop-down-full-width">
-                            <mat-form-field class="input-formfield">
+                            <mat-form-field class="input-formfield extra-margin-bottom">
                                 <mat-label>Institution</mat-label>
                                 <mat-select formControlName="institutionId">
                                     <mat-option *ngFor="let institution of availableInstitutions"
                                         [value]="institution.id">{{institution.name}}</mat-option>
                                 </mat-select>
+                                <mat-hint>Choose "Guest" if your institution does not appear
+                                    in the drop-down list.  You can change institutions
+                                    later if you need to.</mat-hint>
+                                <mat-error>
+                                    This field is required
+                                </mat-error>
                             </mat-form-field>
 
                         </div>
@@ -92,7 +99,7 @@
                         <!--<mat-divider></mat-divider>-->
                         <!-- https://stackoverflow.com/questions/32062051/how-to-make-submit-button-disabled -->
                         <button mat-button
-                            [disabled]="signupForm.invalid && (signupForm.touched || signupForm.dirty)">SUBMIT</button>
+                            [disabled]="signupForm.invalid && (signupForm.touched || signupForm.dirty)">Submit</button>
                     </form>
                 </mat-card-content>
             </mat-card>

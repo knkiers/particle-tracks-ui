@@ -255,12 +255,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   }
 
-  userIsLoggedIn() {
-    return this.userService.isLoggedIn();
-  }
 
-  signOut() {
-    this.userService.logout();
+  onCancel() {
+    this.router.navigate(['/events']);
   }
 
   ngOnDestroy() {
