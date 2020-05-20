@@ -3,117 +3,105 @@
 
         <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="0px" fxLayoutGap.xs="0px">
 
-        <!-- https://developer.okta.com/blog/2020/01/21/angular-material-login ...to be continued.....-->
+            <!-- https://developer.okta.com/blog/2020/01/21/angular-material-login ...to be continued.....-->
 
-        <mat-card class="login-card">
-            <h1 *ngIf="newUser">Create Account</h1>
-            <h1 *ngIf="!newUser">Update Account</h1>
-            <!--<mat-card-title class="card-title">Login</mat-card-title>-->
-            <mat-card-content>
+            <mat-card class="signup-card">
+                <h1>Create Account</h1>
+                <mat-card-content>
 
-                <div *ngIf="userIsLoggedIn()" class="row">
-                    <div class="login-error">
-                      You are currently signed in!  Please
-                      <a class="include-pointer" (click)="signOut()">Sign Out</a> before attempting
-                      to create a new account.
-                    </div>
-                </div>
+                    <mat-error class="signup-error-message">
+                        {{signupServerError}}
+                    </mat-error>
 
-                <mat-error class="signin-error-message">
-                    {{signinServerError}}
-                </mat-error>
-
-                <form [formGroup]="signupForm" novalidate (ngSubmit)="onSubmit()">
-                    <mat-form-field appearance="outline" class="login-formfield">
-                        <mat-label>First Name</mat-label>
-                        <input matInput placeholder="First Name" type="text" formControlName="firstName" required>
-                        <mat-error>
-                            This field is required
-                        </mat-error>
-                        <!--<mat-icon matSuffix>sentiment_very_satisfied</mat-icon>-->
-                        <!--<mat-hint>Hint</mat-hint>-->
-                    </mat-form-field>
-
-                    <mat-form-field appearance="outline" class="login-formfield">
-                        <mat-label>Last Name</mat-label>
-                        <input matInput placeholder="Last Name" type="text" formControlName="lastName" required>
-                        <mat-error>
-                            This field is required
-                        </mat-error>
-                        <!--<mat-icon matSuffix>sentiment_very_satisfied</mat-icon>-->
-                        <!--<mat-hint>Hint</mat-hint>-->
-                    </mat-form-field>
-
-                    <mat-form-field appearance="outline" class="login-formfield">
-                        <mat-label>Username</mat-label>
-                        <input matInput placeholder="Username" type="text" formControlName="username" required>
-                        <mat-error>
-                            This field is required
-                        </mat-error>
-                        <!--<mat-icon matSuffix>sentiment_very_satisfied</mat-icon>-->
-                        <!--<mat-hint>Hint</mat-hint>-->
-                    </mat-form-field>
-
-                    <mat-form-field appearance="outline" class="login-formfield">
-                        <mat-label>Email</mat-label>
-                        <input matInput placeholder="user@example.com" type="email" formControlName="email" required>
-                        <mat-error *ngIf="signupForm.get('email').invalid">{{getEmailErrorMessage()}}</mat-error>
-                        <!--<mat-icon matSuffix>sentiment_very_satisfied</mat-icon>-->
-                        <!--<mat-hint>Hint</mat-hint>-->
-                    </mat-form-field>
-
-                    <div formGroupName="passwords">
-                        <mat-form-field type="password" appearance="outline" class="login-formfield">
-                            <mat-label>Password</mat-label>
-                            <input matInput placeholder="Password" type="password" formControlName="password" required>
-                            <mat-error>
-                                This field is required
-                            </mat-error>
-                            <!--
-                            <mat-error>
-                                Please provide a valid password
-                            </mat-error>
-                        -->
-                            <!--<mat-icon matSuffix>sentiment_very_satisfied</mat-icon>-->
-                            <!--<mat-hint>Hint</mat-hint>-->
-                        </mat-form-field>
-                        <mat-form-field type="password" appearance="outline" class="login-formfield">
-                            <mat-label>Reenter Password</mat-label>
-                            <input matInput placeholder="Password" type="password" formControlName="password2" required>
+                    <form [formGroup]="signupForm" novalidate (ngSubmit)="onSubmit()">
+                        <mat-form-field appearance="outline" class="input-formfield">
+                            <mat-label>First Name</mat-label>
+                            <input matInput placeholder="First Name" type="text" formControlName="firstName" required>
                             <mat-error>
                                 This field is required
                             </mat-error>
                             <!--<mat-icon matSuffix>sentiment_very_satisfied</mat-icon>-->
                             <!--<mat-hint>Hint</mat-hint>-->
                         </mat-form-field>
-                        <!--https://stackoverflow.com/questions/46926182/property-controls-does-not-exist-on-type-abstractcontrol-angular-4-->
-                        <mat-error *ngIf="signupForm.get('passwords').errors && signupForm.get('passwords')['controls'].password.touched && signupForm.get('passwords')['controls'].password2.touched">
-                            {{getPasswordErrorMessage()}}
-                        </mat-error>
-                    </div>
-                    <div *ngIf="haveInstitutions" class="drop-down-full-width">
-                        <mat-form-field>
-                            <mat-label>Institution</mat-label>
-                            <mat-select formControlName="institutionId">
-                              <mat-option *ngFor="let institution of availableInstitutions" [value]="institution.id">{{institution.name}}</mat-option>
-                            </mat-select>
+
+                        <mat-form-field appearance="outline" class="input-formfield">
+                            <mat-label>Last Name</mat-label>
+                            <input matInput placeholder="Last Name" type="text" formControlName="lastName" required>
+                            <mat-error>
+                                This field is required
+                            </mat-error>
+                            <!--<mat-icon matSuffix>sentiment_very_satisfied</mat-icon>-->
+                            <!--<mat-hint>Hint</mat-hint>-->
                         </mat-form-field>
-                        
-                    </div>
 
-                    <!--<mat-divider></mat-divider>-->
-                    <!-- https://stackoverflow.com/questions/32062051/how-to-make-submit-button-disabled -->
-                    <button mat-button
-                        [disabled]="signupForm.invalid && (signupForm.touched || signupForm.dirty)">SUBMIT</button>
-                </form>
-            </mat-card-content>
-        </mat-card>
+                        <mat-form-field appearance="outline" class="input-formfield">
+                            <mat-label>Username</mat-label>
+                            <input matInput placeholder="Username" type="text" formControlName="username" required>
+                            <mat-error>
+                                This field is required
+                            </mat-error>
+                            <!--<mat-icon matSuffix>sentiment_very_satisfied</mat-icon>-->
+                            <!--<mat-hint>Hint</mat-hint>-->
+                        </mat-form-field>
 
+                        <mat-form-field appearance="outline" class="input-formfield">
+                            <mat-label>Email</mat-label>
+                            <input matInput placeholder="user@example.com" type="email" formControlName="email"
+                                required>
+                            <mat-error *ngIf="signupForm.get('email').invalid">{{getEmailErrorMessage()}}</mat-error>
+                            <!--<mat-icon matSuffix>sentiment_very_satisfied</mat-icon>-->
+                            <!--<mat-hint>Hint</mat-hint>-->
+                        </mat-form-field>
+
+                        <div formGroupName="passwords">
+                            <mat-form-field type="password" appearance="outline" class="input-formfield">
+                                <mat-label>Password</mat-label>
+                                <input matInput placeholder="Password" type="password" formControlName="password"
+                                    required>
+                                <mat-error>
+                                    This field is required
+                                </mat-error>
+                            </mat-form-field>
+                            <mat-form-field type="password" appearance="outline" class="input-formfield">
+                                <mat-label>Reenter Password</mat-label>
+                                <input matInput placeholder="Password" type="password" formControlName="password2"
+                                    required>
+                                <mat-error>
+                                    This field is required
+                                </mat-error>
+                                <!--<mat-icon matSuffix>sentiment_very_satisfied</mat-icon>-->
+                                <!--<mat-hint>Hint</mat-hint>-->
+                            </mat-form-field>
+                            <!--https://stackoverflow.com/questions/46926182/property-controls-does-not-exist-on-type-abstractcontrol-angular-4-->
+                            <mat-error
+                                *ngIf="signupForm.get('passwords').errors && signupForm.get('passwords')['controls'].password.touched && signupForm.get('passwords')['controls'].password2.touched">
+                                {{getPasswordErrorMessage()}}
+                            </mat-error>
+                        </div>
+                        <div *ngIf="haveInstitutions" class="drop-down-full-width">
+                            <mat-form-field class="input-formfield">
+                                <mat-label>Institution</mat-label>
+                                <mat-select formControlName="institutionId">
+                                    <mat-option *ngFor="let institution of availableInstitutions"
+                                        [value]="institution.id">{{institution.name}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                        </div>
+
+                        <!--<mat-divider></mat-divider>-->
+                        <!-- https://stackoverflow.com/questions/32062051/how-to-make-submit-button-disabled -->
+                        <button mat-button
+                            [disabled]="signupForm.invalid && (signupForm.touched || signupForm.dirty)">SUBMIT</button>
+                    </form>
+                </mat-card-content>
+            </mat-card>
+
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center" class="have-an-account">
+            <h1>Already have an account?</h1>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center">
+            <button [routerLink]="['/login']" mat-stroked-button mat-large color="primary">Sign In</button>
+        </div>
     </div>
-    <div fxLayout="row" fxLayoutAlign="center" class="have-an-account">
-        <h1>Already have an account?</h1>
-    </div>
-    <div fxLayout="row" fxLayoutAlign="center">
-        <button [routerLink]="['/login']" mat-stroked-button mat-large color="primary">Sign In</button>
-    </div>
-</div>

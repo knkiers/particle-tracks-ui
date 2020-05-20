@@ -1,25 +1,22 @@
 <mat-toolbar color="primary" class="app-navigation-bar">
 
-    <mat-toolbar-row>
-  
-      <button mat-icon-button (click)="toggleSidenav.emit()">
-        <mat-icon>menu</mat-icon>
-      </button>
-  
-      <span class="toolbar-title"> Particle Tracks </span>
+  <mat-toolbar-row>
 
-  <!-- This fills the remaining space of the current row -->
+    <button mat-icon-button (click)="toggleSidenav.emit()">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <span class="toolbar-title"> Particle Tracks </span>
+
+    <!-- This fills the remaining space of the current row -->
     <span class="fill-space"></span>
-    <span>logged in?: {{isLoggedIn}}</span>
-    <span *ngIf="isLoggedIn">
-        <button mat-menu-item (click)="logout()">
-            <mat-icon>exit_to_app</mat-icon>
-            Sign out
-        </button>
+    <span *ngIf="isLoggedIn && currentUser">
+      <button mat-button [matMenuTriggerFor]="menu">+{{currentUser.username}} <mat-icon>arrow_drop_down</mat-icon></button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="manageAccount()"><mat-icon>account_circle</mat-icon><span>Manage Account</span></button>
+        <button mat-menu-item (click)="logout()"><mat-icon>exit_to_app</mat-icon><span>Sign Out</span></button>
+      </mat-menu>
     </span>
-    
-    <span>Right Aligned Text</span>
-  
-    </mat-toolbar-row>
-  
-  </mat-toolbar>
+  </mat-toolbar-row>
+
+</mat-toolbar>

@@ -3,9 +3,9 @@ import { Router } from '@angular/router';
 import {
   FormBuilder,
   FormGroup,
-  FormArray,
+  //FormArray,
   Validators, // used to make a field required
-  FormControl
+  //FormControl
 } from '@angular/forms';
 
 import { UserService } from '../../shared/services/user.service';
@@ -18,13 +18,9 @@ import { Institution } from '../../shared/interfaces/institution';
 })
 export class SignupComponent implements OnInit {
 
-  signinServerError: string = '';
+  signupServerError: string = '';
   private userData: any;
-  newUser = true;
   public signupForm: FormGroup; // our model driven form
-
-  passwordHide = true;
-  password2Hide = true;
 
   availableInstitutions: Institution[] = [];
   haveInstitutions: boolean = false;
@@ -46,11 +42,11 @@ export class SignupComponent implements OnInit {
         this.availableInstitutions = institutions;
         console.log('institutions: ', this.availableInstitutions);
         this.haveInstitutions = true;
-        this.signinServerError = '';
+        this.signupServerError = '';
       },
       error => {
         console.log('there was an error: ', error, typeof error);
-        this.signinServerError = error;
+        this.signupServerError = error;
       }
     );
 
@@ -67,10 +63,7 @@ export class SignupComponent implements OnInit {
       }, { validator: this.areEqual }),
       firstName: [this.userData.firstName, [<any>Validators.required]],
       lastName: [this.userData.lastName, [<any>Validators.required]],
-      institutionId: [this.userData.institutionId, [<any>Validators.required]],
-      //joinedOn: [this.date.toISOString(), [<any>Validators.required]],//maybe fill this in upon submission instead...?!?
-      //enabled: [true, [<any>Validators.required]],
-      //preferredVersionID: [this.userData.preferredVersionID, [<any>Validators.required]],
+      institutionId: [this.userData.institutionId, [<any>Validators.required]]
     });
 
   }
@@ -94,6 +87,7 @@ export class SignupComponent implements OnInit {
     }
   }
 
+  /*
   // if change this in this in the future, make sure to change it in the profile component as well....
   emailValidator(control) {
     //see: http://stackoverflow.com/questions/34072092/generic-mail-validator-in-angular2
@@ -103,6 +97,7 @@ export class SignupComponent implements OnInit {
       return { invalidEmail: true };
     }
   }
+  */
 
   getPasswordErrorMessage() {
     console.log('inside method; password error', this.signupForm.controls.passwords.errors);//, this.signupForm.controls.passwords.errors);
@@ -127,7 +122,7 @@ export class SignupComponent implements OnInit {
   onSubmit() {
     console.log(this.signupForm);
     if (this.signupForm.valid) {
-      this.signinServerError = null;//reinitialize it....
+      this.signupServerError = null;//reinitialize it....
       this.userService.register(
         this.signupForm.value.username,
         this.signupForm.value.passwords.password,
@@ -137,33 +132,15 @@ export class SignupComponent implements OnInit {
         +this.signupForm.value.institutionId
       ).subscribe(
         (result) => {
-          this.signinServerError = '';
+          this.signupServerError = '';
           this.router.navigate(['/login']);
         },
         (error) => {
           console.log('there was an error: ', error, typeof error);
-          this.signinServerError = error;
-          //let errorDict = JSON.parse(error._body);
-          //console.log('there was an error');
-          //console.log(errorDict);
-          // if there are multiple errors, only the last one will be shown;
-          // this will allow the user to fix one error at a time, which isn't so bad....
-          //for (var key in errorDict) {
-          //  this.signinServerError = errorDict[key][0];//the text of the error is the only entry in an array....
-          //  console.log(errorDict[key]);
-          //}
+          this.signupServerError = error;
         });
     }
 
   }
-
-  userIsLoggedIn() {
-    return this.userService.isLoggedIn();
-  }
-
-  signOut() {
-    this.userService.logout();
-  }
-
 
 }

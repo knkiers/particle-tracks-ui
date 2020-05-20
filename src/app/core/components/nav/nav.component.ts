@@ -41,8 +41,9 @@ export class NavComponent {
         let token = this.userService.fetchToken();
         if (token !== null && !(this.userService.tokenExpired())) {
           this.userService.setUserData(token).subscribe(
-            result => {
-              console.log('user is logged in and ready to go');
+            (user: User) => {
+              console.log('user is logged in and ready to go', user);
+              this.currentUser = user;
             }
           )
         }
@@ -55,9 +56,9 @@ export class NavComponent {
     }
     // ...and sign up for the service in order to keep up with changes
     this.userService.userAnnounced$.subscribe(
-      user => {
+      (user: User) => {
         this.currentUser = user;
-        console.log('inside app comp...user updated');
+        console.log('inside app comp...user updated', user);
 //        console.log(this.currentUser);
       });
     /*

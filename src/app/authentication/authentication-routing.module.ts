@@ -6,7 +6,7 @@ import { LoggedInGuard } from '../shared/guards/logged-in.guard';
 
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
-
+import { ProfileComponent } from './profile/profile.component';
 
 const authenticationRoutes: Routes = [
   { 
@@ -16,7 +16,13 @@ const authenticationRoutes: Routes = [
   },
   {
     path: 'signup',
-    component: SignupComponent
+    component: SignupComponent,
+    canActivate: [NotLoggedInGuard],
+  },
+  {
+    path: 'profile',
+    component: ProfileComponent,
+    canActivate: [LoggedInGuard],
   },
 ];
 

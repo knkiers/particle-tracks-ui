@@ -12,7 +12,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 import { Observable, Subject, pipe, ObservableInput } from 'rxjs';
-import { map } from 'rxjs/operators';
+//import { map } from 'rxjs/operators';
 import { tap, retry, catchError } from 'rxjs/operators';
 
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -39,7 +39,7 @@ import { ResetPasswordConfirmUrl } from './urls';
 import { User } from '../models/user';
 import { Institution } from '../interfaces/institution';
 import { UserNumberEvents } from '../interfaces/user-number-events';
-import { UpdateUserData } from '../interfaces/update-user-data';
+import { UpdateUserData, UpdateUserDataResponse } from '../interfaces/update-user-data';
 
 @Injectable({
   providedIn: 'root'
@@ -90,38 +90,35 @@ export class UserService {
       );
   }
 
-
-  /*
-  update(updateUserData: UpdateUserData, userId: number): Observable<any> {
-
+  update(updateUserData: UpdateUserData, userId: number): Observable<UpdateUserDataResponse> {
     console.log('update user data: ', updateUserData);
     console.log('user id: ', userId);
 
-    let headers = new Headers();
     let authToken = sessionStorage.getItem('auth_token');
-    //headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', `JWT ${authToken}`);
-
+    console.log('auth token: ', authToken);
+    let httpOptions = this.httpService.buildHttpOptionsSecure(authToken);
+  
     let emptyList = [];
-    headers.append('Content-Type', 'application/json');
 
     return this.http
-      .put(
+      .put<UpdateUserDataResponse>(
         AccountsUrl + userId + '/',
         JSON.stringify(updateUserData),
-        { headers }
+        httpOptions
       )
       .pipe(
-        map(res => {
+        tap((response: UpdateUserDataResponse) => {
           // apparently if there is an error, that just gets returned automatically(?), skipping over this part of the code
-          let jsonResponse = res.json();
-          sessionStorage.setItem('auth_token', jsonResponse.token);
+          //let jsonResponse = res.json();
+          console.log('updated user! ', response);
+          sessionStorage.setItem('auth_token', response.token);
           //this.loggedIn = true;
-          return jsonResponse;
-        })
+          //return jsonResponse;
+        }),
+        catchError(this.httpService.createAccountErrorHandler)
       );
   }
-  */
+
 
 
   /* example from: https://www.positronx.io/angular-8-httpclient-http-tutorial-build-consume-restful-api/

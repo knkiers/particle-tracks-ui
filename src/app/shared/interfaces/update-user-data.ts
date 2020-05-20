@@ -3,10 +3,16 @@
  * in when updating a user's data
  */
 export interface UpdateUserData {
-    username?: string;
-    password?: string;
-    email?: string;
-    first_name?: string;
-    last_name?: string;
-    institution_id?: number;
-  }
+  username?: string;
+  password?: string;
+  email?: string;
+  first_name?: string;
+  last_name?: string;
+  institution_id?: number;
+}
+
+export interface UpdateUserDataResponse {
+  token: string;
+}
+
+

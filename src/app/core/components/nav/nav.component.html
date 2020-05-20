@@ -2,7 +2,8 @@
 <app-navigation-bar 
   (toggleSidenav)="navigationSidenav.toggle()"
   (logUserOut)="logout()"
-  [isLoggedIn]="isLoggedIn()">
+  [isLoggedIn]="isLoggedIn()"
+  [currentUser]="currentUser">
 </app-navigation-bar>
 
 <mat-sidenav-container class="sidenav-container">
