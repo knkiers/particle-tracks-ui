@@ -10,8 +10,8 @@
             <!--<mat-card-title class="card-title">Login</mat-card-title>-->
             <mat-card-content>
 
-                <mat-error class="signin-error-message">
-                    {{signinServerError}}
+                <mat-error class="update-error-message">
+                    {{updateServerError}}
                 </mat-error>
 
                 <form [formGroup]="profileForm" novalidate (ngSubmit)="onSubmit()">

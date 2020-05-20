@@ -227,7 +227,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
         },
         (error) => {
           console.log(error);
+          this.updateServerError = error;
           //console.log(error.status);
+          /*
           if (error.status >= 500) {
             this.updateServerError = error.statusText;
           } else if (error.status >= 400) {
@@ -244,7 +246,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
           } else {
             this.updateServerError = error.statusText;
           }
+          */
         });
+       
 
 
     }
