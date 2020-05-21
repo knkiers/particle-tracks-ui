@@ -59,6 +59,31 @@ export class HttpService {
     return throwError(errorMessage);
   }
 
+  resetPasswordErrorHandler(error: HttpErrorResponse) {
+    console.log('inside error handler ', error);
+    let errorMessage = 'Sorry, there was an unknown error.  Please contact the site administrator if the problem persists.';
+    let errorMessageForConsole = '';
+    if (error.error instanceof ErrorEvent) {
+      // Client-side errors
+      console.log('client side error');
+      errorMessageForConsole = `Error: ${error.error.message}`;
+      console.log(errorMessageForConsole);
+    } else {
+      // Server-side errors
+      console.log('server side error');
+      errorMessageForConsole = `Error Code: ${error.status}\nMessage: ${error.message}`;
+      if ((error.status === 400) || (error.status === 401)) {
+        if (error.error.hasOwnProperty('email')) {
+          errorMessage = error.error.email[0];//there is a list of error messages; choose the first item in the list
+        } else {
+          errorMessage = 'Sorry, there seems to have been a problem with your request.  If the email that you are entering is correct and the problem persists, please contact the site administrator.'
+        }
+      }
+    }
+    console.log(errorMessageForConsole);
+    return throwError(errorMessage);
+  }
+
   createAccountErrorHandler(error: HttpErrorResponse) {
     console.log('inside error handler ', error);
     let errorMessage = 'Sorry, there was an unknown error.  Please contact the site administrator if the problem persists.';

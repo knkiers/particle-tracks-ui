@@ -87,7 +87,7 @@ export class SignupComponent implements OnInit {
     }
   }
 
-  /*
+  
   // if change this in this in the future, make sure to change it in the profile component as well....
   emailValidator(control) {
     //see: http://stackoverflow.com/questions/34072092/generic-mail-validator-in-angular2
@@ -97,7 +97,6 @@ export class SignupComponent implements OnInit {
       return { invalidEmail: true };
     }
   }
-  */
 
   getPasswordErrorMessage() {
     console.log('inside method; password error', this.signupForm.controls.passwords.errors);//, this.signupForm.controls.passwords.errors);
