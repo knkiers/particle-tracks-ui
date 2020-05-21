@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router} from '@angular/router';
+import { Router } from '@angular/router';
 import {
   FormBuilder,
   FormGroup,
@@ -7,6 +7,8 @@ import {
   Validators // used to make a field required
   //FormControl
 } from '@angular/forms';
+
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 import { UserService } from '../../shared/services/user.service';
 
@@ -22,14 +24,16 @@ export class ResetPasswordComponent implements OnInit {
   public resetPasswordForm: FormGroup; // our model driven form
 
   constructor(private formBuilder: FormBuilder,
-              private router: Router,
-              private userService: UserService) { }
+    private router: Router,
+    private userService: UserService,
+    public dialog: MatDialog) {
+  }
 
   ngOnInit() {
     this.initializeForm();
   }
 
-  initializeForm(){
+  initializeForm() {
     this.resetPasswordForm = this.formBuilder.group({
       email: ['', Validators.compose([<any>Validators.required, this.emailValidator])],
     });
@@ -41,7 +45,7 @@ export class ResetPasswordComponent implements OnInit {
     var EMAIL_REGEXP = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
 
     if (!EMAIL_REGEXP.test(control.value)) {
-      return {invalidEmail: true};
+      return { invalidEmail: true };
     }
   }
 
@@ -55,6 +59,17 @@ export class ResetPasswordComponent implements OnInit {
     this.userService.logout();
   }
 
+  openDialog(): void {
+    const dialogRef = this.dialog.open(ResetPasswordDialog, {
+      width: '60%'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed', result);
+      this.redirect();
+    });
+  }
+  
   redirect() {
     this.router.navigate(['/']);
   }
@@ -68,7 +83,7 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.resetPasswordForm.valid){
+    if (this.resetPasswordForm.valid) {
       this.resetPasswordServerError = '';//reinitialize it....
       this.userService.resetPassword(
         this.resetPasswordForm.value.email
@@ -76,21 +91,28 @@ export class ResetPasswordComponent implements OnInit {
         (result) => {
           //this.openModal();
           console.log('back in the component; here is the result: ', result);
-
-          /**
-           * emit snack-bar....
-           */
-
-          //console.log('here is the result! ', result);
-          //this.router.navigate(['/login']);
+          this.openDialog();
         },
         (error) => {
           console.log(error);
           this.resetPasswordServerError = error;
-          
+
         });
     }
   }
 
+
+}
+
+@Component({
+  selector: 'reset-password-dialog',
+  templateUrl: 'reset-password-dialog.html',
+})
+export class ResetPasswordDialog {
+  constructor(public dialogRef: MatDialogRef<ResetPasswordDialog>) {}
+
+  onClose(): void {
+    this.dialogRef.close();
+  }
 
 }

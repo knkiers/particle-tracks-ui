@@ -29,6 +29,8 @@ import { MatStepperModule } from '@angular/material/stepper';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatSelectModule} from '@angular/material/select';
 
+import {MatDialogModule} from '@angular/material/dialog';
+
 const modules: any[] = [
   MatMenuModule,
   MatSidenavModule,
@@ -43,7 +45,8 @@ const modules: any[] = [
   MatSlideToggleModule,
   MatStepperModule,
   MatSnackBarModule,
-  MatSelectModule
+  MatSelectModule,
+  MatDialogModule
 ]
 
 
