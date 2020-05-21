@@ -100,7 +100,7 @@ export class SignupComponent implements OnInit {
 
   getPasswordErrorMessage() {
     console.log('inside method; password error', this.signupForm.controls.passwords.errors);//, this.signupForm.controls.passwords.errors);
-    return this.signupForm.controls.passwords.errors.error;
+    return this.signupForm.get('passwords').errors.error;
     /*
     console.log(this.signupForm.controls.email);
     if (this.signupForm.controls.email.hasError('required')) {

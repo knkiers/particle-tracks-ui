@@ -8,6 +8,7 @@ import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { ResetPasswordConfirmComponent } from './reset-password-confirm/reset-password-confirm.component';
 
 const authenticationRoutes: Routes = [
   { 
@@ -28,6 +29,11 @@ const authenticationRoutes: Routes = [
   {
     path: 'reset-password',
     component: ResetPasswordComponent,
+    canActivate: [NotLoggedInGuard],
+  },
+  {
+    path: 'reset-password-confirm',
+    component: ResetPasswordConfirmComponent,
     canActivate: [NotLoggedInGuard],
   },
 ];

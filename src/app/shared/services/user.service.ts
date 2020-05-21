@@ -161,28 +161,22 @@ export class UserService {
       );
   }
 
-  /*
   resetPasswordConfirm(token: string, password: string) {
     console.log('password: ', password);
     console.log('token: ', token);
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
+    let httpOptions = this.httpService.buildHttpOptions();
     return this.http
       .post(
         ResetPasswordConfirmUrl,
         JSON.stringify({ 'token': token, 'password': password }),
-        { headers })
+        httpOptions)
       .pipe(
-        map(res => {
-          // apparently if there is an error, that just gets returned automatically(?), skipping over this part of the code
-          let jsonResponse = res.json();
-          console.log(jsonResponse);
-          //this.loggedIn = true;
-          return jsonResponse;
-        })
+        tap(res => {
+          console.log('here is what we got back: ', res, typeof res);
+        }),
+        catchError(this.httpService.resetPasswordErrorHandler)
       );
   }
-  */
 
   tokenExpired() {
     let token: string = this.fetchToken();

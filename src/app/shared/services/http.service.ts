@@ -75,9 +75,15 @@ export class HttpService {
       if ((error.status === 400) || (error.status === 401)) {
         if (error.error.hasOwnProperty('email')) {
           errorMessage = error.error.email[0];//there is a list of error messages; choose the first item in the list
+        } else if (error.error.hasOwnProperty('password')) {
+          errorMessage = error.error.password[0];//there is a list of error messages; choose the first item in the list
         } else {
           errorMessage = 'Sorry, there seems to have been a problem with your request.  If the email that you are entering is correct and the problem persists, please contact the site administrator.'
         }
+      } else if (error.status === 404) {
+        // occurs if the password-reset token has already been used (and then deleted);
+        // search for the string 'not-found' in the reset-password-confirm component in order to possibly expose a reset-password button in that component
+        errorMessage = 'not-found';
       }
     }
     console.log(errorMessageForConsole);

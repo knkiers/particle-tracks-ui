@@ -75,7 +75,7 @@
                             <!--https://stackoverflow.com/questions/46926182/property-controls-does-not-exist-on-type-abstractcontrol-angular-4-->
                             <mat-error
                                 *ngIf="signupForm.get('passwords').errors && signupForm.get('passwords')['controls'].password.touched && signupForm.get('passwords')['controls'].password2.touched"
-                                    class="error-margin-bottom">
+                                class="error-margin-bottom">
                                 {{getPasswordErrorMessage()}}
                             </mat-error>
                         </div>
@@ -87,7 +87,7 @@
                                         [value]="institution.id">{{institution.name}}</mat-option>
                                 </mat-select>
                                 <mat-hint>Choose "Guest" if your institution does not appear
-                                    in the drop-down list.  You can change institutions
+                                    in the drop-down list. You can change institutions
                                     later if you need to.</mat-hint>
                                 <mat-error>
                                     This field is required
@@ -112,3 +112,4 @@
             <button [routerLink]="['/login']" mat-stroked-button mat-large color="primary">Sign In</button>
         </div>
     </div>
+</div>

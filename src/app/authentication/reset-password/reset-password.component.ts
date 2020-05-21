@@ -20,10 +20,10 @@ import { UserService } from '../../shared/services/user.service';
 export class ResetPasswordComponent implements OnInit {
 
   resetPasswordServerError: string = '';
-
   public resetPasswordForm: FormGroup; // our model driven form
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(
+    private formBuilder: FormBuilder,
     private router: Router,
     private userService: UserService,
     public dialog: MatDialog) {
@@ -47,16 +47,6 @@ export class ResetPasswordComponent implements OnInit {
     if (!EMAIL_REGEXP.test(control.value)) {
       return { invalidEmail: true };
     }
-  }
-
-  /*
-  userIsLoggedIn() {
-    return this.userService.isLoggedIn();
-  }
-  */
-
-  signOut() {
-    this.userService.logout();
   }
 
   openDialog(): void {
@@ -96,12 +86,9 @@ export class ResetPasswordComponent implements OnInit {
         (error) => {
           console.log(error);
           this.resetPasswordServerError = error;
-
         });
     }
   }
-
-
 }
 
 @Component({

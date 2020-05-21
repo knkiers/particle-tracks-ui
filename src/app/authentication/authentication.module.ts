@@ -12,10 +12,10 @@ import { AngularMaterialModule } from '../shared/angular-material/angular-materi
 import { SignupComponent } from './signup/signup.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ResetPasswordComponent, ResetPasswordDialog } from './reset-password/reset-password.component';
-import { ResetPasswordConfirmComponent } from './reset-password-confirm/reset-password-confirm.component';
+import { ResetPasswordConfirmComponent, ResetPasswordConfirmDialog } from './reset-password-confirm/reset-password-confirm.component';
 
 @NgModule({
-  declarations: [LoginComponent, SignupComponent, ProfileComponent, ResetPasswordComponent, ResetPasswordDialog, ResetPasswordConfirmComponent],
+  declarations: [LoginComponent, SignupComponent, ProfileComponent, ResetPasswordComponent, ResetPasswordDialog, ResetPasswordConfirmComponent, ResetPasswordConfirmDialog],
   imports: [
     CommonModule,
     AuthenticationRoutingModule,
@@ -24,7 +24,8 @@ import { ResetPasswordConfirmComponent } from './reset-password-confirm/reset-pa
     ReactiveFormsModule
   ],
   entryComponents: [
-    ResetPasswordDialog 
+    ResetPasswordDialog, 
+    ResetPasswordConfirmDialog
   ],
   exports: [
   ]
