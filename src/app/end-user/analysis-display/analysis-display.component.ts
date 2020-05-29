@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input, EventEmitter } from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 
 //import { ROUTER_DIRECTIVES } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
 //import {MaterializeDirective} from "angular2-materialize";
 
 //import {MaterializeDirective,MaterializeAction} from "angular2-materialize";
-import {MatSnackBar} from '@angular/material/snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { EventDisplayService } from '../../shared/services/event-display.service';
 import { UnitConversionService } from '../../shared/services/unit-conversion.service';
@@ -122,13 +122,8 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     //private circleBindingService:CircleBindingService,
     private eventDisplayService: EventDisplayService,
     private _snackBar: MatSnackBar) {
-      // https://codecraft.tv/courses/angular/routing/parameterised-routes/
-    this.route.params.subscribe(params => {
-      console.log(params);
-      if (params['id']) {
-        console.log('we have a route param! ', params['id']);
-      }
-    });
+    console.log('inside constructor!');
+    
     this.subscription = eventDisplayService.gridActivationAnnounced$.subscribe(
       (gridData) => {
         this.activateDots(gridData);
@@ -156,27 +151,37 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.unitConversionService.getGrid().subscribe(
-      dots => {
-        this.dots = [];
-        dots.forEach(dot => this.dots.push(new Dot(dot)));
-        //console.log(this.dots);
-      },
-      err => console.log("ERROR", err),
-      () => console.log("Grid fetched"));
-    this.unitConversionService.getBoundaries().subscribe(
-      boundaries => {
-        this.boundaries = boundaries.boundaries;
-        this.momentumDiagramBoundaries = boundaries.momentumDiagramBoundaries;
-        //this.computeAxisCoordinates();
-      },
-      err => console.log("ERROR", err),
-      () => console.log("Boundaries fetched"));
-    this.unitConversionService.getInteractionRegion().subscribe(
-      interactionRegion => {
-        this.interactionRegion = interactionRegion;
-      });
-    //this.getEvents();
+    console.log('inside on init!');
+    // https://codecraft.tv/courses/angular/routing/parameterised-routes/
+    this.route.params.subscribe(params => {
+      console.log(params);
+      if (params['id']) {
+        console.log('we have a route param! ', params['id'], typeof +params['id']);
+        let id: number = +params['id'];
+        this.getAnalyzedEvent(id);
+      } else {
+        this.unitConversionService.getGrid().subscribe(
+          dots => {
+            this.dots = [];
+            dots.forEach(dot => this.dots.push(new Dot(dot)));
+            //console.log(this.dots);
+          },
+          err => console.log("ERROR", err),
+          () => console.log("Grid fetched"));
+        this.unitConversionService.getBoundaries().subscribe(
+          boundaries => {
+            this.boundaries = boundaries.boundaries;
+            this.momentumDiagramBoundaries = boundaries.momentumDiagramBoundaries;
+            //this.computeAxisCoordinates();
+          },
+          err => console.log("ERROR", err),
+          () => console.log("Boundaries fetched"));
+        this.unitConversionService.getInteractionRegion().subscribe(
+          interactionRegion => {
+            this.interactionRegion = interactionRegion;
+          });
+      }
+    });
   }
 
   fetchNewEvent() {
@@ -646,6 +651,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
 
   updateCircleTangentAngles() {
     console.log('update circle tangent angles');
+    console.log('circles: ', this.circles);
     this.circles.forEach((circle: Circle) => {
       if (!this.showAxes) {
         circle.unsetAngle();
@@ -654,6 +660,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
         circle.setAngle(theta);
       }
     });
+    console.log('done updating tangent angles');
   }
 
 
@@ -767,7 +774,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   }
   */
 
-  getAnalyzedEvent(id) {
+  getAnalyzedEvent(id: number) {
     var eventNewData;
     // get the analyzed event from the database
     //console.log('about to get event #....');
@@ -787,6 +794,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   refreshView(eventData) {
     console.log(eventData);
     this.event = eventData.event;
+    this.noEventRetrieved = false;
     this.eventTypeJSON = eventData.eventType;
     this.svgRegion = eventData.svgRegion;
     this.eventJSON = eventData.eventJSON;
@@ -799,11 +807,20 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
      * be reordered in the list...if so, we have a problem....
      *
      */
-    this.dots = this.unitConversionService.initializeGrid(eventData.boundaries);
+
+    this.dots = [];
+    let dotsFromData = this.unitConversionService.initializeGrid(eventData.boundaries);
+    dotsFromData.forEach(dot => this.dots.push(new Dot(dot)));
     for (let dot of eventData.dots) {
-      this.dots[dot.id] = dot;
+      this.dots[dot.id] = new Dot(dot);
     }
-    this.circles = eventData.circles;
+
+    this.circles = [];
+    eventData.circles.forEach( (circle: Circle) => {
+      this.circles.push(new Circle(circle));
+    });
+    
+    //this.circles = eventData.circles;
     this.clearDotsForFit();
 
     this.numberCircles = this.circles.length;
@@ -831,6 +848,8 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       this.showAxes = false;
       this.circleChange = this.circleChange + 1;
     }
+
+    console.log('got here');
 
 
   }
