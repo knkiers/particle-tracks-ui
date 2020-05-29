@@ -101,6 +101,11 @@
             </div>
         </div>
         <div fxFlex="40%">
+            <mat-card>
+                <p>Last Save:</p>
+                <p>Submitted? No</p>
+                <p>Review: Contains possible errors</p>
+            </mat-card>
             <div *ngIf="momentumDiagramBoundaries && eventDisplay && editModeOn && showAxes" class="row">
                 <div fxLayout="row" fxLayoutAlign="space-around center">
                     <app-momentum-axis [circles]="circles" [boundaries]="momentumDiagramBoundaries"

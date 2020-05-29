@@ -31,6 +31,11 @@ import {MatSelectModule} from '@angular/material/select';
 
 import {MatDialogModule} from '@angular/material/dialog';
 
+// Table
+import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatSortModule} from '@angular/material/sort';
+
 const modules: any[] = [
   MatMenuModule,
   MatSidenavModule,
@@ -46,7 +51,10 @@ const modules: any[] = [
   MatStepperModule,
   MatSnackBarModule,
   MatSelectModule,
-  MatDialogModule
+  MatDialogModule,
+  MatTableModule,
+  MatPaginatorModule,
+  MatSortModule
 ]
 
 

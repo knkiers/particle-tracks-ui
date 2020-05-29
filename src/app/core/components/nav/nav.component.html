@@ -14,21 +14,24 @@
     <!--[opened]="(isHandset$ | async) === false"-->
     <mat-toolbar>
       <mat-toolbar-row>
-        <h2 class="toolbar-title"> ToolBarTitle </h2>
+        <h2 class="toolbar-title"> Particle Tracks </h2>
       </mat-toolbar-row>
     </mat-toolbar>
     <mat-nav-list>
       <!--[routerLink]="[item.route]"-->
+      <a mat-list-item [routerLink]="['/events']">Get New Event</a>
       <a mat-list-item 
         (click)="navigationSidenav.close()"
         routerLinkActive="list-item-active"
         href="#">
-        Link 1
+        Analyzed Events
       </a>
-      <a mat-list-item href="#">Link 2</a>
-      <a mat-list-item href="#">Link 3</a>
     </mat-nav-list>
   </mat-sidenav>
+
+  <!--  
+    Possibly good resource for a more elaborate side nav: https://stackblitz.com/edit/dynamic-nested-sidenav-menu?file=app%2Fmenu-list-item%2Fmenu-list-item.component.html
+  -->
   
 
   <mat-sidenav-content role="main">

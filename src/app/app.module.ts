@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from './core/core.module';
 import { AuthenticationModule } from './authentication/authentication.module';
+import { EventListModule } from './event-list/event-list.module';
 import { EndUserModule } from './end-user/end-user.module';
 
 import { AppComponent } from './app.component';
@@ -26,6 +27,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     FlexLayoutModule,
     CoreModule,
     AuthenticationModule,
+    EventListModule,
     EndUserModule
   ],
   providers: [],

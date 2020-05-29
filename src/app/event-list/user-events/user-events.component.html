@@ -1,0 +1,53 @@
+<div class="container">
+    <div fxLayout="row" fxLayoutAlign="space-around center">
+        <div fxFlex.gt-sm="900px">
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title>
+                        Analyzed Events
+                    </mat-card-title>
+                    <mat-card-subtitle>
+                        Click title bar to sort by date or submission status
+                    </mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="mat-elevation-z8">
+                        <table mat-table [dataSource]="dataSource" matSort>
+                            <!-- Event column -->
+                            <ng-container matColumnDef="title">
+                                <th mat-header-cell *matHeaderCellDef> Event </th>
+                                <td mat-cell *matCellDef="let element" [innerHTML]="element.title"></td>
+                            </ng-container>
+                            <!-- Time stamp column -->
+                            <ng-container matColumnDef="created">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Updated </th>
+                                <td mat-cell *matCellDef="let element"> {{moment(element.created).format('LLL')}} -
+                                    {{moment(element.created).fromNow()}}</td>
+                            </ng-container>
+                            <!-- Submitted column -->
+                            <ng-container matColumnDef="submitted">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Submitted? </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <span *ngIf="element.submitted">
+                                        <mat-icon class="align-icon">check_circle</mat-icon>
+                                    </span>
+                                </td>
+                            </ng-container>
+                            <!-- Actions column -->
+                            <ng-container matColumnDef="actions">
+                                <th mat-header-cell *matHeaderCellDef> Actions </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <mat-icon class="align-icon">edit</mat-icon>
+                                    <mat-icon class="align-icon">delete</mat-icon>
+                                </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</div>
