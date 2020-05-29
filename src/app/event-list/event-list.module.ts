@@ -7,11 +7,10 @@ import { AngularMaterialModule } from '../shared/angular-material/angular-materi
 import { SharedModule } from '../shared/shared.module';
 
 import { EventListRoutingModule } from './event-list-routing.module';
-import { UserEventsComponent } from './user-events/user-events.component';
-
+import { UserEventsComponent, DeleteEventDialog } from './user-events/user-events.component';
 
 @NgModule({
-  declarations: [UserEventsComponent],
+  declarations: [UserEventsComponent, DeleteEventDialog],
   imports: [
     CommonModule,
     AngularMaterialModule,

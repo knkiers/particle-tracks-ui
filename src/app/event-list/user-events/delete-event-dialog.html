@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>Delete Analyzed Event:  <span [innerHTML]="data.userEvent.title"></span></h1>
+<div mat-dialog-content>
+  <p>
+    <strong>Last Update:</strong>
+    {{data.moment(data.userEvent.created).format('LLL')}} ({{data.moment(data.userEvent.created).fromNow()}})
+  </p>
+  <p>
+    Do you really wish to delete this event?  
+    <span *ngIf="data.userEvent.submitted"> <strong>This event has already been submitted.  If you delete it, it will no longer be submitted.</strong></span>
+  </p>
+  <p>This action cannot be undone.</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onDelete()">Delete</button>
+  <button mat-button (click)="onCancel()" cdkFocusInitial>Cancel</button>
+</div>

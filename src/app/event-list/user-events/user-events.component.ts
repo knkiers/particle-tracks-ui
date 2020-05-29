@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { EventAnalysisService } from '../../shared/services/event-analysis.service';
 
@@ -16,10 +17,10 @@ import * as moment from 'moment'; // add this 1 of 4
 })
 export class UserEventsComponent implements OnInit {
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  displayedColumns: string[] = ['title','created','submitted','actions'];
+  displayedColumns: string[] = ['title', 'created', 'submitted', 'actions'];
 
   userEvents: UserEvent[];
   dataSource: MatTableDataSource<any>;
@@ -28,7 +29,8 @@ export class UserEventsComponent implements OnInit {
   moment: any = moment;
 
   constructor(
-    private eventAnalysisService: EventAnalysisService
+    private eventAnalysisService: EventAnalysisService,
+    public dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -46,7 +48,21 @@ export class UserEventsComponent implements OnInit {
       );
   }
 
+  openDialog(userEvent: UserEvent): void {
+    console.log('inside dialog method: ', userEvent);
+    const dialogRef = this.dialog.open(DeleteEventDialog, {
+      width: '60%',
+      data: {
+        userEvent: userEvent,
+        moment: this.moment
+      }
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed', result);
+      //this.redirect();
+    });
+  }
 
 }
 
@@ -56,6 +72,27 @@ export interface UserEvent {
   created: string;
   submitted: boolean;
   uuid: string;
+}
+
+@Component({
+  selector: 'delete-event-dialog',
+  templateUrl: 'delete-event-dialog.html',
+})
+export class DeleteEventDialog {
+  constructor(
+    public dialogRef: MatDialogRef<DeleteEventDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) { }
+
+  onCancel(): void {
+    this.dialogRef.close();
+  }
+
+  onDelete(): void {
+    console.log('delete!');
+    this.dialogRef.close();
+  }
+
 }
 
 
