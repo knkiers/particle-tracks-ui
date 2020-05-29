@@ -229,7 +229,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       momentumDiagramBoundaries: this.momentumDiagramBoundaries,
       interactionRegion: this.interactionRegion,
       interactionLocation: this.interactionLocation,
-      eventDisplay: this.eventDisplay,
+      //eventDisplay: this.eventDisplay,
       bFieldStrength: this.bFieldStrength,
       bFieldDirection: this.bFieldDirection
     };
@@ -399,7 +399,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
    */
   activateDots(gridData: any) {
     console.log('grid indices:', gridData.gridIndices);
-    console.log('grid activated dots:', gridData.gridActivatedData);
+    //console.log('grid activated dots:', gridData.gridActivatedData);
     if (this.dots !== []) {// in principle possible(?) that dots has not yet been initialized....
       this.dots.forEach(dot => {// deactivate all dots and unset useForFit as well
         dot.deactivate();
@@ -410,6 +410,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       }
     }
     this.eventActivatedDots = gridData.eventActivatedDots;
+    console.log('event activated dots: ', this.eventActivatedDots);
     this.eventInfoService.announceEventUpdate(this.event, this.circles, this.eventActivatedDots);
   }
 
@@ -831,8 +832,6 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     this.interactionLocation = eventData.interactionLocation;
     this.computeAxisCoordinates();
 
-    this.eventDisplay = eventData.eventDisplay;
-
     this.editModeOn = true;
     this.revealEvent = false;
     this.colourModeOn = true;
@@ -849,8 +848,13 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       this.circleChange = this.circleChange + 1;
     }
 
-    console.log('got here');
-
+    this.eventDisplay = this.eventDisplayService.getStringEventDisplay(
+      this.bFieldStrength,
+      this.bFieldDirection,
+      this.dots,
+      this.boundaries,
+      this.interactionLocation,
+      this.event);
 
   }
 

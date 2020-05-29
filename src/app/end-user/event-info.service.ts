@@ -22,7 +22,7 @@ export class EventInfoService {
 
   // Service message commands
   announceEventUpdate(event: Event, circles: Circle[], eventActivatedDots: CircleActivatedDots[]) {
-    console.log('inside service');
+    console.log('announce event update!');
     console.log(event, circles);
     this.eventUpdatedSource.next({
       event: event, 

@@ -36,7 +36,7 @@ export class ReviewEventComponent implements OnInit, OnDestroy {
     private eventInfoService: EventInfoService,
     private eventReviewService: EventReviewService
   ) {
-    this.subscription = eventInfoService.circleUpdated$.subscribe(
+    this.subscription = this.eventInfoService.circleUpdated$.subscribe(
       (data: {event: Event, circles: Circle[], eventActivatedDots: CircleActivatedDots[]}) => {
         console.log('inside review component; event updated!');
         console.log(data.event);
