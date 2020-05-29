@@ -24,6 +24,7 @@ export class UserEventsComponent implements OnInit {
 
   userEvents: UserEvent[];
   dataSource: MatTableDataSource<any>;
+  errorMessage: string = '';
 
   // https://stackoverflow.com/questions/52037445/moment-is-giving-me-error-in-angular-5-html-template
   moment: any = moment;
@@ -34,6 +35,11 @@ export class UserEventsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.getAnalyzedEvents();
+  }
+
+  getAnalyzedEvents() {
+    this.errorMessage = '';
     this.eventAnalysisService.getAnalyzedEvents()
       .subscribe(
         (userEvents: UserEvent[]) => {
@@ -44,6 +50,10 @@ export class UserEventsComponent implements OnInit {
           this.dataSource.sort = this.sort;
           //this.dataSource.renderRows();
           console.log('dataSource: ', this.dataSource);
+        },
+        error => {
+          console.log('there was an error');
+          this.errorMessage = 'Sorry, there appears to have been a problem.  Your data could not be accessed.  Please try again later.  If the problem persists, please contact the site administrator.'
         }
       );
   }
@@ -58,8 +68,21 @@ export class UserEventsComponent implements OnInit {
       }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed', result);
+    dialogRef.afterClosed().subscribe((result: string) => {
+      console.log('The dialog was closed', result, typeof result);
+      if (result === 'delete') {
+        console.log('need to delete event....');
+        this.eventAnalysisService.deleteAnalyzedEvents([userEvent.id])
+        .subscribe(
+          result => {
+            console.log('done deleting: ', result);
+            this.getAnalyzedEvents();
+          },
+          error => {
+            console.log('there was an error');
+            this.errorMessage = 'Sorry, there appears to have been a problem.  The event could not be deleted.  Please try again later.'
+          });
+      }
       //this.redirect();
     });
   }
@@ -85,12 +108,12 @@ export class DeleteEventDialog {
   ) { }
 
   onCancel(): void {
-    this.dialogRef.close();
+    this.dialogRef.close('');
   }
 
   onDelete(): void {
     console.log('delete!');
-    this.dialogRef.close();
+    this.dialogRef.close('delete');
   }
 
 }

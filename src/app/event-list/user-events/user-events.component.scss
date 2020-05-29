@@ -6,7 +6,20 @@ table {
     width: 100%;
 }
 
-.align-icon {
+.check-icon {
     vertical-align: bottom;
-    color: green;
+    color: #2E7D32;
+    cursor: pointer;
 }
+
+.action-icon {
+    vertical-align: bottom;
+    color: #FFC400;// #01579B;
+    cursor: pointer;
+}
+
+.error-message {
+    color: red;
+    margin-bottom: 20px;
+}
+
