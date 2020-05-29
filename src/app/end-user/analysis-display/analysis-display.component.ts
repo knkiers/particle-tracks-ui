@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, Input, EventEmitter } from '@angular/core';
+import {ActivatedRoute} from "@angular/router";
 
 //import { ROUTER_DIRECTIVES } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -114,12 +115,20 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   ]
 
   constructor(
+    private route: ActivatedRoute,
     private eventInfoService: EventInfoService,
     private unitConversionService: UnitConversionService,
     private eventAnalysisService: EventAnalysisService,
     //private circleBindingService:CircleBindingService,
     private eventDisplayService: EventDisplayService,
     private _snackBar: MatSnackBar) {
+      // https://codecraft.tv/courses/angular/routing/parameterised-routes/
+    this.route.params.subscribe(params => {
+      console.log(params);
+      if (params['id']) {
+        console.log('we have a route param! ', params['id']);
+      }
+    });
     this.subscription = eventDisplayService.gridActivationAnnounced$.subscribe(
       (gridData) => {
         this.activateDots(gridData);
@@ -142,7 +151,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     this.tokenExpiredSubscription = eventAnalysisService.tokenExpired$.subscribe(
       (data) => {
         console.log('token timed out!');
-        this.closeBrowseEventsModal();
+        //this.closeBrowseEventsModal();
       });
   }
 
@@ -151,7 +160,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       dots => {
         this.dots = [];
         dots.forEach(dot => this.dots.push(new Dot(dot)));
-        console.log(this.dots);
+        //console.log(this.dots);
       },
       err => console.log("ERROR", err),
       () => console.log("Grid fetched"));
@@ -167,7 +176,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       interactionRegion => {
         this.interactionRegion = interactionRegion;
       });
-    this.getEvents();
+    //this.getEvents();
   }
 
   fetchNewEvent() {
@@ -225,7 +234,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       .subscribe(
         savedEvent => {
           //console.log(savedEvent);
-          this.getEvents();// update list of all events owned by user
+          //this.getEvents();// update list of all events owned by user
           //console.log(JSON.parse(savedEvent));
           //if (fetchAfterSave) {
           //  this.fetchNewEvent();
@@ -246,6 +255,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     this._snackBar.open('Event submitted successfully!  The next stage of your analysis is offline. You can access your submitted events using the menu in the navigation bar.', 'OK');
   }
 
+  /*
   getEvents() {
     var date;
     var dateInRecentEvents;
@@ -272,6 +282,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   listEvents() {
     console.log(this.userEvents);
   }
+  */
 
   /*
   calculateMinNumberCircles() {
@@ -747,12 +758,14 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
 
   // the following can be used to close a modal programmatically....
   // (see Galilee webapp -- update resource collection)
+  /*
   onModalFinished(eventID: string) {
     // Note: must include the following declaration (above) in component:
     //          declare var $: any;
     this.closeBrowseEventsModal();
     this.getAnalyzedEvent(eventID);
   }
+  */
 
   getAnalyzedEvent(id) {
     var eventNewData;
@@ -829,6 +842,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     console.log('colour mode is on? ', this.colourModeOn);
   }
 
+  /*
   openSaveWarningModal() {
     //this.modalSaveWarningActions.emit({action:"modal",params:['open']});
   }
@@ -845,6 +859,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   closeBrowseEventsModal() {
     //this.modalBrowseEventsActions.emit({action:"modal",params:['close']});
   }
+  */
 
   openCircleErrorModal() {
     //this.modalCircleActions.emit({action:"modal",params:['open']});

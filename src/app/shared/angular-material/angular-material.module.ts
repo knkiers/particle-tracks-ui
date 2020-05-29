@@ -36,6 +36,8 @@ import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSortModule} from '@angular/material/sort';
 
+import {MatTooltipModule} from '@angular/material/tooltip';
+
 const modules: any[] = [
   MatMenuModule,
   MatSidenavModule,
@@ -54,7 +56,8 @@ const modules: any[] = [
   MatDialogModule,
   MatTableModule,
   MatPaginatorModule,
-  MatSortModule
+  MatSortModule,
+  MatTooltipModule
 ]
 
 

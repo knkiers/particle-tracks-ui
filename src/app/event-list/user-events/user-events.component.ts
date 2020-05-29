@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -30,6 +31,7 @@ export class UserEventsComponent implements OnInit {
   moment: any = moment;
 
   constructor(
+    private router: Router,
     private eventAnalysisService: EventAnalysisService,
     public dialog: MatDialog
   ) { }
@@ -52,12 +54,16 @@ export class UserEventsComponent implements OnInit {
           console.log('dataSource: ', this.dataSource);
         },
         error => {
-          console.log('there was an error');
           this.errorMessage = 'Sorry, there appears to have been a problem.  Your data could not be accessed.  Please try again later.  If the problem persists, please contact the site administrator.'
         }
       );
   }
 
+  editEvent(userEvent: UserEvent) {
+    //https://codecraft.tv/courses/angular/routing/parameterised-routes/
+    this.router.navigate(['events', {id: userEvent.id}]);
+  }
+  
   openDialog(userEvent: UserEvent): void {
     console.log('inside dialog method: ', userEvent);
     const dialogRef = this.dialog.open(DeleteEventDialog, {
@@ -71,15 +77,12 @@ export class UserEventsComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result: string) => {
       console.log('The dialog was closed', result, typeof result);
       if (result === 'delete') {
-        console.log('need to delete event....');
         this.eventAnalysisService.deleteAnalyzedEvents([userEvent.id])
         .subscribe(
           result => {
-            console.log('done deleting: ', result);
             this.getAnalyzedEvents();
           },
           error => {
-            console.log('there was an error');
             this.errorMessage = 'Sorry, there appears to have been a problem.  The event could not be deleted.  Please try again later.'
           });
       }
@@ -112,7 +115,6 @@ export class DeleteEventDialog {
   }
 
   onDelete(): void {
-    console.log('delete!');
     this.dialogRef.close('delete');
   }
 
