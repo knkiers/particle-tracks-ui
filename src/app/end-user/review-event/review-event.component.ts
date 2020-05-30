@@ -19,6 +19,7 @@ export class ReviewEventComponent implements OnInit, OnDestroy {
   @Output() reviewStatus = new EventEmitter<any>();
 
   subscription: Subscription;
+  resetReviewDataSubscription: Subscription;
   event: Event = null;
   circles: Circle[] = [];
   eventActivatedDots: any[] = [];
@@ -46,8 +47,20 @@ export class ReviewEventComponent implements OnInit, OnDestroy {
         this.circles = data.circles;
         this.eventActivatedDots = data.eventActivatedDots;
         this.updateReviewData();
-
       });
+      this.resetReviewDataSubscription = this.eventInfoService.reviewDataCleared$.subscribe(
+        () => {
+          this.event = null;
+          this.circles = []
+          this.eventActivatedDots = [];
+          this.numberChargedParticles = 0;
+          this.numberNeutralParticles = 0;
+          this.errorMessages = [];
+          this.warningMessages = [];
+          this.correctFeatureMessages = [];
+          this.canSubmit = true;
+        }
+      )
    }
 
   ngOnInit(): void {
@@ -165,6 +178,7 @@ export class ReviewEventComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.resetReviewDataSubscription.unsubscribe();
   }
 
 }

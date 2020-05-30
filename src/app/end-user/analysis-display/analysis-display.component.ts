@@ -86,7 +86,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   hAxisParams: any;
   vAxisParams: any;
 
-  eventDisplay: any;
+  eventDisplay: any = {};
 
   editModeOn = false;
   revealEvent = false;
@@ -123,7 +123,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     private eventDisplayService: EventDisplayService,
     private _snackBar: MatSnackBar) {
     console.log('inside constructor!');
-    
+
     this.subscription = eventDisplayService.gridActivationAnnounced$.subscribe(
       (gridData) => {
         this.activateDots(gridData);
@@ -154,28 +154,40 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     console.log('inside on init!');
     // https://codecraft.tv/courses/angular/routing/parameterised-routes/
     this.route.params.subscribe(params => {
-      console.log(params);
+      console.log('route params subscription!', params);
       if (params['id']) {
         console.log('we have a route param! ', params['id'], typeof +params['id']);
         let id: number = +params['id'];
         this.getAnalyzedEvent(id);
       } else {
+
+        if (!this.noEventRetrieved) {
+          this.turnOffEditMode();
+          this.resetAxes();
+          this.event = null;
+          this.noEventRetrieved = true;
+          this.eventActivatedDots = [];
+          this.eventDisplay = {};
+          this.circles = [];
+          this.eventInfoService.announceClearReviewData();
+        }
+
         this.unitConversionService.getGrid().subscribe(
           dots => {
             this.dots = [];
             dots.forEach(dot => this.dots.push(new Dot(dot)));
             //console.log(this.dots);
           },
-          err => console.log("ERROR", err),
-          () => console.log("Grid fetched"));
+          err => console.log("ERROR", err));//,
+        //() => console.log("Grid fetched"));
         this.unitConversionService.getBoundaries().subscribe(
           boundaries => {
             this.boundaries = boundaries.boundaries;
             this.momentumDiagramBoundaries = boundaries.momentumDiagramBoundaries;
             //this.computeAxisCoordinates();
           },
-          err => console.log("ERROR", err),
-          () => console.log("Boundaries fetched"));
+          err => console.log("ERROR", err));//,
+        //() => console.log("Boundaries fetched"));
         this.unitConversionService.getInteractionRegion().subscribe(
           interactionRegion => {
             this.interactionRegion = interactionRegion;
@@ -234,7 +246,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       bFieldDirection: this.bFieldDirection
     };
     let filename = this.event.human_readable_name;
-    console.log('about to save event.... ', eventData);
+    //console.log('about to save event.... ', eventData);
     this.eventAnalysisService.saveAnalyzedEvent(filename, eventData, submitEvent)
       .subscribe(
         savedEvent => {
@@ -323,7 +335,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       this.event);
 
     this.computeAxisCoordinates();
-    console.log('event display: ', this.eventDisplay);
+    //console.log('event display: ', this.eventDisplay);
   }
 
   /**
@@ -332,7 +344,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
    * within an optimal range....
    */
   setBFieldByEvent(event) {
-    console.log('inside setBFieldByEvent', event);
+    //console.log('inside setBFieldByEvent', event);
     let pmax: number = null;
     let pmin: number = null;
     let px: number = null;
@@ -367,14 +379,14 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       }
     }
 
-    console.log('pmax: ', pmax);
-    console.log('pmin: ', pmin);
+    //console.log('pmax: ', pmax);
+    //console.log('pmin: ', pmin);
 
     let bmin = pmax / (POINT_THREE * R_MAX);
     let bmax = pmin / (POINT_THREE * R_MIN);
 
-    console.log('bmin: ', bmin);
-    console.log('bmax: ', bmax);
+    //console.log('bmin: ', bmin);
+    //console.log('bmax: ', bmax);
 
     if (bmax > B_MAX) {
       bmax = B_MAX;
@@ -398,7 +410,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     via the subscription service (following the generation of a new event)
    */
   activateDots(gridData: any) {
-    console.log('grid indices:', gridData.gridIndices);
+    //console.log('grid indices:', gridData.gridIndices);
     //console.log('grid activated dots:', gridData.gridActivatedData);
     if (this.dots !== []) {// in principle possible(?) that dots has not yet been initialized....
       this.dots.forEach(dot => {// deactivate all dots and unset useForFit as well
@@ -410,7 +422,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       }
     }
     this.eventActivatedDots = gridData.eventActivatedDots;
-    console.log('event activated dots: ', this.eventActivatedDots);
+    //console.log('event activated dots: ', this.eventActivatedDots);
     this.eventInfoService.announceEventUpdate(this.event, this.circles, this.eventActivatedDots);
   }
 
@@ -425,7 +437,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   }
 
   highlightFitDots(gridIndices: number[]) {
-    console.log('fit dots: ', gridIndices);
+    //console.log('fit dots: ', gridIndices);
     if (this.dots !== []) {// in principle possible(?) that dots has not yet been initialized....
       for (let i of gridIndices) { // now activate the ones indicated in gridIndices
         this.dots[i].setUseForFit();
@@ -434,7 +446,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   }
 
   unhighlightFitDots(gridIndices: number[]) {
-    console.log('fit dots: ', gridIndices);
+    //console.log('fit dots: ', gridIndices);
     if (this.dots !== []) {// in principle possible(?) that dots has not yet been initialized....
       for (let i of gridIndices) { // now activate the ones indicated in gridIndices
         this.dots[i].unsetUseForFit();
@@ -817,10 +829,10 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     }
 
     this.circles = [];
-    eventData.circles.forEach( (circle: Circle) => {
+    eventData.circles.forEach((circle: Circle) => {
       this.circles.push(new Circle(circle));
     });
-    
+
     //this.circles = eventData.circles;
     this.clearDotsForFit();
 

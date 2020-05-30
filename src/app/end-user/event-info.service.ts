@@ -15,10 +15,12 @@ export class EventInfoService {
   // Observable sources
   private eventUpdatedSource = new Subject<any>();
   private eventStagedForSubmitSource = new Subject<void>();
+  private clearReviewDataSource = new Subject<void>();
 
   // Observable streams
   circleUpdated$ = this.eventUpdatedSource.asObservable();
   eventStagedForSubmit$ = this.eventStagedForSubmitSource.asObservable();
+  reviewDataCleared$ = this.clearReviewDataSource.asObservable();
 
   // Service message commands
   announceEventUpdate(event: Event, circles: Circle[], eventActivatedDots: CircleActivatedDots[]) {
@@ -34,6 +36,10 @@ export class EventInfoService {
   announcedEventStagedForSubmit() {
     console.log('inside service -- announcing event ready for submit!');
     this.eventStagedForSubmitSource.next();
+  }
+
+  announceClearReviewData() {
+    this.clearReviewDataSource.next();
   }
 
 }

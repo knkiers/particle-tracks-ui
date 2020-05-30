@@ -1,4 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+
+import { Subscription } from 'rxjs';
+
 import { MatStepper } from '@angular/material/stepper';
 
 import { EventInfoService } from '../event-info.service';
@@ -8,9 +11,11 @@ import { EventInfoService } from '../event-info.service';
   templateUrl: './analysis-stepper.component.html',
   styleUrls: ['./analysis-stepper.component.scss']
 })
-export class AnalysisStepperComponent implements OnInit {
+export class AnalysisStepperComponent implements OnInit, OnDestroy {
 
   @ViewChild('stepper') private myStepper: MatStepper;
+
+  resetReviewDataSubscription: Subscription;
 
   canSubmit: boolean = false;
   warningsExist: boolean = false;
@@ -19,12 +24,26 @@ export class AnalysisStepperComponent implements OnInit {
   constructor(private eventInfoService: EventInfoService) { }
 
   ngOnInit(): void {
+    console.log('myStepper: ', this.myStepper);
+    this.resetReviewDataSubscription = this.eventInfoService.reviewDataCleared$.subscribe(
+      () => {
+        console.log('received reset command!');
+        this.resetStepper();
+      });
   }
 
   onReviewStatusUpdate(reviewStatus: any) {
     this.canSubmit = reviewStatus.canSubmit;
     this.errorsExist = reviewStatus.errorsExist;
     this.warningsExist = reviewStatus.warningsExist;
+    console.log('myStepper: ', this.myStepper);
+  }
+
+  resetStepper() {
+    this.canSubmit = false;
+    this.warningsExist = false;
+    this.errorsExist = false;
+    this.myStepper.reset();
   }
 
   submitEvent() {
@@ -34,5 +53,8 @@ export class AnalysisStepperComponent implements OnInit {
     this.myStepper.reset();
   }
 
+  ngOnDestroy() {
+    this.resetReviewDataSubscription.unsubscribe();
+  }
 
 }
