@@ -30,6 +30,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatSelectModule} from '@angular/material/select';
 
 import {MatDialogModule} from '@angular/material/dialog';
+//import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
 
 // Table
 import {MatTableModule} from '@angular/material/table';
@@ -37,6 +38,8 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSortModule} from '@angular/material/sort';
 
 import {MatTooltipModule} from '@angular/material/tooltip';
+
+
 
 const modules: any[] = [
   MatMenuModule,
@@ -54,6 +57,7 @@ const modules: any[] = [
   MatSnackBarModule,
   MatSelectModule,
   MatDialogModule,
+  //MatBottomSheetModule,
   MatTableModule,
   MatPaginatorModule,
   MatSortModule,

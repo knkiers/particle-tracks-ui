@@ -1,16 +1,11 @@
 <!-- https://github.com/Robinyo/serendipity -->
-<app-navigation-bar 
-  (toggleSidenav)="navigationSidenav.toggle()"
-  (logUserOut)="logout()"
-  [isLoggedIn]="isLoggedIn()"
+<app-navigation-bar (toggleSidenav)="navigationSidenav.toggle()" (logUserOut)="logout()" [isLoggedIn]="isLoggedIn()"
   [currentUser]="currentUser">
 </app-navigation-bar>
 
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav #navigationSidenav class="sidenav" fixedInViewport
-      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-      [mode]="(isHandset$ | async) ? 'over' : 'side'"
-    >
+    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'" [mode]="(isHandset$ | async) ? 'over' : 'side'">
     <!--[opened]="(isHandset$ | async) === false"-->
     <mat-toolbar>
       <mat-toolbar-row>
@@ -19,10 +14,9 @@
     </mat-toolbar>
     <mat-nav-list>
       <!--[routerLink]="[item.route]"-->
-      <a mat-list-item [routerLink]="['/events']">Get New Event</a>
-      <a mat-list-item 
-        (click)="navigationSidenav.close()"
-        routerLinkActive="list-item-active"
+      <a mat-list-item (click)="navigationSidenav.close()" routerLinkActive="list-item-active"
+        [routerLink]="['/events']">Get New Event</a>
+      <a mat-list-item (click)="navigationSidenav.close()" routerLinkActive="list-item-active"
         [routerLink]="['/event-list']">
         Analyzed Events
       </a>
@@ -32,7 +26,7 @@
   <!--  
     Possibly good resource for a more elaborate side nav: https://stackblitz.com/edit/dynamic-nested-sidenav-menu?file=app%2Fmenu-list-item%2Fmenu-list-item.component.html
   -->
-  
+
 
   <mat-sidenav-content role="main">
     <router-outlet></router-outlet>

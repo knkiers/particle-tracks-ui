@@ -1,12 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import {Router} from '@angular/router';
 
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 
 import { MatSidenav } from '@angular/material/sidenav';
+import { MatSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
+
 import { UserService } from '../../../shared/services/user.service';
+import { SnackBarInfoService } from '../../../shared/services/snack-bar-info.service';
 import {User} from '../../../shared/models/user';
 
 @Component({
@@ -14,7 +17,7 @@ import {User} from '../../../shared/models/user';
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.scss']
 })
-export class NavComponent {
+export class NavComponent implements OnInit, OnDestroy{
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
@@ -23,11 +26,32 @@ export class NavComponent {
     );
 
   public sidenav: MatSidenav;
+  unsubmitWarningSubscription: Subscription;
+  eventSubmittedSubscription: Subscription;
+  snackBarsDismissedSubscription: Subscription;
+
+  unsubmitWarningSnackBarRef: MatSnackBarRef<any> = null;
+  unsubmitWarningSnackBarDismissed: boolean = false;
+
+  eventSubmittedSnackBarRef: MatSnackBarRef<any> = null;
+  eventSubmittedSnackBarDismissed: boolean = false;
   
   constructor(
     private breakpointObserver: BreakpointObserver,
     private userService: UserService,
-    private router: Router) {}
+    snackBarInfoService: SnackBarInfoService,
+    private _snackBar: MatSnackBar,
+    private router: Router) {
+      this.unsubmitWarningSubscription = snackBarInfoService.unsubmitWarningSnackBarLaunched$.subscribe(
+        () => this.launchUnsubmitWarningSnackBar()
+      );
+      this.eventSubmittedSubscription = snackBarInfoService.eventSubmittedSnackBarLaunched$.subscribe(
+        () => this.launchEventSubmittedSnackBar()
+      );
+      this.snackBarsDismissedSubscription = snackBarInfoService.snackBarsDismissed$.subscribe(
+        () => this.dismissAllSnackBars()
+      );
+    }
 
   currentUser: User = null;
 
@@ -69,6 +93,27 @@ export class NavComponent {
      */
   }
 
+  launchUnsubmitWarningSnackBar(): void {
+    this.unsubmitWarningSnackBarRef = this._snackBar.open(
+      'This event has already been submitted.  Editing the analysis will cause it to become unsubmitted, and you will need to resubmit it.',
+      'OK');
+    this.unsubmitWarningSnackBarRef.afterDismissed().subscribe(() => {
+      console.log('The snack-bar was dismissed');
+      console.log('dismissed flag: ', this.unsubmitWarningSnackBarDismissed);
+      this.unsubmitWarningSnackBarDismissed = true;
+      console.log('dismissed flag: ', this.unsubmitWarningSnackBarDismissed);
+    });
+  }
+
+  launchEventSubmittedSnackBar(): void {
+    this.eventSubmittedSnackBarRef = this._snackBar.open('Event submitted successfully!  The next stage of your analysis is offline. You can access your submitted events using the menu in the navigation bar.', 'OK');
+    this.eventSubmittedSnackBarRef.afterDismissed().subscribe(() => {
+      console.log('The snack-bar was dismissed');
+      // the following is used in the OnDestroy method to decide whether or not to dismiss the snackbar...probably not the best way to do this
+      this.eventSubmittedSnackBarDismissed = true;
+    });
+  }
+  
   isLoggedIn(){
     return this.userService.isLoggedIn();
   }
@@ -77,6 +122,28 @@ export class NavComponent {
     console.log('inside parent -- log out!');
     this.userService.logout();
     this.router.navigate(['/login']);
+  }
+
+  dismissAllSnackBars() {
+    if (this.unsubmitWarningSnackBarRef !== null) {
+      if (!this.unsubmitWarningSnackBarDismissed) {
+        console.log('...snack bar not yet dismissed!  doing so now....');
+        this.unsubmitWarningSnackBarRef.dismiss();
+      }
+    }
+    if (this.eventSubmittedSnackBarRef !== null) {
+      console.log('event submitted snack bar ref exists! ', this.eventSubmittedSnackBarRef);
+      if (!this.eventSubmittedSnackBarDismissed) {
+        console.log('...snack bar not yet dismissed!  doing so now....');
+        this.eventSubmittedSnackBarRef.dismiss();
+      }
+    }
+  }
+
+  ngOnDestroy() {
+    this.unsubmitWarningSubscription.unsubscribe();
+    console.log('leaving the page!!!!!');
+    this.dismissAllSnackBars();
   }
 
 

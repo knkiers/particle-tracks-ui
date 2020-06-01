@@ -332,7 +332,7 @@ export class EventAnalysisService {
       .pipe(
         retry(1),
         tap(response => {
-          console.log('new event: ', response);
+          console.log('saved event: ', response);
           return response;
           //sessionStorage.setItem('auth_token', res.token);
         }),
