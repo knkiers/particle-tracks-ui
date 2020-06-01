@@ -160,6 +160,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
         let id: number = +params['id'];
         this.getAnalyzedEvent(id);
       } else {
+        this.snackBarInfoService.announceSnackBarsDismissed();
         this.initializeAll();
       }
     });
@@ -409,7 +410,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     }
     this.eventActivatedDots = gridData.eventActivatedDots;
     //console.log('event activated dots: ', this.eventActivatedDots);
-    this.eventInfoService.announceEventUpdate(this.event, this.circles, this.eventActivatedDots);
+    this.eventInfoService.announceEventUpdate(this.event, this.editModeOn, this.circles, this.eventActivatedDots);
   }
 
   highlight(circle: Circle) {
@@ -444,7 +445,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     //this.updateCircleTangentAngles();
     this.saveEvent(false);
     this.circleChange = this.circleChange + 1;// used to wake up one or more child components
-    this.eventInfoService.announceEventUpdate(this.event, this.circles, this.eventActivatedDots);
+    this.eventInfoService.announceEventUpdate(this.event, this.editModeOn, this.circles, this.eventActivatedDots);
   }
 
   resetCircles() {
@@ -493,7 +494,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       }
       this.circleChange = this.circleChange + 1;
       this.saveEvent(false);
-      this.eventInfoService.announceEventUpdate(this.event, this.circles, this.eventActivatedDots);
+      this.eventInfoService.announceEventUpdate(this.event, this.editModeOn, this.circles, this.eventActivatedDots);
     }
 
   }
@@ -542,7 +543,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
         this.updateCircleTangentAngles();
         this.circleChange = this.circleChange + 1;
       }
-      this.eventInfoService.announceEventUpdate(this.event, this.circles, this.eventActivatedDots);
+      this.eventInfoService.announceEventUpdate(this.event, this.editModeOn, this.circles, this.eventActivatedDots);
     }
   }
 
@@ -654,6 +655,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     if (!this.editModeOn) {
       this.editModeOn = true;
       this.colourModeOn = true;
+      this.eventInfoService.announceEventUpdate(this.event, this.editModeOn, this.circles, this.eventActivatedDots);
     }
   }
 

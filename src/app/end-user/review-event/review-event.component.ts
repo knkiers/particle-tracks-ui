@@ -32,36 +32,39 @@ export class ReviewEventComponent implements OnInit, OnDestroy {
   correctFeatureMessages: string[] = [];
   canSubmit: boolean = true;
 
-  
+
   constructor(
     private eventInfoService: EventInfoService,
     private eventReviewService: EventReviewService
   ) {
     this.subscription = this.eventInfoService.circleUpdated$.subscribe(
-      (data: {event: Event, circles: Circle[], eventActivatedDots: CircleActivatedDots[]}) => {
+      (data: { event: Event, editModeOn: boolean, circles: Circle[], eventActivatedDots: CircleActivatedDots[] }) => {
         console.log('inside review component; event updated!');
         console.log(data.event);
         console.log(data.circles);
         console.log(data.eventActivatedDots);
-        this.event = data.event;
-        this.circles = data.circles;
-        this.eventActivatedDots = data.eventActivatedDots;
-        this.updateReviewData();
-      });
-      this.resetReviewDataSubscription = this.eventInfoService.reviewDataCleared$.subscribe(
-        () => {
-          this.event = null;
-          this.circles = []
-          this.eventActivatedDots = [];
-          this.numberChargedParticles = 0;
-          this.numberNeutralParticles = 0;
-          this.errorMessages = [];
-          this.warningMessages = [];
-          this.correctFeatureMessages = [];
-          this.canSubmit = true;
+        console.log(data.editModeOn);
+        if (data.editModeOn) {
+          this.event = data.event;
+          this.circles = data.circles;
+          this.eventActivatedDots = data.eventActivatedDots;
+          this.updateReviewData();
         }
-      )
-   }
+      });
+    this.resetReviewDataSubscription = this.eventInfoService.reviewDataCleared$.subscribe(
+      () => {
+        this.event = null;
+        this.circles = []
+        this.eventActivatedDots = [];
+        this.numberChargedParticles = 0;
+        this.numberNeutralParticles = 0;
+        this.errorMessages = [];
+        this.warningMessages = [];
+        this.correctFeatureMessages = [];
+        this.canSubmit = true;
+      }
+    )
+  }
 
   ngOnInit(): void {
   }
@@ -119,7 +122,7 @@ export class ReviewEventComponent implements OnInit, OnDestroy {
     let allRotnDirectionsCorrect: boolean = true;
     let allIncomingDirectionsCorrect: boolean = true;
     let radiusChecks: any[] = [];
-    this.circles.forEach( circle => {
+    this.circles.forEach(circle => {
       let bestFitIndex = this.eventReviewService.bestFitIndex(circle, this.eventActivatedDots);
       circleTracker.push({
         circle: circle,
@@ -130,7 +133,7 @@ export class ReviewEventComponent implements OnInit, OnDestroy {
       } else {
         bestFitIndices.push(bestFitIndex);
       }
-      this.eventActivatedDots.forEach( (event: CircleActivatedDots) => {
+      this.eventActivatedDots.forEach((event: CircleActivatedDots) => {
         if (event.index === bestFitIndex) {
           if (event.CW !== circle.CW) {
             allRotnDirectionsCorrect = false;
@@ -138,7 +141,7 @@ export class ReviewEventComponent implements OnInit, OnDestroy {
           if (event.incoming !== circle.incoming) {
             allIncomingDirectionsCorrect = false;
           }
-          if (Math.abs(event.radius - circle.r)/event.radius > 0.02) {
+          if (Math.abs(event.radius - circle.r) / event.radius > 0.02) {
             console.log(event.radius, typeof event.radius);
             console.log(circle.r, typeof circle.r);
             radiusChecks.push({
@@ -147,7 +150,7 @@ export class ReviewEventComponent implements OnInit, OnDestroy {
                 `The fit radius for the circle with r = ${(circle.r).toFixed(4)} cm differs by more than 2% from
               the correct value.  This will not prevent you from submitting the event, but you may wish to check that your fit includes all the points for the particle's path and 
               does not accidentally include points from other circles.  Also note that the fits for very small circles may not be very accurate.`,
-              `To check which points are included in the fit, 
+                `To check which points are included in the fit, 
               go back to the previous step and hover over the 'Edit circle properties' box for this circle.  To edit the fit, start
               by deleting the circle.)`
               ]
@@ -170,7 +173,7 @@ export class ReviewEventComponent implements OnInit, OnDestroy {
     }
     if (this.errorMessages.length === 0) {
       // if everything else agrees, do a check of the radii....
-      radiusChecks.forEach( check => this.warningMessages.push(check));
+      radiusChecks.forEach(check => this.warningMessages.push(check));
     }
 
 

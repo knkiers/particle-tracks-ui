@@ -23,11 +23,12 @@ export class EventInfoService {
   reviewDataCleared$ = this.clearReviewDataSource.asObservable();
 
   // Service message commands
-  announceEventUpdate(event: Event, circles: Circle[], eventActivatedDots: CircleActivatedDots[]) {
+  announceEventUpdate(event: Event, editModeOn: boolean, circles: Circle[], eventActivatedDots: CircleActivatedDots[]) {
     console.log('announce event update!');
     console.log(event, circles);
     this.eventUpdatedSource.next({
       event: event, 
+      editModeOn: editModeOn,
       circles: circles,
       eventActivatedDots: eventActivatedDots
     });
