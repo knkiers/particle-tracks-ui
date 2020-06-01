@@ -5,6 +5,8 @@ import { ActivatedRoute } from "@angular/router";
 import { Subscription } from 'rxjs';
 //import {FormsModule} from '@angular/forms';
 
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+
 import { EventDisplayService } from '../../shared/services/event-display.service';
 import { UnitConversionService } from '../../shared/services/unit-conversion.service';
 import { EventAnalysisService } from '../../shared/services/event-analysis.service';
@@ -117,7 +119,8 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     private eventAnalysisService: EventAnalysisService,
     //private circleBindingService:CircleBindingService,
     private eventDisplayService: EventDisplayService,
-    private snackBarInfoService: SnackBarInfoService
+    private snackBarInfoService: SnackBarInfoService,
+    public dialog: MatDialog
   ) {
     console.log('inside constructor!');
 
@@ -157,40 +160,59 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
         let id: number = +params['id'];
         this.getAnalyzedEvent(id);
       } else {
-
-        if (!this.noEventRetrieved) {
-          this.turnOffEditMode();
-          this.resetAxes();
-          this.event = null;
-          this.noEventRetrieved = true;
-          this.eventActivatedDots = [];
-          this.eventDisplay = {};
-          this.circles = [];
-          this.eventInfoService.announceClearReviewData();
-        }
-
-        this.unitConversionService.getGrid().subscribe(
-          dots => {
-            this.dots = [];
-            dots.forEach(dot => this.dots.push(new Dot(dot)));
-            //console.log(this.dots);
-          },
-          err => console.log("ERROR", err));//,
-        //() => console.log("Grid fetched"));
-        this.unitConversionService.getBoundaries().subscribe(
-          boundaries => {
-            this.boundaries = boundaries.boundaries;
-            this.momentumDiagramBoundaries = boundaries.momentumDiagramBoundaries;
-            //this.computeAxisCoordinates();
-          },
-          err => console.log("ERROR", err));//,
-        //() => console.log("Boundaries fetched"));
-        this.unitConversionService.getInteractionRegion().subscribe(
-          interactionRegion => {
-            this.interactionRegion = interactionRegion;
-          });
+        this.initializeAll();
       }
     });
+  }
+
+  clearSnackBarsAndInitialize() {
+    this.snackBarInfoService.announceSnackBarsDismissed();
+    this.initializeAll();
+  }
+
+  openCannotFitCircleDialog(): void {
+    const dialogRef = this.dialog.open(CannotFitCircleDialog, {
+      width: '60%'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed', result);
+      //this.redirect();
+    });
+  }
+
+  initializeAll() {
+    if (!this.noEventRetrieved) {
+      this.turnOffEditMode();
+      this.resetAxes();
+      this.event = null;
+      this.noEventRetrieved = true;
+      this.eventActivatedDots = [];
+      this.eventDisplay = {};
+      this.circles = [];
+      this.eventInfoService.announceClearReviewData();
+    }
+
+    this.unitConversionService.getGrid().subscribe(
+      dots => {
+        this.dots = [];
+        dots.forEach(dot => this.dots.push(new Dot(dot)));
+        //console.log(this.dots);
+      },
+      err => console.log("ERROR", err));//,
+    //() => console.log("Grid fetched"));
+    this.unitConversionService.getBoundaries().subscribe(
+      boundaries => {
+        this.boundaries = boundaries.boundaries;
+        this.momentumDiagramBoundaries = boundaries.momentumDiagramBoundaries;
+        //this.computeAxisCoordinates();
+      },
+      err => console.log("ERROR", err));//,
+    //() => console.log("Boundaries fetched"));
+    this.unitConversionService.getInteractionRegion().subscribe(
+      interactionRegion => {
+        this.interactionRegion = interactionRegion;
+      });
   }
 
   fetchNewEvent() {
@@ -252,6 +274,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
             //  - inform the user of successful submission (toast or something similar)
             //  - reset all data for the page so that the user can start over
             this.displayPostSubmitEventMessage();
+            this.initializeAll();
           }
         }
       );
@@ -452,7 +475,8 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     var dataDict = this.eventAnalysisService.fitCircleToData(this.dots, this.boundaries);
     //var circleInputData = this.eventAnalysisService.gatherDataFromDots(this.dots);
     if (dataDict.error) {
-      this.openCircleErrorModal();
+      //this.openCircleErrorModal();
+      this.openCannotFitCircleDialog();
     }
     if (!dataDict.error) {
       this.circles.push(new Circle(dataDict.circle));
@@ -755,6 +779,19 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     this.tokenExpiredSubscription.unsubscribe();
     this.eventStagedForSubmitSubscription.unsubscribe();
     this.snackBarInfoService.announceSnackBarsDismissed();
+  }
+
+}
+
+@Component({
+  selector: 'cannot-fit-circle-dialog',
+  templateUrl: 'cannot-fit-circle-dialog.html',
+})
+export class CannotFitCircleDialog {
+  constructor(public dialogRef: MatDialogRef<CannotFitCircleDialog>) {}
+
+  onClose(): void {
+    this.dialogRef.close();
   }
 
 }

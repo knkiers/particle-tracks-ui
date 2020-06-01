@@ -18,7 +18,7 @@
 </mat-card-header>
 
 <mat-card-content>
-    <div fxLayout="row" fxLayoutAlign="space-around center">
+    <div fxLayout="row" fxLayoutAlign="space-around start">
         <div fxFlex="55%">
             <div fxLayout="row" fxLayoutAlign="end">
                 <span *ngIf="editModeOn" class="negative-top-margin">
@@ -101,7 +101,11 @@
             </div>
         </div>
         <div fxFlex="40%">
-            <div *ngIf="momentumDiagramBoundaries && eventDisplay && editModeOn && showAxes" class="row">
+            <div *ngIf="editModeOn" fxLayout="row" fxLayoutAlign="end">
+                <!-- https://www.angularjswiki.com/angular/how-to-add-a-class-based-on-condition-in-angular/ -->
+                <button mat-stroked-button color="primary" (click)="clearSnackBarsAndInitialize()" [ngClass]="{'margin-below-button': !(momentumDiagramBoundaries && eventDisplay && showAxes)}">Get New Event</button>
+            </div>
+            <div *ngIf="momentumDiagramBoundaries && eventDisplay && editModeOn && showAxes">
                 <div fxLayout="row" fxLayoutAlign="space-around center">
                     <app-momentum-axis [circles]="circles" [boundaries]="momentumDiagramBoundaries"
                         [wakeUp]="circleChange">

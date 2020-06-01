@@ -9,7 +9,7 @@ import { EndUserRoutingModule } from './end-user-routing.module';
 import { EndUserComponent } from './end-user.component';
 
 import { AngularMaterialModule } from '../shared/angular-material/angular-material.module';
-import { AnalysisDisplayComponent } from './analysis-display/analysis-display.component';
+import { AnalysisDisplayComponent, CannotFitCircleDialog } from './analysis-display/analysis-display.component';
 import { CircleItemComponent } from './circle-item/circle-item.component';
 import { CircleTableComponent } from './circle-table/circle-table.component';
 import { MomentumAxisComponent } from './momentum-axis/momentum-axis.component';
@@ -17,7 +17,7 @@ import { AnalysisStepperComponent } from './analysis-stepper/analysis-stepper.co
 import { ReviewEventComponent } from './review-event/review-event.component';
 
 @NgModule({
-  declarations: [EndUserComponent, AnalysisDisplayComponent, CircleItemComponent, CircleTableComponent, MomentumAxisComponent, AnalysisStepperComponent, ReviewEventComponent ],
+  declarations: [EndUserComponent, AnalysisDisplayComponent, CircleItemComponent, CircleTableComponent, MomentumAxisComponent, AnalysisStepperComponent, CannotFitCircleDialog, ReviewEventComponent ],
   imports: [
     CommonModule,
     EndUserRoutingModule,

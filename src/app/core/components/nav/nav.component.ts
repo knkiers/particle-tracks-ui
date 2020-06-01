@@ -97,6 +97,7 @@ export class NavComponent implements OnInit, OnDestroy{
     this.unsubmitWarningSnackBarRef = this._snackBar.open(
       'This event has already been submitted.  Editing the analysis will cause it to become unsubmitted, and you will need to resubmit it.',
       'OK');
+    this.unsubmitWarningSnackBarDismissed = false;
     this.unsubmitWarningSnackBarRef.afterDismissed().subscribe(() => {
       console.log('The snack-bar was dismissed');
       console.log('dismissed flag: ', this.unsubmitWarningSnackBarDismissed);
@@ -107,6 +108,7 @@ export class NavComponent implements OnInit, OnDestroy{
 
   launchEventSubmittedSnackBar(): void {
     this.eventSubmittedSnackBarRef = this._snackBar.open('Event submitted successfully!  The next stage of your analysis is offline. You can access your submitted events using the menu in the navigation bar.', 'OK');
+    this.eventSubmittedSnackBarDismissed = false;
     this.eventSubmittedSnackBarRef.afterDismissed().subscribe(() => {
       console.log('The snack-bar was dismissed');
       // the following is used in the OnDestroy method to decide whether or not to dismiss the snackbar...probably not the best way to do this
