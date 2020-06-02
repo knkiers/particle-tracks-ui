@@ -248,6 +248,40 @@ export class EventAnalysisService {
       );
   }
 
+  patchAnalyzedEvent(title: string, data: any, submit: boolean, analyzedEventId: number) {
+    let authToken = sessionStorage.getItem('auth_token');
+    let httpOptions = this.httpService.buildHttpOptionsSecure(authToken);
+
+    let eventData = JSON.stringify(data);
+    let id: string = analyzedEventId.toString();
+
+    if (this.userService.tokenExpired()) {
+      this.router.navigate(['/login']);
+    }
+
+    return this.http
+      .patch<any>(
+        AnalyzedEventsUrl+id+'/',
+        JSON.stringify({
+          'title': title,
+          'event_data': eventData,
+          'submitted': submit
+        }),
+        httpOptions
+      )
+      .pipe(
+        retry(1),
+        tap(response => {
+          console.log('response after patching event: ', response);
+          //return response;
+          //sessionStorage.setItem('auth_token', res.token);
+        }),
+        catchError(this.httpService.errorHandler)
+      );
+  }
+
+
+
   /**
    * fetches analyzed events for the logged in user
    * @returns {Observable<R>}

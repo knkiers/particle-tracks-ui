@@ -62,6 +62,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   event: Event;
   eventPreviouslySubmitted: boolean = false;
   noEventRetrieved: boolean = true;
+  analyzedEventId: number = null; // gets set to the id of the analyzed event after it has either been (i) saved for the first time or (ii) retrieved from the server; it is null for a brand new event
   eventActivatedDots: CircleActivatedDots[] = [];
   private eventJSON: any;
   //private eventType: any;
@@ -233,6 +234,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     this.turnOffEditMode();
     this.resetAxes();
     this.event = null;//forces a redraw of the event when the new one comes in
+    this.analyzedEventId = null;
     this.eventDisplayService.getEvent()
       .subscribe(
         event => {
@@ -284,9 +286,12 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     };
     let filename = this.event.human_readable_name;
     //console.log('about to save event.... ', eventData);
-    this.eventAnalysisService.saveAnalyzedEvent(filename, eventData, submitEvent)
+    if (this.analyzedEventId === null) {
+      this.eventAnalysisService.saveAnalyzedEvent(filename, eventData, submitEvent)
       .subscribe(
         savedEvent => {
+          console.log('saved event: ', savedEvent);
+          this.analyzedEventId = +savedEvent.id;
           if (submitEvent) {
             // in this case the event was "submitted" (as opposed to just being auto-saved), so: 
             //  - inform the user of successful submission (toast or something similar)
@@ -299,6 +304,25 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
           }
         }
       );
+    } else {
+      this.eventAnalysisService.patchAnalyzedEvent(filename, eventData, submitEvent, this.analyzedEventId)
+      .subscribe(
+        patchedEvent => {
+          console.log('patched event: ', patchedEvent);
+          //this.analyzedEventId = +savedEvent.id;
+          if (submitEvent) {
+            // in this case the event was "submitted" (as opposed to just being auto-saved), so: 
+            //  - inform the user of successful submission (toast or something similar)
+            //  - reset all data for the page so that the user can start over
+            this.displayPostSubmitEventMessage();
+            this.initializeAll();
+          } else if (this.eventPreviouslySubmitted) {
+            this.openEventNowUnsubmittedDialog();
+            this.eventPreviouslySubmitted = false; // clear the flag so that it doesn't keep displaying the dialog
+          }
+        }
+      );
+    }
   }
 
   displayPostSubmitEventMessage() {
@@ -701,6 +725,8 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       eventData => {
         console.log('get analyzed event: ', eventData);
         eventNewData = JSON.parse(eventData.event_data);
+        this.analyzedEventId = +eventData.id; // seems to come in as a number, but just in case....
+        console.log('analyzed event id: ', this.analyzedEventId, typeof this.analyzedEventId);
         this.refreshView(eventNewData, eventData.submitted);
       },
       err => console.log("ERROR", err),

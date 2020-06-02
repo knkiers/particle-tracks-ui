@@ -21,7 +21,7 @@ export class UserEventsComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  displayedColumns: string[] = ['title', 'created', 'submitted', 'actions'];
+  displayedColumns: string[] = ['title', 'created', 'updated', 'submitted', 'actions'];
 
   userEvents: UserEvent[];
   dataSource: MatTableDataSource<any>;
@@ -96,6 +96,7 @@ export interface UserEvent {
   title: string;
   id: number;
   created: string;
+  updated: string;
   submitted: boolean;
   uuid: string;
 }
