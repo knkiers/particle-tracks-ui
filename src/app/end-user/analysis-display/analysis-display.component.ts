@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input, EventEmitter } from '@angular/core';
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 
 //import { ROUTER_DIRECTIVES } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -58,11 +58,13 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   tokenExpiredSubscription: Subscription;
   eventStagedForSubmitSubscription: Subscription;
 
+  errorMessage: string = '';
 
   event: Event;
   eventPreviouslySubmitted: boolean = false;
   noEventRetrieved: boolean = true;
   analyzedEventId: number = null; // gets set to the id of the analyzed event after it has either been (i) saved for the first time or (ii) retrieved from the server; it is null for a brand new event
+  pathParamsId: number = null; // is the id of the analyzed event if url includes an id param (i.e., if the user browsed to this particular saved event); otherwise null
   eventActivatedDots: CircleActivatedDots[] = [];
   private eventJSON: any;
   //private eventType: any;
@@ -116,6 +118,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private eventInfoService: EventInfoService,
     private unitConversionService: UnitConversionService,
     private eventAnalysisService: EventAnalysisService,
@@ -159,18 +162,25 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       console.log('route params subscription!', params);
       if (params['id']) {
         console.log('we have a route param! ', params['id'], typeof +params['id']);
-        let id: number = +params['id'];
-        this.getAnalyzedEvent(id);
+        this.pathParamsId = +params['id'];
+        this.getAnalyzedEvent(this.pathParamsId);
       } else {
-        this.snackBarInfoService.announceSnackBarsDismissed();
+        this.pathParamsId = null;
+        //this.snackBarInfoService.announceSnackBarsDismissed();
         this.initializeAll();
       }
     });
   }
 
   clearSnackBarsAndInitialize() {
-    this.snackBarInfoService.announceSnackBarsDismissed();
-    this.initializeAll();
+    if (this.pathParamsId === null) {
+      // in this case, the url should not have an id, so navigating to the /events url will not refresh the page...need to do it manually
+      this.snackBarInfoService.announceSnackBarsDismissed();
+      this.initializeAll();
+    } else {
+      // the url had an id param, so browsing to the version of the url with no id param will force a refresh....
+      this.router.navigate(['/events']);
+    }
   }
 
   openCannotFitCircleDialog(): void {
@@ -193,7 +203,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       console.log('The dialog was closed', result);
       //this.redirect();
     });
-    
+
   }
 
   initializeAll() {
@@ -201,6 +211,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       this.turnOffEditMode();
       this.resetAxes();
       this.event = null;
+      this.analyzedEventId = null
       this.noEventRetrieved = true;
       this.eventActivatedDots = [];
       this.eventDisplay = {};
@@ -252,6 +263,9 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
           this.resetCircles();
           this.setBFieldByEvent(this.event);
           this.initializeEvent();
+        },
+        error => {
+          this.errorMessage = error;
         }
       );
   }
@@ -288,40 +302,57 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     //console.log('about to save event.... ', eventData);
     if (this.analyzedEventId === null) {
       this.eventAnalysisService.saveAnalyzedEvent(filename, eventData, submitEvent)
-      .subscribe(
-        savedEvent => {
-          console.log('saved event: ', savedEvent);
-          this.analyzedEventId = +savedEvent.id;
-          if (submitEvent) {
-            // in this case the event was "submitted" (as opposed to just being auto-saved), so: 
-            //  - inform the user of successful submission (toast or something similar)
-            //  - reset all data for the page so that the user can start over
-            this.displayPostSubmitEventMessage();
-            this.initializeAll();
-          } else if (this.eventPreviouslySubmitted) {
-            this.openEventNowUnsubmittedDialog();
-            this.eventPreviouslySubmitted = false; // clear the flag so that it doesn't keep displaying the dialog
+        .subscribe(
+          savedEvent => {
+            console.log('saved event: ', savedEvent);
+            this.analyzedEventId = +savedEvent.id;
+            if (submitEvent) {
+              // in this case the event was "submitted" (as opposed to just being auto-saved), so: 
+              //  - inform the user of successful submission (toast or something similar)
+              //  - reset all data for the page so that the user can start over
+              this.displayPostSubmitEventMessage();
+
+              if (this.pathParamsId === null) {
+                // in this case, the url should not have an id, so navigating to the /events url will not refresh the page...need to do it manually
+                this.initializeAll();
+              } else {
+                // the url had an id param, so browsing to the version of the url with no id param will force a refresh....
+                this.router.navigate(['/events']);
+              }
+
+              //this.clearSnackBarsAndInitialize();
+              //this.initializeAll();
+            } else if (this.eventPreviouslySubmitted) {
+              this.openEventNowUnsubmittedDialog();
+              this.eventPreviouslySubmitted = false; // clear the flag so that it doesn't keep displaying the dialog
+            }
           }
-        }
-      );
+        );
     } else {
       this.eventAnalysisService.patchAnalyzedEvent(filename, eventData, submitEvent, this.analyzedEventId)
-      .subscribe(
-        patchedEvent => {
-          console.log('patched event: ', patchedEvent);
-          //this.analyzedEventId = +savedEvent.id;
-          if (submitEvent) {
-            // in this case the event was "submitted" (as opposed to just being auto-saved), so: 
-            //  - inform the user of successful submission (toast or something similar)
-            //  - reset all data for the page so that the user can start over
-            this.displayPostSubmitEventMessage();
-            this.initializeAll();
-          } else if (this.eventPreviouslySubmitted) {
-            this.openEventNowUnsubmittedDialog();
-            this.eventPreviouslySubmitted = false; // clear the flag so that it doesn't keep displaying the dialog
+        .subscribe(
+          patchedEvent => {
+            console.log('patched event: ', patchedEvent);
+            //this.analyzedEventId = +savedEvent.id;
+            if (submitEvent) {
+              // in this case the event was "submitted" (as opposed to just being auto-saved), so: 
+              //  - inform the user of successful submission (toast or something similar)
+              //  - reset all data for the page so that the user can start over
+              this.displayPostSubmitEventMessage();
+              if (this.pathParamsId === null) {
+                // in this case, the url should not have an id, so navigating to the /events url will not refresh the page...need to do it manually
+                this.initializeAll();
+              } else {
+                // the url had an id param, so browsing to the version of the url with no id param will force a refresh....
+                this.router.navigate(['/events']);
+              }
+              //this.initializeAll();
+            } else if (this.eventPreviouslySubmitted) {
+              this.openEventNowUnsubmittedDialog();
+              this.eventPreviouslySubmitted = false; // clear the flag so that it doesn't keep displaying the dialog
+            }
           }
-        }
-      );
+        );
     }
   }
 
@@ -729,7 +760,14 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
         console.log('analyzed event id: ', this.analyzedEventId, typeof this.analyzedEventId);
         this.refreshView(eventNewData, eventData.submitted);
       },
-      err => console.log("ERROR", err),
+      err => {
+        console.log("ERROR", err);
+        // in this case, there is a possibility that the requested event no longer exists; for example,
+        // the user could have deleted the event (on the event list page) and then hit the "back" button
+        // to return to the events page (with an id for a now-deleted event);
+        // in case this is what happened, navigate to the generic events page
+        this.router.navigate(['/events']);
+      },
       () => console.log("event fetched"));
 
   }
@@ -837,7 +875,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   templateUrl: 'cannot-fit-circle-dialog.html',
 })
 export class CannotFitCircleDialog {
-  constructor(public dialogRef: MatDialogRef<CannotFitCircleDialog>) {}
+  constructor(public dialogRef: MatDialogRef<CannotFitCircleDialog>) { }
 
   onClose(): void {
     this.dialogRef.close();
@@ -850,7 +888,7 @@ export class CannotFitCircleDialog {
   templateUrl: 'event-has-become-unsubmitted-dialog.html',
 })
 export class EventNowUnsubmittedDialog {
-  constructor(public dialogRef: MatDialogRef<EventNowUnsubmittedDialog>) {}
+  constructor(public dialogRef: MatDialogRef<EventNowUnsubmittedDialog>) { }
 
   onClose(): void {
     this.dialogRef.close();

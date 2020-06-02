@@ -107,7 +107,7 @@ export class NavComponent implements OnInit, OnDestroy{
   }
 
   launchEventSubmittedSnackBar(): void {
-    this.eventSubmittedSnackBarRef = this._snackBar.open('Event submitted successfully!  The next stage of your analysis is offline. You can access your submitted events using the menu in the navigation bar.', 'OK');
+    this.eventSubmittedSnackBarRef = this._snackBar.open('Event submitted successfully!  The next stage of your analysis is offline. You can access your submitted events via the side navigation menu.', 'OK');
     this.eventSubmittedSnackBarDismissed = false;
     this.eventSubmittedSnackBarRef.afterDismissed().subscribe(() => {
       console.log('The snack-bar was dismissed');

@@ -294,8 +294,6 @@ export class EventAnalysisService {
       this.router.navigate(['/login']);
     }
 
-    // first fetch the events; then do some clean-up...deleting the older saved versions for the same UUID (keep 3 at most; discard the rest)
-
     return this.http
       .get<any>(UserEventsUrl, httpOptions)
       .pipe(
@@ -305,6 +303,9 @@ export class EventAnalysisService {
           //return response;
           //sessionStorage.setItem('auth_token', res.token);
         }),
+        /*
+        * the following code was used to clean up the saved events (from when I was only using a "save" approach not a "save or patch" approach);
+        * now there should be no reason to cull through analyzed events like this....
         map( userEvents => {
           let mostRecentUserEvents: {[index: string]: any} = {};// object to sort through events
           let olderUserEventIds: number[] = [];//array of ids of events to delete
@@ -349,6 +350,7 @@ export class EventAnalysisService {
           return userEventsToKeep;
 
         }),
+        */
         catchError(this.httpService.errorHandler)
       );
   }
