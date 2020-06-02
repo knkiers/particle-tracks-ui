@@ -60,6 +60,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
 
 
   event: Event;
+  eventPreviouslySubmitted: boolean = false;
   noEventRetrieved: boolean = true;
   eventActivatedDots: CircleActivatedDots[] = [];
   private eventJSON: any;
@@ -182,6 +183,18 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     });
   }
 
+  openEventNowUnsubmittedDialog() {
+    const eventUnsubmittedDialogRef = this.dialog.open(EventNowUnsubmittedDialog, {
+      width: '60%'
+    });
+
+    eventUnsubmittedDialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed', result);
+      //this.redirect();
+    });
+    
+  }
+
   initializeAll() {
     if (!this.noEventRetrieved) {
       this.turnOffEditMode();
@@ -233,6 +246,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
           //console.log(this.event);
 
           //this.calculateMinNumberCircles();
+          this.eventPreviouslySubmitted = false;
           this.resetCircles();
           this.setBFieldByEvent(this.event);
           this.initializeEvent();
@@ -242,6 +256,9 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
 
   saveEvent(submitEvent: boolean) {
     //submitting an event is simply saving it with the submit flag set to true
+
+    //openEventNowUnsubmittedDialog()
+
 
     let reducedDots = [];
     for (let dot of this.dots) {
@@ -276,6 +293,9 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
             //  - reset all data for the page so that the user can start over
             this.displayPostSubmitEventMessage();
             this.initializeAll();
+          } else if (this.eventPreviouslySubmitted) {
+            this.openEventNowUnsubmittedDialog();
+            this.eventPreviouslySubmitted = false; // clear the flag so that it doesn't keep displaying the dialog
           }
         }
       );
@@ -691,6 +711,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   refreshView(eventData, eventSubmitted: boolean) {
     console.log('event data: ', eventData);
     console.log('event submitted? ', eventSubmitted);
+    this.eventPreviouslySubmitted = eventSubmitted;
     this.event = eventData.event;
     this.noEventRetrieved = false;
     this.eventTypeJSON = eventData.eventType;
@@ -797,3 +818,20 @@ export class CannotFitCircleDialog {
   }
 
 }
+
+@Component({
+  selector: 'event-has-become-unsubmitted-dialog',
+  templateUrl: 'event-has-become-unsubmitted-dialog.html',
+})
+export class EventNowUnsubmittedDialog {
+  constructor(public dialogRef: MatDialogRef<EventNowUnsubmittedDialog>) {}
+
+  onClose(): void {
+    this.dialogRef.close();
+  }
+
+}
+
+
+
+
