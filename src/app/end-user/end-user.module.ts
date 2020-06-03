@@ -13,11 +13,11 @@ import { AnalysisDisplayComponent, CannotFitCircleDialog, EventNowUnsubmittedDia
 import { CircleItemComponent } from './circle-item/circle-item.component';
 import { CircleTableComponent } from './circle-table/circle-table.component';
 import { MomentumAxisComponent } from './momentum-axis/momentum-axis.component';
-import { AnalysisStepperComponent } from './analysis-stepper/analysis-stepper.component';
+import { AnalysisStepperComponent, NavigateAwayDialog } from './analysis-stepper/analysis-stepper.component';
 import { ReviewEventComponent } from './review-event/review-event.component';
 
 @NgModule({
-  declarations: [EndUserComponent, AnalysisDisplayComponent, CircleItemComponent, CircleTableComponent, MomentumAxisComponent, AnalysisStepperComponent, CannotFitCircleDialog, EventNowUnsubmittedDialog, ReviewEventComponent ],
+  declarations: [EndUserComponent, AnalysisDisplayComponent, CircleItemComponent, CircleTableComponent, MomentumAxisComponent, AnalysisStepperComponent, NavigateAwayDialog, CannotFitCircleDialog, EventNowUnsubmittedDialog, ReviewEventComponent],
   imports: [
     CommonModule,
     EndUserRoutingModule,

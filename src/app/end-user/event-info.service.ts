@@ -17,6 +17,9 @@ export class EventInfoService {
   private eventStagedForSubmitSource = new Subject<void>();
   private clearReviewDataSource = new Subject<void>();
 
+  //https://medium.com/@tobias.ljungstrom/how-to-use-a-custom-dialogue-with-the-candeactivate-route-guard-in-angular-385616470b6a
+  navigateAwaySelection$: Subject<boolean> = new Subject<boolean>();
+
   // Observable streams
   circleUpdated$ = this.eventUpdatedSource.asObservable();
   eventStagedForSubmit$ = this.eventStagedForSubmitSource.asObservable();
@@ -27,7 +30,7 @@ export class EventInfoService {
     console.log('announce event update!');
     console.log(event, circles);
     this.eventUpdatedSource.next({
-      event: event, 
+      event: event,
       editModeOn: editModeOn,
       circles: circles,
       eventActivatedDots: eventActivatedDots
