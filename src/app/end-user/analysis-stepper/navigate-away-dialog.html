@@ -1,8 +1,8 @@
-<h1 mat-dialog-title>You are attempting to navigate away from this page!</h1>
+<h1 mat-dialog-title>Are you sure you want to leave this page?</h1>
 <div mat-dialog-content>
   <p>{{data.text}}</p>
 </div>
 <div mat-dialog-actions>
-  <button mat-button (click)="choose(true)">Reckless abandon time!  Let's go</button>
-  <button mat-button (click)="choose(false)" cdkFocusInitial>Oops!  Stay on page</button>
+  <button mat-button (click)="choose(true)">Leave page</button>
+  <button mat-button (click)="choose(false)" cdkFocusInitial>Stay on page</button>
 </div>

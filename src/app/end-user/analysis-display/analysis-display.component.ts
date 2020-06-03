@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 
 //import { ROUTER_DIRECTIVES } from '@angular/router';
@@ -46,6 +46,8 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
 
   //@Input() event: Event;
   //@Input() numberEventsRequested: any;
+
+  @Output() analysisStatus = new EventEmitter<any>();
 
   userIsReadOnly: boolean = false; // set to true if viewing from the admin (for grading purposes)
 
@@ -166,6 +168,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
         this.getAnalyzedEvent(this.pathParamsId);
       } else {
         this.pathParamsId = null;
+        this.analysisStatus.emit({allowNavigation: true});// set to true now, but set to false after first save; then set to true after submission
         //this.snackBarInfoService.announceSnackBarsDismissed();
         this.initializeAll();
       }
@@ -246,6 +249,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     this.resetAxes();
     this.event = null;//forces a redraw of the event when the new one comes in
     this.analyzedEventId = null;
+    this.analysisStatus.emit({allowNavigation: true});// set to true now, but set to false after first save; then set to true after submission
     this.eventDisplayService.getEvent()
       .subscribe(
         event => {
@@ -274,7 +278,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     //submitting an event is simply saving it with the submit flag set to true
 
     //openEventNowUnsubmittedDialog()
-
+    this.analysisStatus.emit({allowNavigation: submitEvent});
 
     let reducedDots = [];
     for (let dot of this.dots) {
@@ -326,6 +330,9 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
               this.openEventNowUnsubmittedDialog();
               this.eventPreviouslySubmitted = false; // clear the flag so that it doesn't keep displaying the dialog
             }
+          },
+          error => {
+            console.log('There was an error and the event could not be saved: ', error);
           }
         );
     } else {
@@ -351,6 +358,9 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
               this.openEventNowUnsubmittedDialog();
               this.eventPreviouslySubmitted = false; // clear the flag so that it doesn't keep displaying the dialog
             }
+          },
+          error => {
+            console.log('There was an error and the event could not be patched: ', error);
           }
         );
     }
@@ -751,17 +761,18 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     // get the analyzed event from the database
     //console.log('about to get event #....');
     //console.log(id);
-
     this.eventAnalysisService.getAnalyzedEvent(id).subscribe(
       eventData => {
         console.log('get analyzed event: ', eventData);
         eventNewData = JSON.parse(eventData.event_data);
         this.analyzedEventId = +eventData.id; // seems to come in as a number, but just in case....
         console.log('analyzed event id: ', this.analyzedEventId, typeof this.analyzedEventId);
+        this.analysisStatus.emit({allowNavigation: eventData.submitted});
         this.refreshView(eventNewData, eventData.submitted);
       },
       err => {
         console.log("ERROR", err);
+        this.analysisStatus.emit({allowNavigation: true});// set to true now, but set to false after first save; then set to true after submission
         // in this case, there is a possibility that the requested event no longer exists; for example,
         // the user could have deleted the event (on the event list page) and then hit the "back" button
         // to return to the events page (with an id for a now-deleted event);

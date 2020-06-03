@@ -23,6 +23,7 @@ export class AnalysisStepperComponent implements OnInit, OnDestroy, Deactivation
   canSubmit: boolean = false;
   warningsExist: boolean = false;
   errorsExist: boolean = false;
+  allowNavigation: boolean = true;
 
   constructor(
     private eventInfoService: EventInfoService,
@@ -44,6 +45,11 @@ export class AnalysisStepperComponent implements OnInit, OnDestroy, Deactivation
     console.log('myStepper: ', this.myStepper);
   }
 
+  onAnalysisStatusUpdate(analysisStatus: any){
+    console.log('analysis status update received!  Allow navigation? ', analysisStatus.allowNavigation);
+    this.allowNavigation = analysisStatus.allowNavigation;
+  }
+
   resetStepper() {
     this.canSubmit = false;
     this.warningsExist = false;
@@ -61,8 +67,8 @@ export class AnalysisStepperComponent implements OnInit, OnDestroy, Deactivation
   openDialog(): void {
     console.log('about to open dialog!');
     const dialogRef = this.dialog.open(NavigateAwayDialog, {
-      width: '250px',
-      data: { text: 'You did not submit!  Are you nutso?' }
+      width: '60%',
+      data: { text: 'The event you are analyzing has not yet been submitted.  Your work has been saved, so you can return to finish and submit it later.' }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -74,8 +80,12 @@ export class AnalysisStepperComponent implements OnInit, OnDestroy, Deactivation
   //https://medium.com/@tobias.ljungstrom/how-to-use-a-custom-dialogue-with-the-candeactivate-route-guard-in-angular-385616470b6a
   canDeactivate(): Observable<boolean> | boolean {
     console.log('can deactivate has fired in the component!');
-    this.openDialog();
-    return this.eventInfoService.navigateAwaySelection$;
+    if (this.allowNavigation) {
+      return true;
+    } else {
+      this.openDialog();
+      return this.eventInfoService.navigateAwaySelection$;
+    }
   }
 
   ngOnDestroy() {
