@@ -19,7 +19,7 @@
                             <!-- Event column -->
                             <ng-container matColumnDef="title">
                                 <th mat-header-cell *matHeaderCellDef> Event </th>
-                                <td mat-cell *matCellDef="let element" [innerHTML]="element.title"></td>
+                                <td mat-cell *matCellDef="let element" [innerHTML]="element.event_data.event.name"></td>
                             </ng-container>
                             <!-- Time stamp columns -->
                             <!-- https://devhints.io/moment -->
@@ -45,8 +45,7 @@
                             <ng-container matColumnDef="actions">
                                 <th mat-header-cell *matHeaderCellDef> Actions </th>
                                 <td mat-cell *matCellDef="let element" class="centered-content">
-                                    <mat-icon class="action-icon" matTooltip="Edit this event (submit, unsubmit, etc.)" (click)="editEvent(element)">edit</mat-icon>
-                                    <mat-icon class="action-icon" matTooltip="Delete this event" (click)="openDialog(element)">delete</mat-icon>
+                                    <mat-icon class="action-icon" matTooltip="View this event" (click)="viewEvent(element)">pageview</mat-icon>
                                 </td>
                             </ng-container>
                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

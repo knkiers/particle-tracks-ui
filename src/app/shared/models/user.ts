@@ -18,8 +18,13 @@ export class User {
       this.firstName = obj.first_name;
       this.lastName = obj.last_name;
       this.isStaff = obj.is_staff;
+      console.log('inside user constructor; isStaff? ', this.isStaff);
       this.username = obj.username;
       this.institutionId = obj.institution_id;
+    }
+
+    isAdmin(): boolean {
+      return this.isStaff;
     }
   
 }

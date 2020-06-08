@@ -32,3 +32,14 @@ th.mat-sort-header-sorted {
     justify-content:center;
 }
 
+// https://stackoverflow.com/questions/22545325/how-to-vertically-align-text-with-icon-font
+.search-box {
+    margin-left: 20px;
+    padding-top: 10px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;   
+}

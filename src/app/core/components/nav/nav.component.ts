@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import {Router} from '@angular/router';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 
 import { Observable, Subscription } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
@@ -15,7 +16,16 @@ import {User} from '../../../shared/models/user';
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
-  styleUrls: ['./nav.component.scss']
+  styleUrls: ['./nav.component.scss'],
+  animations: [
+    trigger('indicatorRotate', [
+      state('collapsed', style({transform: 'rotate(0deg)'})),
+      state('expanded', style({transform: 'rotate(180deg)'})),
+      transition('expanded <=> collapsed',
+        animate('225ms cubic-bezier(0.4,0.0,0.2,1)')
+      ),
+    ])
+  ]
 })
 export class NavComponent implements OnInit, OnDestroy{
 
@@ -35,6 +45,8 @@ export class NavComponent implements OnInit, OnDestroy{
 
   eventSubmittedSnackBarRef: MatSnackBarRef<any> = null;
   eventSubmittedSnackBarDismissed: boolean = false;
+
+  teacherNavExpanded: boolean = true;
   
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -93,6 +105,10 @@ export class NavComponent implements OnInit, OnDestroy{
      */
   }
 
+  teacherNavToggle() {
+    this.teacherNavExpanded = !this.teacherNavExpanded;
+  }
+
   launchUnsubmitWarningSnackBar(): void {
     this.unsubmitWarningSnackBarRef = this._snackBar.open(
       'This event has already been submitted.  Editing the analysis will cause it to become unsubmitted, and you will need to resubmit it.',
@@ -118,6 +134,10 @@ export class NavComponent implements OnInit, OnDestroy{
   
   isLoggedIn(){
     return this.userService.isLoggedIn();
+  }
+
+  isAdmin() {
+    return this.userService.isAdmin();
   }
 
   logout(){

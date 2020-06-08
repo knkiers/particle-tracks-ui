@@ -233,10 +233,11 @@ export class UserService {
   }
 
   isAdmin() {
+    //console.log('inside user service isAdmin....  current user: ', this.currentUser);
     if (this.currentUser === null) {
       return false;
     } else {
-      return this.currentUser.isStaff;
+      return this.currentUser.isAdmin();
     }
   }
 
@@ -297,12 +298,6 @@ export class UserService {
     let authToken = sessionStorage.getItem('auth_token');
     let httpOptions = this.httpService.buildHttpOptionsSecure(authToken);
 
-    //eventually will be required to switch to HttpClient; then this will be how to set the headers:
-    //let headers = new HttpHeaders(); // this is the
-    //headers = headers.set('Content-Type', 'application/json').set('Authorization', `JWT ${authToken}`);
-
-    //console.log(headers);
-
     return this.http
       .get(
         UsersThisInstitutionUrl,
@@ -311,14 +306,14 @@ export class UserService {
       .pipe(
         tap(users => {
           console.log('users: ', users);
-          return users;
+          //return users;
         }),
         catchError(this.httpService.errorHandler)
       );
   }
 
 
-  /*
+  
   fetchUser(userId: number) {
 
     if (this.tokenExpired()) {
@@ -329,21 +324,21 @@ export class UserService {
     // jwt on both the server and client side:
     //   client side: https://medium.com/@blacksonic86/angular-2-authentication-revisited-611bf7373bf9#.jelvdws38
     //   server side: http://getblimp.github.io/django-rest-framework-jwt/
-    let headers = new Headers();
     let authToken = sessionStorage.getItem('auth_token');
+    let httpOptions = this.httpService.buildHttpOptionsSecure(authToken);
 
-    headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', `JWT ${authToken}`);
     return this.http
       .get(
         UsersUrl + userId + '/',
-        { headers }
+        httpOptions
       )
       .pipe(
-        map(res => res.json())
+        tap(user => {
+          console.log('user: ', user);
+        }),
+        catchError(this.httpService.errorHandler)
       );
   }
-  */
 
 
   // Service message command

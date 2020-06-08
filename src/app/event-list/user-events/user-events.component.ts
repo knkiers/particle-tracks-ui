@@ -8,7 +8,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 
 import { EventAnalysisService } from '../../shared/services/event-analysis.service';
 
-import * as moment from 'moment'; // add this 1 of 4
+import * as moment from 'moment';
 
 
 @Component({

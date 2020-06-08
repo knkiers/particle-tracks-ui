@@ -303,54 +303,6 @@ export class EventAnalysisService {
           //return response;
           //sessionStorage.setItem('auth_token', res.token);
         }),
-        /*
-        * the following code was used to clean up the saved events (from when I was only using a "save" approach not a "save or patch" approach);
-        * now there should be no reason to cull through analyzed events like this....
-        map( userEvents => {
-          let mostRecentUserEvents: {[index: string]: any} = {};// object to sort through events
-          let olderUserEventIds: number[] = [];//array of ids of events to delete
-          userEvents.forEach( event => {
-            let uuid = event.uuid;
-            //console.log('uuid: ', uuid);
-            // https://stackoverflow.com/questions/1098040/checking-if-a-key-exists-in-a-javascript-object
-            if (!mostRecentUserEvents.hasOwnProperty(uuid)) {
-              mostRecentUserEvents[uuid] = event;
-              //console.log('uuid not in list....added it');
-            } else {
-              //console.log('uuid was in list');
-              let dateInRecentEvents = new Date(mostRecentUserEvents[uuid].created);
-              let dateInEvents = new Date(event.created);
-              //console.log('date of most recent event so far: ', dateInRecentEvents);
-              //console.log('date of event we are looking at: ', dateInEvents);
-              if (dateInEvents>dateInRecentEvents) {
-                //console.log('event we are looking at is more recent; swap it in and add id of former recent event to delete list');
-                let olderEventId: number = mostRecentUserEvents[uuid].id;
-                mostRecentUserEvents[uuid] = event;
-                olderUserEventIds.push(olderEventId);
-              } else {
-                //console.log('add event id to delete list');
-                olderUserEventIds.push(event.id);
-              }
-            }
-          });
-          let userEventsToKeep = [];
-          //https://stackoverflow.com/questions/43389414/how-to-iterate-over-keys-of-a-generic-object-in-typescript
-          Object.keys(mostRecentUserEvents).forEach(key => {
-            userEventsToKeep.push(mostRecentUserEvents[key]);
-          });
-
-          if (olderUserEventIds.length > 0) {
-            //console.log('do some clean-up....');
-            this.deleteAnalyzedEvents(olderUserEventIds)
-            .subscribe(
-              response => { console.log('returned from clean-up: ', response) }
-            );
-          }
-          
-          return userEventsToKeep;
-
-        }),
-        */
         catchError(this.httpService.errorHandler)
       );
   }
@@ -430,9 +382,20 @@ export class EventAnalysisService {
           .pipe(
             retry(1),
             tap(response => {
-              console.log('new event: ', response);
+              console.log('saved event: ', response);
               return response;
               //sessionStorage.setItem('auth_token', res.token);
+            }),
+            map( response => {
+              return {
+                created: response.created,
+                event_data: JSON.parse(response.event_data),
+                id: response.id,
+                owner: response.owner,
+                submitted: response.submitted,
+                title: response.title,
+                updated: response.updated
+              }
             }),
             catchError(this.httpService.errorHandler)
           ));

@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -7,6 +8,7 @@ import { CoreModule } from './core/core.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { EventListModule } from './event-list/event-list.module';
 import { EndUserModule } from './end-user/end-user.module';
+import { TeacherModule } from './teacher/teacher.module';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -28,7 +30,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     CoreModule,
     AuthenticationModule,
     EventListModule,
-    EndUserModule
+    EndUserModule,
+    TeacherModule
   ],
   providers: [],
   bootstrap: [AppComponent]

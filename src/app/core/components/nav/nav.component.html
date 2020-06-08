@@ -20,6 +20,27 @@
         [routerLink]="['/event-list']">
         Analyzed Events
       </a>
+      <div *ngIf="isAdmin()">
+        <!-- https://stackblitz.com/edit/dynamic-nested-sidenav-menu?file=app%2Fapp.component.scss -->
+        <a mat-list-item (click)="teacherNavToggle()" routerLinkActive="list-item-active">
+          <!-- https://stackblitz.com/edit/mat-nav-list-with-buttons?file=app%2Flistview%2Flistview.component.html -->
+          <span matLine>Teacher</span>
+          <span>
+            <mat-icon [@indicatorRotate]="teacherNavExpanded ? 'expanded': 'collapsed'">
+              expand_more
+            </mat-icon>
+          </span>
+        </a>
+        <div *ngIf="teacherNavExpanded">
+          <a mat-list-item (click)="teacherNavToggle()" (click)="navigationSidenav.close()" routerLinkActive="list-item-active" [routerLink]="['/teacher']">
+            <span class="child-list-item">Dashboard</span>
+          </a>
+          <a mat-list-item (click)="teacherNavToggle()" (click)="navigationSidenav.close()" routerLinkActive="list-item-active">
+            <span class="child-list-item">Resources</span>
+          </a>
+        </div>
+      </div>
+
     </mat-nav-list>
   </mat-sidenav>
 
