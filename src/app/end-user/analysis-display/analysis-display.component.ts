@@ -51,10 +51,6 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
 
   userIsReadOnly: boolean = false; // set to true if viewing from the admin (for grading purposes)
 
-  modalSaveWarningActions = new EventEmitter<string>();
-  modalBrowseEventsActions = new EventEmitter<string>();
-  modalCircleActions = new EventEmitter<string>();
-
   subscription: Subscription;
   //circleSubscription: Subscription;
   tokenExpiredSubscription: Subscription;
@@ -543,7 +539,6 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     var dataDict = this.eventAnalysisService.fitCircleToData(this.dots, this.boundaries);
     //var circleInputData = this.eventAnalysisService.gatherDataFromDots(this.dots);
     if (dataDict.error) {
-      //this.openCircleErrorModal();
       this.openCannotFitCircleDialog();
     }
     if (!dataDict.error) {
@@ -844,6 +839,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     console.log('colour mode is on? ', this.colourModeOn);
   }
 
+  /*
   openCircleErrorModal() {
     //this.modalCircleActions.emit({action:"modal",params:['open']});
     console.log('open circle error modal');
@@ -852,6 +848,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   closeAnalysisDisplay() {
     //this.eventAnalysisService.announcedAnalysisDisplayClosed();
   }
+  */
 
   ngOnDestroy() {
     this.subscription.unsubscribe();

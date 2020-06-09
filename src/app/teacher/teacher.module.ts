@@ -10,12 +10,14 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { TeacherComponent } from './teacher.component';
 import { UserEventsByIdComponent } from './user-events-by-id/user-events-by-id.component';
 import { EventInfoAnchorDirective } from './user-events-by-id/event-info-anchor.directive';
-import { UserEventAnchorDirective } from './user-events-by-id/user-event-anchor.directive';
+import { UserEventWrapperAnchorDirective } from './user-events-by-id/user-event-wrapper-anchor.directive';
 import { EventEnergyMomentumComponent } from './event-energy-momentum/event-energy-momentum.component';
+import { AnalysisDisplayWrapperComponent } from './analysis-display-wrapper/analysis-display-wrapper.component';
+import { UserEventAnchorDirective } from './analysis-display-wrapper/user-event-anchor.directive';
 
 
 @NgModule({
-  declarations: [DashboardComponent, TeacherComponent, UserEventsByIdComponent, EventInfoAnchorDirective, UserEventAnchorDirective, EventEnergyMomentumComponent],
+  declarations: [DashboardComponent, TeacherComponent, UserEventsByIdComponent, EventInfoAnchorDirective, UserEventWrapperAnchorDirective, EventEnergyMomentumComponent, AnalysisDisplayWrapperComponent, UserEventAnchorDirective],
   imports: [
     CommonModule,
     AngularMaterialModule,

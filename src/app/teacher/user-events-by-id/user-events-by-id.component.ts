@@ -11,8 +11,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { UserService } from '../../shared/services/user.service';
 import { EventAnalysisService } from '../../shared/services/event-analysis.service';
 
-import { AnalysisDisplayComponent } from '../../end-user/analysis-display/analysis-display.component';
-import { UserEventAnchorDirective } from './user-event-anchor.directive';
+import { AnalysisDisplayWrapperComponent } from '../analysis-display-wrapper/analysis-display-wrapper.component';
+import { UserEventWrapperAnchorDirective } from './user-event-wrapper-anchor.directive';
 import { EventInfoAnchorDirective } from './event-info-anchor.directive';
 import { EventEnergyMomentumComponent } from '../event-energy-momentum/event-energy-momentum.component';
 
@@ -33,12 +33,12 @@ export class UserEventsByIdComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  @ViewChild(UserEventAnchorDirective, { static: false }) userEventAnchor: UserEventAnchorDirective;
+  @ViewChild(UserEventWrapperAnchorDirective, { static: false }) userEventWrapperAnchor: UserEventWrapperAnchorDirective;
   @ViewChild(EventInfoAnchorDirective, { static: false }) eventInfoAnchor: EventInfoAnchorDirective;
 
   user: User = null;
   events: any = null;
-  private analysisDisplayComponent: any;
+  private analysisDisplayWrapperComponent: any;
   private eventEnergyMomentumComponent: any;
 
   subscription: Subscription;
@@ -114,11 +114,12 @@ export class UserEventsByIdComponent implements OnInit, OnDestroy {
 
   openUserEvent(eventData: any) {
     console.log(eventData);
-    this.userEventAnchor.viewContainer.clear();
-    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(AnalysisDisplayComponent);
-    this.analysisDisplayComponent = this.userEventAnchor.viewContainer.createComponent(componentFactory).instance;
-    this.analysisDisplayComponent.refreshView(eventData);
-    this.analysisDisplayComponent.userIsReadOnly = true;
+    console.log('in user events by id; user event wrapper anchor: ', this.userEventWrapperAnchor);
+    this.userEventWrapperAnchor.viewContainer.clear();
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(AnalysisDisplayWrapperComponent);
+    this.analysisDisplayWrapperComponent = this.userEventWrapperAnchor.viewContainer.createComponent(componentFactory).instance;
+    this.analysisDisplayWrapperComponent.eventData = eventData;
+    //this.analysisDisplayWrapperComponent.userIsReadOnly = true;
 
     this.eventInfoAnchor.viewContainer.clear();
     let eventInfoComponentFactory = this.componentFactoryResolver.resolveComponentFactory(EventEnergyMomentumComponent);
@@ -129,7 +130,7 @@ export class UserEventsByIdComponent implements OnInit, OnDestroy {
   }
 
   closeUserEvent() {
-    this.userEventAnchor.viewContainer.clear();
+    this.userEventWrapperAnchor.viewContainer.clear();
     this.eventInfoAnchor.viewContainer.clear();
   }
 
