@@ -1,0 +1,147 @@
+<div class="container">
+    <div fxLayout="row" fxLayoutAlign="space-around center">
+        <div fxFlex.gt-sm="900px">
+            <mat-card>
+                <div fxLayout="row" fxLayoutAlign="space-between start">
+                    <div>
+                        <mat-card-header>
+                            <mat-card-title>
+                                <span [innerHtml]="eventData.event.name"></span>
+                            </mat-card-title>
+                            <mat-card-subtitle>
+                                B = {{eventData.bFieldStrength}} kG ({{eventData.bFieldDirection}})
+                            </mat-card-subtitle>
+                        </mat-card-header>
+                    </div>
+                    <div>
+                        <button mat-stroked-button (click)="closeAnalysisDisplay()" color="primary">Close</button>
+                    </div>
+                </div>
+                
+                <mat-card-content>
+                    <div *ngIf="errorMessage" class="error-message">
+                        {{errorMessage}}
+                    </div>
+                    <h1 class="table-title">Event Data:</h1>
+                    <div class="mat-elevation-z1">
+                        <table mat-table [dataSource]="eventSummaryDataSource">
+                            <ng-container matColumnDef="particle">
+                                <th mat-header-cell *matHeaderCellDef> Particle </th>
+                                <td mat-cell *matCellDef="let element" [innerHTML]="element.name"></td>
+                            </ng-container>
+                            <ng-container matColumnDef="inOut">
+                                <th mat-header-cell *matHeaderCellDef> in/out </th>
+                                <td mat-cell *matCellDef="let element">{{element.inout}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="xY">
+                                <th mat-header-cell *matHeaderCellDef> X/Y? </th>
+                                <td mat-cell *matCellDef="let element" [innerHTML]="element.alias"></td>
+                            </ng-container>
+                            <ng-container matColumnDef="mass">
+                                <th mat-header-cell *matHeaderCellDef> Mass (MeV) </th>
+                                <td mat-cell *matCellDef="let element">{{element.mass}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="theta">
+                                <th mat-header-cell *matHeaderCellDef> &theta; (rad)</th>
+                                <td mat-cell *matCellDef="let element">{{element.theta | roundReal : 4}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="momentum">
+                                <th mat-header-cell *matHeaderCellDef> p (MeV) </th>
+                                <td mat-cell *matCellDef="let element">{{element.pMag | roundReal : 4}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="px">
+                                <th mat-header-cell *matHeaderCellDef> p<sub>x</sub> (MeV)</th>
+                                <td mat-cell *matCellDef="let element">{{element.px | roundReal : 4}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="py">
+                                <th mat-header-cell *matHeaderCellDef> p<sub>y</sub> (MeV) </th>
+                                <td mat-cell *matCellDef="let element">{{element.py | roundReal : 4}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="energy">
+                                <th mat-header-cell *matHeaderCellDef> E (MeV) </th>
+                                <td mat-cell *matCellDef="let element">{{element.energy | roundReal : 4}}</td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsEventDataSummary"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumnsEventDataSummary;"></tr>
+                        </table>
+                    </div>
+                    <h1 class="student-data-table-title">Student Data:</h1>
+                    <div class="mat-elevation-z1">
+                        <table mat-table [dataSource]="studentDataSource">
+                            <ng-container matColumnDef="particle">
+                                <th mat-header-cell *matHeaderCellDef> Particle </th>
+                                <td mat-cell *matCellDef="let element" [innerHTML]="element.name"></td>
+                            </ng-container>
+                            <ng-container matColumnDef="circleNumber">
+                                <th mat-header-cell *matHeaderCellDef> Circle # </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <span *ngIf="element.error">
+                                        {{element.circleNumber}}
+                                        <mat-icon class="material-icons icon-align-no-space">error_outline</mat-icon>
+                                    </span>
+                                    <span *ngIf="!element.error">
+                                        {{element.circleNumber}}
+                                    </span>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="inOut">
+                                <th mat-header-cell *matHeaderCellDef> in/out </th>
+                                <td mat-cell *matCellDef="let element">{{element.inout}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="mass">
+                                <th mat-header-cell *matHeaderCellDef> Mass (MeV) </th>
+                                <td mat-cell *matCellDef="let element">{{element.mass}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="radius">
+                                <th mat-header-cell *matHeaderCellDef> r (cm)</th>
+                                <td mat-cell *matCellDef="let element">{{element.r | roundReal : 4}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="theta">
+                                <th mat-header-cell *matHeaderCellDef> &theta; (rad)</th>
+                                <td mat-cell *matCellDef="let element">{{element.theta | roundReal : 4}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="momentum">
+                                <th mat-header-cell *matHeaderCellDef> p (MeV) </th>
+
+                                <td mat-cell *matCellDef="let element">
+                                    <span *ngIf="element.summaryRow" [innerHTML]="element.pMag"></span>
+                                    <span *ngIf="!element.summaryRow">{{element.pMag | roundReal : 4}}</span>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="px">
+                                <th mat-header-cell *matHeaderCellDef> p<sub>x</sub> (MeV)</th>
+                                <td mat-cell *matCellDef="let element">{{element.px | roundReal : 4}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="py">
+                                <th mat-header-cell *matHeaderCellDef> p<sub>y</sub> (MeV) </th>
+                                <td mat-cell *matCellDef="let element">{{element.py | roundReal : 4}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="energy">
+                                <th mat-header-cell *matHeaderCellDef> E (MeV) </th>
+                                <td mat-cell *matCellDef="let element">{{element.energy | roundReal : 4}}</td>
+                            </ng-container>
+
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsStudentData"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumnsStudentData;"></tr>
+                        </table>
+
+                    </div>
+
+                    <div *ngIf="errorMessages.length > 0">
+                        <h1 class="student-data-table-title warning-title">
+                            <div> Errors/Warnings:</div>
+                        </h1>
+                        <div *ngFor="let error of errorMessages" class="warning-list">
+                            <i class="material-icons icon-align">error_outline</i> {{error}}
+                        </div>
+                    </div>
+                </mat-card-content>
+
+
+
+            </mat-card>
+
+        </div>
+    </div>
+</div>

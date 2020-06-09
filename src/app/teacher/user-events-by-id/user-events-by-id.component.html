@@ -1,10 +1,13 @@
+<div appUserEventAnchor></div>
+<div appEventInfoAnchor></div>
+
 <div class="container">
     <div fxLayout="row" fxLayoutAlign="space-around center">
         <div fxFlex.gt-sm="900px">
             <mat-card>
                 <mat-card-header>
                     <mat-card-title>
-                        Analyzed Events
+                        Analyzed Events <span *ngIf="user">for {{user.firstName}} {{user.lastName}}</span>
                     </mat-card-title>
                     <mat-card-subtitle>
                         Click title bar to sort by date or submission status
@@ -45,7 +48,7 @@
                             <ng-container matColumnDef="actions">
                                 <th mat-header-cell *matHeaderCellDef> Actions </th>
                                 <td mat-cell *matCellDef="let element" class="centered-content">
-                                    <mat-icon class="action-icon" matTooltip="View this event" (click)="viewEvent(element)">pageview</mat-icon>
+                                    <mat-icon class="action-icon" matTooltip="View this event" (click)="openUserEvent(element.event_data)">pageview</mat-icon>
                                 </td>
                             </ng-container>
                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

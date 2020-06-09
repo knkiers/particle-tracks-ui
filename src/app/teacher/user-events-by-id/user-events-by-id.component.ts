@@ -1,17 +1,26 @@
-import { Component, OnInit, ViewChild, Inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, ComponentFactoryResolver } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+
+import { Subscription }   from 'rxjs';
 
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 //import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
-import {UserService} from '../../shared/services/user.service';
+import { UserService } from '../../shared/services/user.service';
 import { EventAnalysisService } from '../../shared/services/event-analysis.service';
+
+import { AnalysisDisplayComponent } from '../../end-user/analysis-display/analysis-display.component';
+import { UserEventAnchorDirective } from './user-event-anchor.directive';
+import { EventInfoAnchorDirective } from './event-info-anchor.directive';
+import { EventEnergyMomentumComponent } from '../event-energy-momentum/event-energy-momentum.component';
+
 
 import { User } from '../../shared/models/user';
 
 import * as moment from 'moment';
+import { analyzeAndValidateNgModules } from '@angular/compiler';
 
 
 @Component({
@@ -24,10 +33,15 @@ export class UserEventsByIdComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  private user: User = null;
+  @ViewChild(UserEventAnchorDirective, { static: false }) userEventAnchor: UserEventAnchorDirective;
+  @ViewChild(EventInfoAnchorDirective, { static: false }) eventInfoAnchor: EventInfoAnchorDirective;
+
+  user: User = null;
   events: any = null;
   private analysisDisplayComponent: any;
   private eventEnergyMomentumComponent: any;
+
+  subscription: Subscription;
 
   displayedColumns: string[] = ['title', 'created', 'updated', 'submitted', 'actions'];
 
@@ -43,8 +57,15 @@ export class UserEventsByIdComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private userService: UserService,
     private eventAnalysisService: EventAnalysisService,
-    //public dialog: MatDialog
-  ) { }
+    private componentFactoryResolver: ComponentFactoryResolver) {
+    this.subscription = eventAnalysisService.analysisDisplayClosed$.subscribe(
+      event => {
+        this.closeUserEvent();
+      });
+  }
+
+
+
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -65,7 +86,7 @@ export class UserEventsByIdComponent implements OnInit, OnDestroy {
       error => {
         this.errorMessage = 'Sorry, there appears to have been a problem.  Your data could not be accessed.  Please try again later.  If the problem persists, please contact the site administrator.'
       }
-      );
+    );
   }
 
   fetchUserEvents(eventIdList: number[]) {
@@ -73,7 +94,7 @@ export class UserEventsByIdComponent implements OnInit, OnDestroy {
     console.log('event id list: ', eventIdList);
 
     this.errorMessage = '';
-    
+
     console.log('here are the events: ', eventIdList);
     this.eventAnalysisService.getAnalyzedUserEvents(eventIdList).subscribe(
       (userEvents: UserEvent[]) => {
@@ -91,11 +112,40 @@ export class UserEventsByIdComponent implements OnInit, OnDestroy {
     );
   }
 
+  openUserEvent(eventData: any) {
+    console.log(eventData);
+    this.userEventAnchor.viewContainer.clear();
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(AnalysisDisplayComponent);
+    this.analysisDisplayComponent = this.userEventAnchor.viewContainer.createComponent(componentFactory).instance;
+    this.analysisDisplayComponent.refreshView(eventData);
+    this.analysisDisplayComponent.userIsReadOnly = true;
+
+    this.eventInfoAnchor.viewContainer.clear();
+    let eventInfoComponentFactory = this.componentFactoryResolver.resolveComponentFactory(EventEnergyMomentumComponent);
+    this.eventEnergyMomentumComponent = this.eventInfoAnchor.viewContainer.createComponent(eventInfoComponentFactory).instance;
+    this.eventEnergyMomentumComponent.eventData = eventData;
+    //this.analysisDisplayComponent.userIsReadOnly = true;
+
+  }
+
+  closeUserEvent() {
+    this.userEventAnchor.viewContainer.clear();
+    this.eventInfoAnchor.viewContainer.clear();
+  }
+
+
+
+
+
   viewEvent(userEvent: UserEvent) {
     //https://codecraft.tv/courses/angular/routing/parameterised-routes/
     //this.router.navigate(['events', {id: userEvent.id}]);
   }
-  
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
 }
 
 export interface UserEvent {
