@@ -2,37 +2,34 @@
     <div fxLayout="row" fxLayoutAlign="space-around center">
         <div fxFlex.gt-sm="900px">
             <mat-card>
-                <mat-card-header>
-                    <mat-card-title class="card-title-container">
-                        <span *ngIf="event !== null; else no_event_container">
-                            <span [innerHTML]="event.name">
-                            </span>
-                        </span>
-                        <ng-template #no_event_container>
-                            No Process Selected
-                        </ng-template>
-                    </mat-card-title>
-                    <mat-card-subtitle>
-                        <span *ngIf="event !== null">
-                            B = {{bFieldStrength}} kG
-                        </span>
-                    </mat-card-subtitle>
-                </mat-card-header>
-
+                <div fxLayout="row" fxLayoutAlign="space-between start">
+                    <div>
+                        <mat-card-header>
+                            <mat-card-title class="card-title-container">
+                                <span *ngIf="event !== null; else no_event_container">
+                                    <span [innerHTML]="event.name">
+                                    </span>
+                                </span>
+                                <ng-template #no_event_container>
+                                    No Process Selected
+                                </ng-template>
+                            </mat-card-title>
+                            <mat-card-subtitle>
+                                <span *ngIf="event !== null">
+                                    B = {{bFieldStrength}} kG
+                                </span>
+                            </mat-card-subtitle>
+                        </mat-card-header>
+                    </div>
+                    <div>
+                        <button *ngIf="revealEvent" mat-stroked-button (click)="hideEvent()" color="primary" class="show-hide-button">Hide Event</button>
+                        <button *ngIf="!revealEvent" mat-stroked-button (click)="showEvent()" color="primary" class="show-hide-button">Show Event</button>
+                        <button mat-stroked-button (click)="closeAnalysisDisplay()" color="primary">Close</button>
+                    </div>
+                </div>
                 <mat-card-content>
                     <div fxLayout="row" fxLayoutAlign="space-around start">
                         <div fxFlex="55%">
-                            <div fxLayout="row" fxLayoutAlign="end">
-                                <span *ngIf="editModeOn" class="negative-top-margin">
-                                    <mat-label class="mat-slide-toggle-content">
-                                        Deselect&nbsp;
-                                    </mat-label>
-                                    <mat-slide-toggle color="primary" [checked]="colourModeOn" (change)="toggleColourMode()">
-                                    </mat-slide-toggle>
-                                    <mat-label class="mat-slide-toggle-content">&nbsp;Select
-                                    </mat-label>
-                                </span>
-                            </div>
                             <div fxLayout="row" fxLayoutAlign="space-around center">
                                 <div *ngIf="boundaries && dots">
                                     <svg [attr.height]="boundaries.height" [attr.width]="boundaries.width">
@@ -40,7 +37,7 @@
                                             [attr.width]="boundaries.widthDisplay" [attr.height]="boundaries.heightDisplay"
                                             style="fill:blue;stroke:grey;stroke-width:5;fill-opacity:0.1;stroke-opacity:0.9" />
                 
-                                        <g *ngIf="eventDisplay && ((!editModeOn)||revealEvent)">
+                                        <g *ngIf="eventDisplay && revealEvent">
                                             <path *ngIf="eventDisplay" [attr.d]="eventDisplay.inCharged" stroke="olivedrab"
                                                 stroke-width="4" fill="none">
                                             </path>
@@ -80,6 +77,9 @@
                                     </svg>
                 
                                 </div>
+                                <div *ngIf="!(boundaries && dots)">
+                                    Loading....
+                                </div>
                             </div>
                         </div>
                         <div fxFlex="40%">
@@ -99,8 +99,6 @@
                     </div>
                 
                 </mat-card-content>
-
-                <button (click)="onClick()">click me</button>
             </mat-card>
         </div>
     </div>

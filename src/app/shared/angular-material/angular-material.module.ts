@@ -39,7 +39,8 @@ import {MatSortModule} from '@angular/material/sort';
 
 import {MatTooltipModule} from '@angular/material/tooltip';
 
-
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 const modules: any[] = [
   MatMenuModule,
@@ -61,9 +62,10 @@ const modules: any[] = [
   MatTableModule,
   MatPaginatorModule,
   MatSortModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatProgressSpinnerModule,
+  MatProgressBarModule
 ]
-
 
 @NgModule({
   declarations: [],

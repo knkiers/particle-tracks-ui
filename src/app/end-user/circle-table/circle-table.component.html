@@ -1,56 +1,3 @@
-<!--
-    <mat-expansion-panel *ngFor="let circle of circles; let i=index" (mouseenter)="highlightCircle(i)" (mouseleave)="unhighlightCircle(i)">
-        <mat-expansion-panel-header>
-            <mat-panel-title>
-                Circle #{{i+1}}
-            </mat-panel-title>
-            <mat-panel-description>
-                Edit circle data
-            </mat-panel-description>
-        </mat-expansion-panel-header>
-
-        <p>This is the primary content of the panel.</p>
-
-    </mat-expansion-panel>
-
-
-
-<mat-accordion>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Personal data
-        </mat-panel-title>
-        <mat-panel-description>
-          Type your name and age
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-  
-      <mat-form-field>
-        <mat-label>First name</mat-label>
-        <input matInput>
-      </mat-form-field>
-  
-      <mat-form-field>
-        <mat-label>Age</mat-label>
-        <input matInput type="number" min="1">
-      </mat-form-field>
-    </mat-expansion-panel>
-    <mat-expansion-panel (opened)="panelOpenState = true"
-                         (closed)="panelOpenState = false">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Self aware panel
-        </mat-panel-title>
-        <mat-panel-description>
-          Currently I am {{panelOpenState ? 'open' : 'closed'}}
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-      <p>I'm visible because I am open</p>
-    </mat-expansion-panel>
-  </mat-accordion>
--->
-
 <mat-accordion>
     <mat-expansion-panel *ngFor="let circle of circles; let i=index" (mouseenter)="highlight(circle)"
         (mouseleave)="unhighlight(circle)">
@@ -93,7 +40,7 @@
                         <polygon points="9,5,12,2,12,8" stroke="black" fill="black"></polygon>
                     </svg>&nbsp;
                 </mat-label>
-                <mat-slide-toggle color="primary" [checked]="circle.CW" (change)="resetRotationDirection(circle)"></mat-slide-toggle>
+                <mat-slide-toggle color="primary" [disabled]="userIsReadOnly" [checked]="circle.CW" (change)="resetRotationDirection(circle)"></mat-slide-toggle>
                 <mat-label class="mat-slide-toggle-content">
                     &nbsp;<svg height="24" width="24">
                         <path d=" M 17 8 A 7 7 0 1 1 12 5" stroke="black" stroke-width="2" fill="none"></path>
@@ -110,7 +57,7 @@
                 <mat-label class="mat-slide-toggle-content">
                     outgoing&nbsp;
                 </mat-label>
-                <mat-slide-toggle color="primary" [checked]="circle.incoming" (change)="resetParticleDirection(circle)">
+                <mat-slide-toggle color="primary" [disabled]="userIsReadOnly" [checked]="circle.incoming" (change)="resetParticleDirection(circle)">
                 </mat-slide-toggle>
                 <mat-label class="mat-slide-toggle-content">&nbsp;incoming</mat-label>
             </div>
