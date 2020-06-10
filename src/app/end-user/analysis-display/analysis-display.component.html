@@ -5,7 +5,10 @@
     <div fxFlex="55%">
         <mat-card-header>
             <mat-card-title class="card-title-container">
-                <span *ngIf="!noEventRetrieved && event !== null; else no_event_container">
+                <span *ngIf="!noEventRetrieved && event !== null; else no_event_container"
+                    #titleTooltip="matTooltip"
+                    matTooltip="X and Y refer to unknown particles whose identities you will need to determine in your offline analysis"
+                    matTooltipPosition="right">
                     <span [innerHTML]="event.name">
                     </span>
                 </span>
@@ -16,14 +19,18 @@
                 </ng-template>
             </mat-card-title>
             <mat-card-subtitle>
-                <span *ngIf="!noEventRetrieved">
-                    B = {{bFieldStrength}} kG
+                <span *ngIf="!noEventRetrieved" #subtitleTooltip="matTooltip"
+                matTooltip="The magnetic field strength and direction (into or out of the page)"
+                matTooltipPosition="below">
+                    B = {{bFieldStrength}} kG ({{bFieldDirection}})
                 </span>
             </mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
             <div fxLayout="row" fxLayoutAlign="end">
-                <span *ngIf="editModeOn" class="negative-top-margin">
+                <span *ngIf="editModeOn" class="negative-top-margin" #selectDeselectSliderTooltip="matTooltip"
+                    matTooltip="Deselect accidentally selected points -- slide back to select points again"
+                    matTooltipPosition="below">
                     <mat-label class="mat-slide-toggle-content">
                         Deselect&nbsp;
                     </mat-label>
@@ -83,17 +90,24 @@
 
             <div *ngIf="!userIsReadOnly">
                 <div *ngIf="!editModeOn">
-                    <button mat-stroked-button color="primary" (click)="fetchNewEvent()">Get
+                    <button mat-stroked-button color="primary" (click)="fetchNewEvent()" #getEventTooltip="matTooltip"
+                        matTooltip="First step of the process -- get an event to analyze" matTooltipPosition="above">Get
                         Event</button>
-                    <button *ngIf="event" mat-stroked-button color="primary" (click)="turnOnEditMode()" class="button-space-left">Analyze
+                    <button *ngIf="event" mat-stroked-button color="primary" (click)="turnOnEditMode()"
+                        class="button-space-left" #analyzeEventTooltip="matTooltip"
+                        matTooltip="Choose this event to analyze" matTooltipPosition="below">Analyze
                         This
                         Event</button>
                 </div>
                 <div *ngIf="editModeOn">
-                    <button *ngIf="!userIsReadOnly" mat-stroked-button color="primary" (click)="addCircle()">Add
+                    <button *ngIf="!userIsReadOnly" mat-stroked-button color="primary" (click)="addCircle()"
+                        #addCircleTooltip="matTooltip"
+                        matTooltip="Hover to select points for one of the circular paths and then click to fit a circle to the points"
+                        matTooltipPosition="above">Add
                         Circle</button>
                     <button mat-stroked-button color="primary" [disabled]="circles.length === 0"
-                        [matMenuTriggerFor]="menu" class="button-space-left">Delete Circle</button>
+                        [matMenuTriggerFor]="menu" class="button-space-left" #deleteCircleTooltip="matTooltip"
+                        matTooltip="Delete one or more circles" matTooltipPosition="below">Delete Circle</button>
                     <mat-menu #menu="matMenu">
                         <div *ngFor="let circle of circles; let i=index">
                             <button mat-menu-item (mouseenter)="highlight(circle)" (mouseout)="unhighlight(circle)"
@@ -102,13 +116,17 @@
                             </button>
                         </div>
                     </mat-menu>
-                    <button *ngIf="!userIsReadOnly && !revealEvent" mat-stroked-button color="primary" (click)="showEvent()" class="button-space-left">
+                    <button *ngIf="!userIsReadOnly && !revealEvent" mat-stroked-button color="primary"
+                        (click)="showEvent()" class="button-space-left" #showEventTooltip="matTooltip"
+                        matTooltip="Show the actual paths taken by the particles" matTooltipPosition="right">
                         Show Event
                     </button>
-                    <button *ngIf="!userIsReadOnly && revealEvent" mat-stroked-button color="primary" (click)="hideEvent()" class="button-space-left">
+                    <button *ngIf="!userIsReadOnly && revealEvent" mat-stroked-button color="primary"
+                        (click)="hideEvent()" class="button-space-left" #hideEventTooltip="matTooltip"
+                        matTooltip="Hide the particles' paths" matTooltipPosition="right">
                         Hide Event
                     </button>
-        
+
                 </div>
             </div>
 
@@ -117,11 +135,15 @@
     </div>
     <div fxFlex="40%">
         <mat-card-content>
-            <div *ngIf="editModeOn" fxLayout="row" fxLayoutAlign="end">
+            <div fxLayout="row" fxLayoutAlign="end start">
                 <!-- https://www.angularjswiki.com/angular/how-to-add-a-class-based-on-condition-in-angular/ -->
-                <button mat-stroked-button color="primary" (click)="clearSnackBarsAndInitialize()"
-                    [ngClass]="{'margin-below-button': !(momentumDiagramBoundaries && eventDisplay && showAxes)}">Get
+                <button *ngIf="editModeOn" mat-stroked-button color="primary" (click)="clearSnackBarsAndInitialize()"
+                    [ngClass]="{'margin-below-button': !(momentumDiagramBoundaries && eventDisplay && showAxes)}"
+                    #getNewEventTooltip="matTooltip" matTooltip="Discard the current event and start over"
+                    matTooltipPosition="above">Get
                     New Event</button>
+                <button mat-stroked-button color="primary" (click)="showTooltips()"
+                    class="button-space-left">Help</button>
             </div>
             <div *ngIf="momentumDiagramBoundaries && eventDisplay && editModeOn && showAxes">
                 <div fxLayout="row" fxLayoutAlign="space-around center">

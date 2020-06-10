@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 
 //import { ROUTER_DIRECTIVES } from '@angular/router';
@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 //import {FormsModule} from '@angular/forms';
 
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatTooltip } from '@angular/material/tooltip';
 
 import { EventDisplayService } from '../../shared/services/event-display.service';
 import { UnitConversionService } from '../../shared/services/unit-conversion.service';
@@ -39,6 +40,18 @@ const AXIS_FRACTION = 0.8;
   styleUrls: ['analysis-display.component.scss']
 })
 export class AnalysisDisplayComponent implements OnInit, OnDestroy {
+
+  @ViewChild('getEventTooltip') getEventTooltip: MatTooltip;
+  @ViewChild('analyzeEventTooltip') analyzeEventTooltip: MatTooltip;
+  @ViewChild('addCircleTooltip') addCircleTooltip: MatTooltip;
+  @ViewChild('deleteCircleTooltip') deleteCircleTooltip: MatTooltip;
+  @ViewChild('showEventTooltip') showEventTooltip: MatTooltip;
+  @ViewChild('hideEventTooltip') hideEventTooltip: MatTooltip;
+  @ViewChild('getNewEventTooltip') getNewEventTooltip: MatTooltip;
+  @ViewChild('selectDeselectSliderTooltip') selectDeselectSliderTooltip: MatTooltip;
+  @ViewChild('titleTooltip') titleTooltip: MatTooltip;
+  @ViewChild('subtitleTooltip') subtitleTooltip: MatTooltip;
+
 
   // TODO: Should make circles and dots objects with methods; then they can 'do' things
   // to themselves, like set hovering, selecting dots, etc.;
@@ -710,6 +723,39 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     };
   }
 
+  showTooltips() {
+    console.log('show tool tip! get event tooltip: ', this.getEventTooltip);
+    if (this.getEventTooltip !== undefined) {
+      this.getEventTooltip.show();
+    }
+    if (this.analyzeEventTooltip !== undefined) {
+      this.analyzeEventTooltip.show();
+    }
+    if (this.addCircleTooltip !== undefined) {
+      this.addCircleTooltip.show();
+    }
+    if (this.deleteCircleTooltip !== undefined) {
+      this.deleteCircleTooltip.show();
+    }
+    if (this.showEventTooltip !== undefined) {
+      this.showEventTooltip.show();
+    }
+    if (this.hideEventTooltip !== undefined) {
+      this.hideEventTooltip.show();
+    }
+    if (this.getNewEventTooltip !== undefined) {
+      this.getNewEventTooltip.show();
+    }
+    if (this.selectDeselectSliderTooltip !== undefined) {
+      this.selectDeselectSliderTooltip.show();
+    }
+    if (this.titleTooltip !== undefined) {
+      this.titleTooltip.show();
+    }
+    if (this.subtitleTooltip !== undefined) {
+      this.subtitleTooltip.show();
+    }
+  }
 
   turnOnEditMode() {
     //console.log('inside toggle edit mode fn');

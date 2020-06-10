@@ -15,11 +15,29 @@
     <mat-nav-list>
       <!--[routerLink]="[item.route]"-->
       <a mat-list-item (click)="navigationSidenav.close()" routerLinkActive="list-item-active"
-        [routerLink]="['/events']">Get New Event</a>
+        [routerLink]="['/events']">Choose/Analyze an Event</a>
       <a mat-list-item (click)="navigationSidenav.close()" routerLinkActive="list-item-active"
         [routerLink]="['/event-list']">
-        Analyzed Events
+        Previously Analyzed Events
       </a>
+      <a mat-list-item (click)="resourcesNavToggle()" routerLinkActive="list-item-active">
+        <span matLine>Resources</span>
+        <span>
+          <mat-icon [@indicatorRotate]="resourcesNavExpanded ? 'expanded': 'collapsed'">
+            expand_more
+          </mat-icon>
+        </span>
+      </a>
+      <div *ngIf="resourcesNavExpanded">
+        <a mat-list-item (click)="resourcesNavToggle()" (click)="navigationSidenav.close()"
+          routerLinkActive="list-item-active" [routerLink]="['/teacher']">
+          <span class="child-list-item">List of Particle Decays</span>
+        </a>
+        <a mat-list-item (click)="resourcesNavToggle()" (click)="navigationSidenav.close()"
+          routerLinkActive="list-item-active">
+          <span class="child-list-item">Explore</span>
+        </a>
+      </div>
       <div *ngIf="isAdmin()">
         <!-- https://stackblitz.com/edit/dynamic-nested-sidenav-menu?file=app%2Fapp.component.scss -->
         <a mat-list-item (click)="teacherNavToggle()" routerLinkActive="list-item-active">
@@ -32,10 +50,12 @@
           </span>
         </a>
         <div *ngIf="teacherNavExpanded">
-          <a mat-list-item (click)="teacherNavToggle()" (click)="navigationSidenav.close()" routerLinkActive="list-item-active" [routerLink]="['/teacher']">
+          <a mat-list-item (click)="teacherNavToggle()" (click)="navigationSidenav.close()"
+            routerLinkActive="list-item-active" [routerLink]="['/teacher']">
             <span class="child-list-item">Dashboard</span>
           </a>
-          <a mat-list-item (click)="teacherNavToggle()" (click)="navigationSidenav.close()" routerLinkActive="list-item-active">
+          <a mat-list-item (click)="teacherNavToggle()" (click)="navigationSidenav.close()"
+            routerLinkActive="list-item-active">
             <span class="child-list-item">Resources</span>
           </a>
         </div>

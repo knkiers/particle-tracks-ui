@@ -47,6 +47,7 @@ export class NavComponent implements OnInit, OnDestroy{
   eventSubmittedSnackBarDismissed: boolean = false;
 
   teacherNavExpanded: boolean = true;
+  resourcesNavExpanded: boolean = true;
   
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -107,6 +108,10 @@ export class NavComponent implements OnInit, OnDestroy{
 
   teacherNavToggle() {
     this.teacherNavExpanded = !this.teacherNavExpanded;
+  }
+
+  resourcesNavToggle() {
+    this.resourcesNavExpanded = !this.resourcesNavExpanded;
   }
 
   launchUnsubmitWarningSnackBar(): void {

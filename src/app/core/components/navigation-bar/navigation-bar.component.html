@@ -17,6 +17,9 @@
         <button mat-menu-item (click)="logout()"><mat-icon>exit_to_app</mat-icon><span>Sign Out</span></button>
       </mat-menu>
     </span>
+    <span *ngIf="!isLoggedIn">
+      <button mat-button mat-raised-button color="accent" [routerLink]="['/login']">Sign In</button>
+    </span>
   </mat-toolbar-row>
 
 </mat-toolbar>
