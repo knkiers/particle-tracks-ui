@@ -60,7 +60,7 @@
                                         </g>
                 
                                         <g *ngFor="let dot of dots">
-                                            <circle (mouseover)="dot.checkDot(colourModeOn)" [attr.r]="dot.findRadius()"
+                                            <circle (mouseover)="dot.checkDot('false')" [attr.r]="dot.findRadius()"
                                                 [attr.cx]="dot.x" [attr.cy]="dot.y" [attr.stroke-width]="dot.findStrokeWidth()"
                                                 [attr.stroke]="dot.findStrokeColour()" [attr.fill]="dot.findFillColour()">
                                             </circle>
