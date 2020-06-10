@@ -25,6 +25,7 @@ export class MomentumAxisComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    console.log('on init for momentum axis component');
     console.log(this.circles);
     console.log(this.boundaries);
     this.computeAxisCoordinates();

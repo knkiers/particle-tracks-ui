@@ -25,6 +25,6 @@ import { ReviewEventComponent } from './review-event/review-event.component';
     AngularMaterialModule,
     SharedModule
   ],
-  exports: []
+  exports: [MomentumAxisComponent, CircleTableComponent]
 })
 export class EndUserModule { }

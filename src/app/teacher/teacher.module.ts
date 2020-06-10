@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AngularMaterialModule } from '../shared/angular-material/angular-material.module';
 import { SharedModule } from '../shared/shared.module';
+import { EndUserModule } from '../end-user/end-user.module';
 
 import { TeacherRoutingModule } from './teacher-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -23,6 +24,7 @@ import { UserEventAnchorDirective } from './analysis-display-wrapper/user-event-
     AngularMaterialModule,
     FlexLayoutModule,
     SharedModule,
+    EndUserModule,
     TeacherRoutingModule
   ]
 })

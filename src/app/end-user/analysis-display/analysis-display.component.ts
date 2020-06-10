@@ -520,9 +520,8 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   }
 
   clearDotsForFit() {
-    var i;
-    for (i = 0; i < this.dots.length; i++) {
-      this.dots[i].useForFit = false;
+    for (let i = 0; i < this.dots.length; i++) {
+      this.dots[i].unsetUseForFit();
     }
     //this.eventAnalysisService.clearDotsForFit(this.dots);
   }
