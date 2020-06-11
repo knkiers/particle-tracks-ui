@@ -9,6 +9,7 @@ import { AuthenticationModule } from './authentication/authentication.module';
 import { EventListModule } from './event-list/event-list.module';
 import { EndUserModule } from './end-user/end-user.module';
 import { TeacherModule } from './teacher/teacher.module';
+import { PublicResourcesModule } from './public-resources/public-resources.module';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -31,7 +32,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     AuthenticationModule,
     EventListModule,
     EndUserModule,
-    TeacherModule
+    TeacherModule,
+    PublicResourcesModule
   ],
   providers: [],
   bootstrap: [AppComponent]

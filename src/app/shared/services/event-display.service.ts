@@ -44,12 +44,16 @@ export class EventDisplayService {
     //   client side: https://medium.com/@blacksonic86/angular-2-authentication-revisited-611bf7373bf9#.jelvdws38
     //   server side: http://getblimp.github.io/django-rest-framework-jwt/
 
-    let authToken = sessionStorage.getItem('auth_token');
-    let httpOptions = this.httpService.buildHttpOptionsSecure(authToken);
+    //let authToken = sessionStorage.getItem('auth_token');
+    //let httpOptions = this.httpService.buildHttpOptionsSecure(authToken);
+    let httpOptions = this.httpService.buildHttpOptions();
 
+    /* don't need this anymore, because this method is called from a component that does not require the user to be authenticated
     if (this.userService.tokenExpired()) {
+      console.log('token expired!');
       this.router.navigate(['/login']);
     }
+    */
 
     return this.http
       .get<Event>(EventUrl, httpOptions)

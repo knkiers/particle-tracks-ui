@@ -1,0 +1,22 @@
+<div class="container">
+    <div fxLayout="row" fxLayoutAlign="space-around center">
+        <div fxFlex.gt-sm="900px">
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title>
+                        Particle Decays
+                    </mat-card-title>
+                    <mat-card-subtitle>
+                        List of possible decays that could be encountered in Particle Tracks.  Hover over particle names for more information.
+                    </mat-card-subtitle>
+                </mat-card-header>
+
+                <mat-card-content>
+                    <app-neutral-decays></app-neutral-decays>
+                    <div class="vertical-space"></div>
+                    <app-charged-decays></app-charged-decays>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</div>

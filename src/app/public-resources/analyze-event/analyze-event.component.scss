@@ -1,0 +1,33 @@
+.container {
+    margin-top: 64px;
+}
+
+.review-card-margin {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+// https://stackoverflow.com/questions/49669654/angular-5-nghide-ngshow-hidden-not-working/49669819
+// https://www.angularjswiki.com/angular/difference-between-ngif-and-hidden-or-displaynone-in-angular/
+.hidden-card {
+    display: none !important;
+}
+
+.all-is-well-card {
+    background-color: #9575CD !important;
+    color: white !important;
+    margin: 0px;
+}
+
+.align-icon {
+    vertical-align: bottom;
+}
+
+.got-it-button {
+    margin-top: 20px;
+}
+
+//https://css-tricks.com/css-basics-styling-links-like-boss/
+a:active {
+    color: #FFCA28;
+}

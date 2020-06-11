@@ -1,0 +1,49 @@
+<div class="container">
+    <div fxLayout="row" fxLayoutAlign="space-around center">
+        <div fxFlex.gt-sm="900px">
+            <div *ngIf="!warningHasBeenSeen">
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>
+                            Choose and/or Analyze an Event
+                        </mat-card-title>
+                        <mat-card-subtitle>
+                            Preview version only -- <a [routerLink]="['/login']">sign in</a> if you want to save and submit your events
+                        </mat-card-subtitle>
+                    </mat-card-header>
+    
+                    <mat-card-content fxLayout="row wrap" fxLayoutAlign="center start">
+
+                        <div fxFlex.gt-sm="80%">
+                            <mat-card class="all-is-well-card">
+                                <mat-card-content>
+                                    <mat-icon class="align-icon">warning</mat-icon>&nbsp;In the following you will be able to choose a particle decay event and then analyze it.  Note, however, that <strong> your event and analysis will not be saved</strong>
+                                    because you are not signed in to an account.  This is fine if you are only checking out the website, but if you want
+                                    to save and submit your work, you will need to <a [routerLink]="['/signup']">create an account</a> and/or <a [routerLink]="['/login']">sign in</a>.
+                                </mat-card-content>
+                            </mat-card>
+                        </div>
+
+                        <div fxFlex.gt-sm="80%" class="got-it-button">
+                            <span fxFlex></span>
+                            <button mat-stroked-button color="primary" (click)="onWarningSeen()" class="button-space-left">Got
+                                It</button>
+                        </div>
+
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <div *ngIf="warningHasBeenSeen">
+                <mat-card>
+                    <app-analysis-display [isPublicUser]="true" (showReviewCard)="onShowReviewCard($event)"
+                        (analysisStatus)="onAnalysisStatusUpdate($event)">
+                    </app-analysis-display>
+                </mat-card>
+                <mat-card [ngClass]="{'hidden-card': !showReviewCard}" class="review-card-margin">
+                    <app-review-event [isPublicUser]="true" (reviewStatus)="onReviewStatusUpdate($event)">
+                    </app-review-event>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</div>

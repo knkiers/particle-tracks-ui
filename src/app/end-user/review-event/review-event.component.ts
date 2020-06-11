@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { EventInfoService } from '../event-info.service';
@@ -17,6 +17,7 @@ import { RoundRealPipe } from 'src/app/shared/pipes/round-real.pipe';
 export class ReviewEventComponent implements OnInit, OnDestroy {
 
   @Output() reviewStatus = new EventEmitter<any>();
+  @Input() isPublicUser: boolean = false;
 
   subscription: Subscription;
   resetReviewDataSubscription: Subscription;
@@ -144,17 +145,31 @@ export class ReviewEventComponent implements OnInit, OnDestroy {
           if (Math.abs(event.radius - circle.r) / event.radius > 0.02) {
             console.log(event.radius, typeof event.radius);
             console.log(circle.r, typeof circle.r);
-            radiusChecks.push({
-              circleRadius: circle.r,
-              messages: [
-                `The fit radius for the circle with r = ${(circle.r).toFixed(4)} cm differs by more than 2% from
+            if (this.isPublicUser) {
+              radiusChecks.push({
+                circleRadius: circle.r,
+                messages: [
+                  `The fit radius for the circle with r = ${(circle.r).toFixed(4)} cm differs by more than 2% from
+              the correct value.  You may wish to check that your fit includes all the points for the particle's path and 
+              does not accidentally include points from other circles.  Also note that the fits for very small circles may not be very accurate.`,
+                  `To check which points are included in the fit, 
+              hover over the 'Edit circle properties' box for this circle.  (To edit the fit, start
+              by deleting the circle.)  It might also help to click on 'Show Event'.`
+                ]
+              });
+            } else {
+              radiusChecks.push({
+                circleRadius: circle.r,
+                messages: [
+                  `The fit radius for the circle with r = ${(circle.r).toFixed(4)} cm differs by more than 2% from
               the correct value.  This will not prevent you from submitting the event, but you may wish to check that your fit includes all the points for the particle's path and 
               does not accidentally include points from other circles.  Also note that the fits for very small circles may not be very accurate.`,
-                `To check which points are included in the fit, 
-              go back to the previous step and hover over the 'Edit circle properties' box for this circle.  To edit the fit, start
-              by deleting the circle.)`
-              ]
-            });
+                  `To check which points are included in the fit, 
+              go back to the previous step and hover over the 'Edit circle properties' box for this circle.  (To edit the fit, start
+              by deleting the circle.)  It might also help to click on 'Show Event'.`
+                ]
+              });
+            }
           }
         }
       });
@@ -166,10 +181,19 @@ export class ReviewEventComponent implements OnInit, OnDestroy {
       this.correctFeatureMessages.push("The fit radii of the various circles agree with the correct values to within 2%.");
     }
     if (!allRotnDirectionsCorrect) {
-      this.errorMessages.push("It appears that the rotation direction (clockwise versus counterclockwise) is set incorrectly for one or more circles.  To fix this, go back to the previous step and click on 'Edit circle properties'.");
+      if (this.isPublicUser) {
+        this.errorMessages.push("It appears that the rotation direction (clockwise versus counterclockwise) is set incorrectly for one or more circles.  To fix this, click on 'Edit circle properties'.  It might also help to click on 'Show Event'.");
+
+      } else {
+        this.errorMessages.push("It appears that the rotation direction (clockwise versus counterclockwise) is set incorrectly for one or more circles.  To fix this, go back to the previous step and click on 'Edit circle properties'.  It might also help to click on 'Show Event'.");
+      }
     }
     if (!allIncomingDirectionsCorrect) {
-      this.errorMessages.push("It appears that the particle direction (incoming versus outgoing) is set incorrectly for one or more circles.  To fix this, go back to the previous step and click on 'Edit circle properties'.");
+      if (this.isPublicUser) {
+        this.errorMessages.push("It appears that the particle direction (incoming versus outgoing) is set incorrectly for one or more circles.  To fix this, click on 'Edit circle properties'.  It might also help to click on 'Show Event'.");
+      } else {
+        this.errorMessages.push("It appears that the particle direction (incoming versus outgoing) is set incorrectly for one or more circles.  To fix this, go back to the previous step and click on 'Edit circle properties'.  It might also help to click on 'Show Event'.");
+      }
     }
     if (this.errorMessages.length === 0) {
       // if everything else agrees, do a check of the radii....

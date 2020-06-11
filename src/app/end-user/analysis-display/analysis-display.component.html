@@ -5,9 +5,8 @@
     <div fxFlex="55%">
         <mat-card-header>
             <mat-card-title class="card-title-container">
-                <span *ngIf="!noEventRetrieved && event !== null; else no_event_container"
-                    #titleTooltip="matTooltip"
-                    matTooltip="X and Y refer to unknown particles whose identities you will need to determine in your offline analysis"
+                <span *ngIf="!noEventRetrieved && event !== null; else no_event_container" #titleTooltip="matTooltip"
+                    matTooltip="X and Y refer to unknown particles whose identities you will need to determine in your offline analysis.  Possibilities may be found in the List of Particle Decays in the side navigation menu."
                     matTooltipPosition="right">
                     <span [innerHTML]="event.name">
                     </span>
@@ -20,8 +19,8 @@
             </mat-card-title>
             <mat-card-subtitle>
                 <span *ngIf="!noEventRetrieved" #subtitleTooltip="matTooltip"
-                matTooltip="The magnetic field strength and direction (into or out of the page)"
-                matTooltipPosition="below">
+                    matTooltip="The magnetic field strength and direction (into or out of the page)"
+                    matTooltipPosition="below">
                     B = {{bFieldStrength}} kG ({{bFieldDirection}})
                 </span>
             </mat-card-subtitle>
@@ -142,6 +141,13 @@
                     #getNewEventTooltip="matTooltip" matTooltip="Discard the current event and start over"
                     matTooltipPosition="above">Get
                     New Event</button>
+                <button *ngIf="editModeOn && isPublicUser" mat-stroked-button color="primary"
+                    (click)="onShowReviewCard()"
+                    #showReviewCardTooltip="matTooltip" matTooltip="Review analysis of this event"
+                    matTooltipPosition="above" class="button-space-left">
+                    <span *ngIf="!reviewCardShown">Review</span>
+                    <span *ngIf="reviewCardShown">Hide Review</span>
+                </button>
                 <button mat-stroked-button color="primary" (click)="showTooltips()"
                     class="button-space-left">Help</button>
             </div>

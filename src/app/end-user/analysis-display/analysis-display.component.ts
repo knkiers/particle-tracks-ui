@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild, Input } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 
 //import { ROUTER_DIRECTIVES } from '@angular/router';
@@ -60,7 +60,10 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   //@Input() event: Event;
   //@Input() numberEventsRequested: any;
 
+  @Input() isPublicUser: boolean = false; // this component can be loaded in from the public-facing part of the website, too; in that case, don't do the auto-saving, etc.
   @Output() analysisStatus = new EventEmitter<any>();
+  @Output() showReviewCard = new EventEmitter<boolean>(); //used for the public-facing version of the component
+  reviewCardShown: boolean = false;
 
   userIsReadOnly: boolean = false; // set to true if viewing from the admin (for grading purposes)
 
@@ -129,7 +132,10 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     this.eventStagedForSubmitSubscription = eventInfoService.eventStagedForSubmit$.subscribe(
       () => {
         console.log('inside component -- event is ready to submit!');
-        this.saveEvent(true);
+        if (!this.isPublicUser) {
+          // a public (i.e., non-authenticated) user should never get here, but just in case....
+          this.saveEvent(false);
+        }
       }
     )
     /*
@@ -159,11 +165,16 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
         this.getAnalyzedEvent(this.pathParamsId);
       } else {
         this.pathParamsId = null;
-        this.analysisStatus.emit({allowNavigation: true});// set to true now, but set to false after first save; then set to true after submission
+        this.analysisStatus.emit({ allowNavigation: true });// set to true now, but set to false after first save; then set to true after submission
         //this.snackBarInfoService.announceSnackBarsDismissed();
         this.initializeAll();
       }
     });
+  }
+
+  onShowReviewCard() {
+    this.reviewCardShown = !this.reviewCardShown;
+    this.showReviewCard.emit(this.reviewCardShown);
   }
 
   clearSnackBarsAndInitialize() {
@@ -240,10 +251,11 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     this.resetAxes();
     this.event = null;//forces a redraw of the event when the new one comes in
     this.analyzedEventId = null;
-    this.analysisStatus.emit({allowNavigation: true});// set to true now, but set to false after first save; then set to true after submission
+    this.analysisStatus.emit({ allowNavigation: true });// set to true now, but set to false after first save; then set to true after submission
     this.eventDisplayService.getEvent()
       .subscribe(
         event => {
+          this.errorMessage = '';
           this.event = event;
           this.noEventRetrieved = false;
           //console.log('back in component! ', this.eventJSON, typeof this.eventJSON);
@@ -269,7 +281,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     //submitting an event is simply saving it with the submit flag set to true
 
     //openEventNowUnsubmittedDialog()
-    this.analysisStatus.emit({allowNavigation: submitEvent});
+    this.analysisStatus.emit({ allowNavigation: submitEvent });
 
     let reducedDots = [];
     for (let dot of this.dots) {
@@ -519,7 +531,9 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
 
   onChangedCircles() {
     //this.updateCircleTangentAngles();
-    this.saveEvent(false);
+    if (!this.isPublicUser) {
+      this.saveEvent(false);
+    }
     this.circleChange = this.circleChange + 1;// used to wake up one or more child components
     this.eventInfoService.announceEventUpdate(this.event, this.editModeOn, this.circles, this.eventActivatedDots);
   }
@@ -567,7 +581,9 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
         this.updateCircleTangentAngles();
       }
       this.circleChange = this.circleChange + 1;
-      this.saveEvent(false);
+      if (!this.isPublicUser) {
+        this.saveEvent(false);
+      }
       this.eventInfoService.announceEventUpdate(this.event, this.editModeOn, this.circles, this.eventActivatedDots);
     }
 
@@ -608,7 +624,9 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       this.numberCircles = this.circles.length;
       this.clearDotsForFit();
       //console.log(this.numberCircles);
-      this.saveEvent(false);
+      if (!this.isPublicUser) {
+        this.saveEvent(false);
+      }
       //if (this.circles.length < this.minNumberCircles) {
       //  this.analysisComplete = false;
       //}
@@ -789,12 +807,12 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
         eventNewData = JSON.parse(eventData.event_data);
         this.analyzedEventId = +eventData.id; // seems to come in as a number, but just in case....
         console.log('analyzed event id: ', this.analyzedEventId, typeof this.analyzedEventId);
-        this.analysisStatus.emit({allowNavigation: eventData.submitted});
+        this.analysisStatus.emit({ allowNavigation: eventData.submitted });
         this.refreshView(eventNewData, eventData.submitted);
       },
       err => {
         console.log("ERROR", err);
-        this.analysisStatus.emit({allowNavigation: true});// set to true now, but set to false after first save; then set to true after submission
+        this.analysisStatus.emit({ allowNavigation: true });// set to true now, but set to false after first save; then set to true after submission
         // in this case, there is a possibility that the requested event no longer exists; for example,
         // the user could have deleted the event (on the event list page) and then hit the "back" button
         // to return to the events page (with an id for a now-deleted event);

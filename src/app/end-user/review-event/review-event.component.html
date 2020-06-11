@@ -1,5 +1,5 @@
 <mat-card-header>
-    <mat-card-title class="card-title-container">
+    <mat-card-title *ngIf="!isPublicUser" class="card-title-container">
         <span *ngIf="event !== null; else no_event_container">
             <span [innerHTML]="event.name">
             </span>
@@ -9,6 +9,9 @@
                 No process selected yet
             </span>
         </ng-template>
+    </mat-card-title>
+    <mat-card-title *ngIf="isPublicUser">
+        Review
     </mat-card-title>
     <mat-card-subtitle *ngIf="event !== null">
         A quick review of your data analysis for this event.
@@ -57,9 +60,13 @@
         <div *ngIf="canSubmit && (warningMessages.length === 0) && (errorMessages.length === 0)" fxLayout="row" fxLayoutAlign="space-around center" class="card-top-space">
             <div fxFlex.gt-sm="650px">
                 <mat-card class="ready-to-submit-card">
-                    <mat-card-content>
+                    <mat-card-content *ngIf="!isPublicUser">
                         <mat-icon class="align-icon">send</mat-icon>&nbsp;
                         You can submit your event if you are happy with the analysis!
+                    </mat-card-content>
+                    <mat-card-content *ngIf="isPublicUser">
+                        <mat-icon class="align-icon">send</mat-icon>&nbsp;
+                        If you were logged in right now, your event would be ready for submission!
                     </mat-card-content>
                 </mat-card>
             </div>

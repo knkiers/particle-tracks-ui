@@ -14,9 +14,11 @@
     </mat-toolbar>
     <mat-nav-list>
       <!--[routerLink]="[item.route]"-->
-      <a mat-list-item (click)="navigationSidenav.close()" routerLinkActive="list-item-active"
+      <a *ngIf="isLoggedIn()" mat-list-item (click)="navigationSidenav.close()" routerLinkActive="list-item-active"
         [routerLink]="['/events']">Choose/Analyze an Event</a>
-      <a mat-list-item (click)="navigationSidenav.close()" routerLinkActive="list-item-active"
+      <a *ngIf="!isLoggedIn()" mat-list-item (click)="navigationSidenav.close()" routerLinkActive="list-item-active"
+        [routerLink]="['/public/analyze-event']">Choose/Analyze an Event</a>
+      <a *ngIf="isLoggedIn()" mat-list-item (click)="navigationSidenav.close()" routerLinkActive="list-item-active"
         [routerLink]="['/event-list']">
         Previously Analyzed Events
       </a>
@@ -29,12 +31,16 @@
         </span>
       </a>
       <div *ngIf="resourcesNavExpanded">
-        <a mat-list-item (click)="resourcesNavToggle()" (click)="navigationSidenav.close()"
-          routerLinkActive="list-item-active" [routerLink]="['/teacher']">
+        <a mat-list-item (click)="navigationSidenav.close()"
+          routerLinkActive="list-item-active" [routerLink]="['/public/particle-decays']">
           <span class="child-list-item">List of Particle Decays</span>
         </a>
-        <a mat-list-item (click)="resourcesNavToggle()" (click)="navigationSidenav.close()"
-          routerLinkActive="list-item-active">
+        <a mat-list-item (click)="navigationSidenav.close()"
+          routerLinkActive="list-item-active" [routerLink]="['/public/particle-properties']">
+          <span class="child-list-item">List of Particle Properties</span>
+        </a>
+        <a mat-list-item (click)="navigationSidenav.close()"
+          routerLinkActive="list-item-active" [routerLink]="['/public/particle-decays']">
           <span class="child-list-item">Explore</span>
         </a>
       </div>
