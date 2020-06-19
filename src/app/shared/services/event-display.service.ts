@@ -7,11 +7,12 @@ import { tap, retry, catchError } from 'rxjs/operators';
 
 import { Router } from '@angular/router';
 
-import { EventUrl } from './urls';
+import { EventUrl, EventsSameSignatureUrl } from './urls';
 // not used: import { EventTypeUrl } from './urls';
 import { POINT_THREE } from './unit-conversion.service';
 
 import { Event } from '../models/event';
+import { EventsSameSignature } from '../interfaces/event-type';
 import { UnitConversionService } from './unit-conversion.service';
 import { UserService } from './user.service';
 import { HttpService } from './http.service';
@@ -66,6 +67,22 @@ export class EventDisplayService {
         }),
         catchError(this.httpService.errorHandler)
       );
+  }
+
+  getEventsSameSignature(id: number): Observable<EventsSameSignature> {
+    let httpOptions = this.httpService.buildHttpOptions();
+    return this.http
+      .get<EventsSameSignature>(EventsSameSignatureUrl + id + '/', httpOptions)
+      .pipe(
+        retry(1),
+        tap(response => {
+          console.log('events with same signature: ', response);
+          return response;
+          //sessionStorage.setItem('auth_token', res.token);
+        }),
+        catchError(this.httpService.errorHandler)
+      );
+
   }
 
   // Service message command

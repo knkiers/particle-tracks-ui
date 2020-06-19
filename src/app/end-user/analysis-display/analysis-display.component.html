@@ -127,8 +127,15 @@
                     </button>
 
                 </div>
+                <div *ngIf="revealedEvent && isAdmin()">
+                    <strong>Event: </strong>
+                    <span [innerHTML]="revealedEvent"></span>
+                </div>
+                <div *ngIf="eventsSameSignature.length > 0">
+                    <strong>Events matching this signature: </strong>
+                    <div *ngFor="let eventSameSignature of eventsSameSignature" class="event-body" [innerHTML]="eventSameSignature"></div>
+                </div>
             </div>
-
         </mat-card-content>
 
     </div>

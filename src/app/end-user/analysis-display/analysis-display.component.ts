@@ -12,6 +12,7 @@ import { EventDisplayService } from '../../shared/services/event-display.service
 import { UnitConversionService } from '../../shared/services/unit-conversion.service';
 import { EventAnalysisService } from '../../shared/services/event-analysis.service';
 import { SnackBarInfoService } from '../../shared/services/snack-bar-info.service';
+import { UserService } from '../../shared/services/user.service';
 import { EventInfoService } from '../event-info.service';
 
 //import { CircleBindingService } from '../circle-binding.service';
@@ -21,6 +22,7 @@ import { Dot } from '../../shared/models/dot';
 import { Circle } from '../../shared/models/circle';
 
 import { CircleActivatedDots } from '../../shared/interfaces/circle-activated-dots';
+import { EventType } from '../../shared/interfaces/event-type';
 
 import { POINT_THREE, R_MIN, R_MAX, B_MAX } from '../../shared/services/unit-conversion.service';
 
@@ -74,6 +76,9 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
 
   errorMessage: string = '';
 
+  revealedEvent: string = '';
+  eventsSameSignature: string[] = [];
+
   event: Event;
   eventPreviouslySubmitted: boolean = false;
   noEventRetrieved: boolean = true;
@@ -115,6 +120,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private userService: UserService,
     private eventInfoService: EventInfoService,
     private unitConversionService: UnitConversionService,
     private eventAnalysisService: EventAnalysisService,
@@ -172,12 +178,22 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     });
   }
 
+  isAdmin() {
+    if (this.userService.isLoggedIn()) {
+      return this.userService.isAdmin();
+    } else {
+      return false;
+    }
+  }
+
   onShowReviewCard() {
     this.reviewCardShown = !this.reviewCardShown;
     this.showReviewCard.emit(this.reviewCardShown);
   }
 
   clearSnackBarsAndInitialize() {
+    this.revealedEvent = '';
+    this.eventsSameSignature = [];
     if (this.pathParamsId === null) {
       // in this case, the url should not have an id, so navigating to the /events url will not refresh the page...need to do it manually
       this.snackBarInfoService.announceSnackBarsDismissed();
@@ -246,6 +262,25 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       });
   }
 
+  fetchEventsSameSignature(id: number) {
+    this.revealedEvent = '';
+    this.eventsSameSignature = [];
+    this.eventDisplayService.getEventsSameSignature(id)
+      .subscribe(
+        result => {
+          console.log('events same signature: ', result);
+          this.revealedEvent = result.original_decay.name;
+          this.eventsSameSignature = [];
+          result.matching_decays.forEach((eventType: EventType) => {
+            this.eventsSameSignature.push(eventType.name);
+          });
+        },
+        error => {
+          this.errorMessage = error;
+        }
+      );
+  }
+
   fetchNewEvent() {
     this.turnOffEditMode();
     this.resetAxes();
@@ -264,7 +299,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
           //this.event = JSON.parse(this.eventJSON);
           console.log('this.event: ', this.event);
           //console.log(this.event);
-
+          this.fetchEventsSameSignature(event.event_type_id);
           //this.calculateMinNumberCircles();
           this.eventPreviouslySubmitted = false;
           this.resetCircles();
@@ -805,10 +840,12 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       eventData => {
         console.log('get analyzed event: ', eventData);
         eventNewData = JSON.parse(eventData.event_data);
+        console.log('event new data: ', eventNewData);
         this.analyzedEventId = +eventData.id; // seems to come in as a number, but just in case....
         console.log('analyzed event id: ', this.analyzedEventId, typeof this.analyzedEventId);
         this.analysisStatus.emit({ allowNavigation: eventData.submitted });
         this.refreshView(eventNewData, eventData.submitted);
+        this.fetchEventsSameSignature(eventNewData.event.event_type_id);
       },
       err => {
         console.log("ERROR", err);

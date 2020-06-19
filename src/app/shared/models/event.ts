@@ -6,5 +6,6 @@ export class Event {
     theta_lab: any;
     xi_lab: any;
     human_readable_name: string;
+    event_type_id: number;
 }
   

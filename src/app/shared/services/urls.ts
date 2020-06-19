@@ -2,6 +2,7 @@ const BaseURL = "http://127.0.0.1:8000";
 //const BaseURL = "https://particle-tracks.physics.taylor.edu/django";
 
 export const EventUrl = BaseURL + "/api/generateevent/";
+export const EventsSameSignatureUrl = BaseURL + "/api/eventssamesignature/";
 export const EventTypeUrl = BaseURL + "/api/decaytypelist/";
 export const LoginUrl = BaseURL + "/api-token-auth/";
 export const AccountsUrl = BaseURL + "/accounts/";
