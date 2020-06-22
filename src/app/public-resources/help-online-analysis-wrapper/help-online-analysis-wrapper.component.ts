@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { HelpOnlineAnalysisComponent } from '../../shared/static-content/help-online-analysis/help-online-analysis.component';
+import { HelpOnlineAnalysisComponent } from '../../shared/static-content/help-analysis/help-analysis.component';
 
 @Component({
   selector: 'app-help-online-analysis-wrapper',

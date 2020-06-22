@@ -8,6 +8,7 @@ import { ParticleDecaysComponent } from './particle-decays/particle-decays.compo
 import { ParticlePropertiesComponent} from './particle-properties/particle-properties.component';
 import { AnalyzeEventComponent } from './analyze-event/analyze-event.component';
 import { HelpOnlineAnalysisWrapperComponent } from './help-online-analysis-wrapper/help-online-analysis-wrapper.component';
+import { HelpOfflineAnalysisWrapperComponent } from './help-offline-analysis-wrapper/help-offline-analysis-wrapper.component';
 
 const publicRoutes: Routes = [
   { 
@@ -30,7 +31,11 @@ const publicRoutes: Routes = [
       {
         path: 'help-online-analysis',
         component: HelpOnlineAnalysisWrapperComponent,
-      }
+      },
+      {
+        path: 'help-offline-analysis',
+        component: HelpOfflineAnalysisWrapperComponent,
+      },
     ]
   },
 ];

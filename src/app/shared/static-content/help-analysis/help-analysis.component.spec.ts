@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HelpOnlineAnalysisComponent } from './help-online-analysis.component';
+import { HelpOnlineAnalysisComponent } from './help-analysis.component';
 
 describe('HelpOnlineAnalysisComponent', () => {
   let component: HelpOnlineAnalysisComponent;

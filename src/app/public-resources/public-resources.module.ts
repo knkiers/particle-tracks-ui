@@ -12,9 +12,17 @@ import { ParticlePropertiesComponent } from './particle-properties/particle-prop
 import { AnalyzeEventComponent } from './analyze-event/analyze-event.component';
 import { EndUserModule } from '../end-user/end-user.module';
 import { HelpOnlineAnalysisWrapperComponent } from './help-online-analysis-wrapper/help-online-analysis-wrapper.component';
+import { HelpOfflineAnalysisWrapperComponent } from './help-offline-analysis-wrapper/help-offline-analysis-wrapper.component';
 
 @NgModule({
-  declarations: [PublicResourcesComponent, ParticleDecaysComponent, ParticlePropertiesComponent, AnalyzeEventComponent, HelpOnlineAnalysisWrapperComponent],
+  declarations: [
+    PublicResourcesComponent, 
+    ParticleDecaysComponent, 
+    ParticlePropertiesComponent, 
+    AnalyzeEventComponent, 
+    HelpOnlineAnalysisWrapperComponent, 
+    HelpOfflineAnalysisWrapperComponent,
+  ],
   imports: [
     CommonModule,
     AngularMaterialModule,

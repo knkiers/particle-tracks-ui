@@ -15,7 +15,7 @@ import { SnackBarInfoService } from '../../shared/services/snack-bar-info.servic
 import { UserService } from '../../shared/services/user.service';
 import { EventInfoService } from '../event-info.service';
 
-import { HelpOnlineAnalysisComponent } from '../../shared/static-content/help-online-analysis/help-online-analysis.component';
+import { HelpOnlineAnalysisComponent } from '../../shared/static-content/help-analysis/help-analysis.component';
 
 //import { CircleBindingService } from '../circle-binding.service';
 
