@@ -1,6 +1,6 @@
 <h2 *ngIf="!data.editModeOn && !data.event" mat-dialog-title>Getting Started</h2>
 <h2 *ngIf="!data.editModeOn && data.event" mat-dialog-title>Events</h2>
-<h2 *ngIf="data.editModeOn && data.event" mat-dialog-title>Analysis</h2>
+<h2 *ngIf="data.editModeOn && data.event" mat-dialog-title>Analysis (Online Portion)</h2>
 
 <mat-dialog-content class="mat-typography">
 
@@ -182,10 +182,108 @@
         </p>
 
         <div fxLayout="row" fxLayoutAlign="center start">
-            <div fxFlex class="help-dialog-image-container">
+            <div fxFlex class="help-dialog-card-image-container">
                 <img src="../../../assets/K->XYpi-first-circle-edit-properties.png" alt="An Event" width="250">
             </div>
         </div>
+
+        <p>
+            Note that the information panel for Circle #1 shows that the radius of the circle
+            is r = 29.7520 cm. This value, along with the value for the strength of the magnetic
+            field, can be used to determine the momentum of the particle in the 'offline' part
+            of the analysis.
+        </p>
+        <p>
+            Continuing in the same way, you can select the points for the positively charged
+            particle:
+        </p>
+
+        <div fxLayout="row" fxLayoutAlign="center start">
+            <div fxFlex class="help-dialog-image-container">
+                <img src="../../../assets/K->XYpi-second-circle-dots.png" alt="An Event" width="300">
+            </div>
+        </div>
+
+        <p>
+            ...and fit a circle to them. Another panel appears for this circle and you can set its properties.
+            In this case, the particle is <strong class="orange-text">outgoing</strong>
+            and traveling in a counter-clockwise path (<span class="svg-icon">
+                <app-ccw-icon></app-ccw-icon>
+            </span>):
+        </p>
+
+        <div fxLayout="row" fxLayoutAlign="center start">
+            <div fxFlex class="help-dialog-card-image-container">
+                <img src="../../../assets/K->XYpi-second-circle-edit-properties.png" alt="An Event" width="250">
+            </div>
+        </div>
+
+        <p>
+            The information panel for Circle #2 also indicates that the particle's momentum vector
+            (which is tangent to the circle at the point where the decay occurred) makes an angle of
+            &theta; = 3.3210 radians compared to the '+x' direction.
+            Once a second circle has been added, a <strong>momentum diagram</strong> appears, with
+            vectors representing the momenta of the <span class="green-text">incoming</span> and
+            <span class="orange-text">outgoing</span> particles:
+        </p>
+
+        <div fxLayout="row" fxLayoutAlign="center start">
+            <div fxFlex class="help-dialog-card-image-container">
+                <img src="../../../assets/K->XYpi-momentum-diagram.png" alt="An Event" width="150">
+            </div>
+        </div>
+
+        <p>
+            You can continue in this way for each of the charged particles in the event. Once you are finished,
+            click on the <strong>Review</strong> tab, to check that you didn't make any mistakes, and then
+            click on <strong>Finish</strong> to <strong>Submit</strong> your event.
+        </p>
+
+        <h3>Neutral Particles</h3>
+
+        <p>
+            If one of the particles in an event is <strong>neutral</strong>, it will <strong>not be detected</strong> by
+            the wires. Also, its
+            path will not be bent into a circle by the magnetic field (because it has no charge). In our simulation,
+            neutral particles are represented by straight dashed lines:
+        </p>
+
+        <div fxLayout="row" fxLayoutAlign="center start">
+            <div fxFlex class="help-dialog-image-container">
+                <img src="../../../assets/X->YK-neutral-particle.png" alt="An Event" width="300">
+            </div>
+        </div>
+
+        <p>
+            The above image shows an example where the <span class="green-text">incoming particle</span> is neutral.
+            The <span class="orange-text">outgoing particles</span> are both charged, with one being positive
+            (<span class="svg-icon">
+                <app-ccw-icon></app-ccw-icon>
+            </span>) and the other negative (<span class="svg-icon">
+                <app-cw-icon></app-cw-icon>
+            </span>).
+        </p>
+
+        <p>
+            Here's another example of a decay involving a neutral particle:
+        </p>
+
+        <div fxLayout="row" fxLayoutAlign="center start">
+            <div fxFlex class="help-dialog-image-container">
+                <img src="../../../assets/pi->XY-neutral-particle.png" alt="An Event" width="300">
+            </div>
+        </div>
+
+        <p>
+            In this case, the <span class="green-text">incoming particle</span> is negatively charged
+            (<span class="svg-icon">
+                <app-cw-icon></app-cw-icon>
+            </span>), while one of the <span class="orange-text">outgoing particles</span> is neutral
+            (represented by the <span class="orange-text">orange dashed line</span>)
+            and the other is negatively charged (<span class="svg-icon">
+                <app-cw-icon></app-cw-icon>
+            </span>).
+        </p>
 
     </div>
 
