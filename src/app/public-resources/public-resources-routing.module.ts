@@ -7,6 +7,7 @@ import { PublicResourcesComponent } from './public-resources.component';
 import { ParticleDecaysComponent } from './particle-decays/particle-decays.component';
 import { ParticlePropertiesComponent} from './particle-properties/particle-properties.component';
 import { AnalyzeEventComponent } from './analyze-event/analyze-event.component';
+import { HelpOnlineAnalysisWrapperComponent } from './help-online-analysis-wrapper/help-online-analysis-wrapper.component';
 
 const publicRoutes: Routes = [
   { 
@@ -25,6 +26,10 @@ const publicRoutes: Routes = [
         path: 'analyze-event',
         component: AnalyzeEventComponent,
         canActivate: [NotLoggedInGuard],
+      },
+      {
+        path: 'help-online-analysis',
+        component: HelpOnlineAnalysisWrapperComponent,
       }
     ]
   },
