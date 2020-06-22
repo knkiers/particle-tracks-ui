@@ -15,17 +15,30 @@ import { CircleTableComponent } from './circle-table/circle-table.component';
 import { MomentumAxisComponent } from './momentum-axis/momentum-axis.component';
 import { AnalysisStepperComponent, NavigateAwayDialog } from './analysis-stepper/analysis-stepper.component';
 import { ReviewEventComponent } from './review-event/review-event.component';
-import { CcwIconComponent } from './ccw-icon/ccw-icon.component';
-import { CwIconComponent } from './cw-icon/cw-icon.component';
+//import { CcwIconComponent } from '../shared/static-content/ccw-icon/ccw-icon.component';
+//import { CwIconComponent } from '../shared/static-content/cw-icon/cw-icon.component';
 
 @NgModule({
-  declarations: [EndUserComponent, AnalysisDisplayComponent, CircleItemComponent, CircleTableComponent, MomentumAxisComponent, AnalysisStepperComponent, NavigateAwayDialog, CannotFitCircleDialog, HelpDialog, EventNowUnsubmittedDialog, ReviewEventComponent, CcwIconComponent, CwIconComponent],
+  declarations: [
+    EndUserComponent,
+    AnalysisDisplayComponent,
+    CircleItemComponent, 
+    CircleTableComponent, 
+    MomentumAxisComponent, 
+    AnalysisStepperComponent, 
+    NavigateAwayDialog, 
+    CannotFitCircleDialog, 
+    HelpDialog, 
+    EventNowUnsubmittedDialog, 
+    ReviewEventComponent], 
+    //CcwIconComponent, 
+    //CwIconComponent],
   imports: [
     CommonModule,
     EndUserRoutingModule,
     FlexLayoutModule,
     AngularMaterialModule,
-    SharedModule
+    SharedModule,
   ],
   exports: [MomentumAxisComponent, CircleTableComponent, AnalysisDisplayComponent, ReviewEventComponent],
   entryComponents: [HelpDialog]

@@ -21,6 +21,6 @@ import { EndUserModule } from '../end-user/end-user.module';
     SharedModule,
     PublicResourcesRoutingModule,
     EndUserModule
-  ]
+  ],
 })
 export class PublicResourcesModule { }

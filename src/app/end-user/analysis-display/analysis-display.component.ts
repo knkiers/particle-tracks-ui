@@ -15,6 +15,8 @@ import { SnackBarInfoService } from '../../shared/services/snack-bar-info.servic
 import { UserService } from '../../shared/services/user.service';
 import { EventInfoService } from '../event-info.service';
 
+import { HelpOnlineAnalysisComponent } from '../../shared/static-content/help-online-analysis/help-online-analysis.component';
+
 //import { CircleBindingService } from '../circle-binding.service';
 
 import { Event } from '../../shared/models/event';
@@ -986,7 +988,8 @@ export interface HelpDialogData {
 @Component({
   selector: 'help-dialog',
   templateUrl: 'help-dialog.html',
-  styleUrls: ['analysis-display.component.scss']
+  styleUrls: ['analysis-display.component.scss'],
+  entryComponents: [HelpOnlineAnalysisComponent]
 })
 export class HelpDialog {
   constructor(
