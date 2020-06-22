@@ -34,18 +34,10 @@
             <div fxFlex="70%">
                 <!--https://stackoverflow.com/questions/58204128/how-to-label-both-sides-of-a-mat-slide-toggle-control-in-angular-material-8-->
                 <mat-label class="mat-slide-toggle-content">
-                    <svg height="24" width="24">
-                        <!-- arc generator: http://xahlee.info/js/svg_circle_arc.html-->
-                        <path d=" M 12 5 A 7 7 0 1 1 7 8" stroke="black" stroke-width="2" fill="none"></path>
-                        <polygon points="9,5,12,2,12,8" stroke="black" fill="black"></polygon>
-                    </svg>&nbsp;
+                    <app-ccw-icon></app-ccw-icon>&nbsp;
                 </mat-label>
                 <mat-slide-toggle color="primary" [disabled]="userIsReadOnly" [checked]="circle.CW" (change)="resetRotationDirection(circle)"></mat-slide-toggle>
-                <mat-label class="mat-slide-toggle-content">
-                    &nbsp;<svg height="24" width="24">
-                        <path d=" M 17 8 A 7 7 0 1 1 12 5" stroke="black" stroke-width="2" fill="none"></path>
-                        <polygon points="15,5,12,2,12,8" stroke="black" fill="black"></polygon>
-                    </svg>
+                <mat-label class="mat-slide-toggle-content">&nbsp;<app-cw-icon></app-cw-icon>
                 </mat-label>
             </div>
         </div>
@@ -54,12 +46,12 @@
                 direction:
             </div>
             <div fxFlex="70%">
-                <mat-label class="mat-slide-toggle-content">
+                <mat-label class="mat-slide-toggle-content orange-text">
                     outgoing&nbsp;
                 </mat-label>
                 <mat-slide-toggle color="primary" [disabled]="userIsReadOnly" [checked]="circle.incoming" (change)="resetParticleDirection(circle)">
                 </mat-slide-toggle>
-                <mat-label class="mat-slide-toggle-content">&nbsp;incoming</mat-label>
+                <mat-label class="mat-slide-toggle-content green-text">&nbsp;incoming</mat-label>
             </div>
         </div>
     </mat-expansion-panel>

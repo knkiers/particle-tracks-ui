@@ -42,6 +42,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 
+import {MatDividerModule} from '@angular/material/divider';
+
 const modules: any[] = [
   MatMenuModule,
   MatSidenavModule,
@@ -64,7 +66,8 @@ const modules: any[] = [
   MatSortModule,
   MatTooltipModule,
   MatProgressSpinnerModule,
-  MatProgressBarModule
+  MatProgressBarModule,
+  MatDividerModule
 ]
 
 @NgModule({

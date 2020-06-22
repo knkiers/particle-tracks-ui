@@ -1,5 +1,6 @@
 <h2 *ngIf="!data.editModeOn && !data.event" mat-dialog-title>Getting Started</h2>
 <h2 *ngIf="!data.editModeOn && data.event" mat-dialog-title>Events</h2>
+<h2 *ngIf="data.editModeOn && data.event" mat-dialog-title>Analysis</h2>
 
 <mat-dialog-content class="mat-typography">
 
@@ -19,7 +20,7 @@
 
     <div *ngIf="!data.editModeOn && data.event">
 
-        <h3 [innerHTML]="'Your Event: '+data.event.name"></h3>
+        <!--<h3 [innerHTML]="'Your Event: '+data.event.name"></h3>-->
 
         <p>
             A particle physics decay <strong>event</strong> is when an unstable particle
@@ -27,55 +28,164 @@
         </p>
 
         <p>
-            For the event you have chosen, the incoming particle
+            For example, for the decay <span [innerHTML]="data.event.name"></span>, the incoming particle
             <span *ngIf="!data.event.parent.particle_alias" [innerHTML]="data.event.parent.particle_name"></span>
             <span *ngIf="data.event.parent.particle_alias" [innerHTML]="data.event.parent.particle_alias"></span>
-            decayed to the outgoing particles
+            decays to the outgoing particles
             <span *ngFor="let dp of data.event.decay_products; let i=index">
                 <span *ngIf="i>0 && data.event.decay_products.length > 2">, </span>
                 <span *ngIf="i === data.event.decay_products.length -1"> and </span>
                 <span *ngIf="!dp.particle_alias" [innerHTML]="dp.particle_name"></span>
                 <span *ngIf="dp.particle_alias" [innerHTML]="dp.particle_alias"></span>
             </span>.
-
         </p>
 
-        <h3>Magnetic Field</h3>
+        <p>
+            Any particles denoted by an X or Y in this simulation are unknown. The eventual goal of your analysis will
+            be
+            to <strong>determine the identities</strong> of these particles.
+        </p>
+    </div>
+
+    <div *ngIf="data.editModeOn && data.event">
+
+        <h3 [innerHTML]="'Your Event: '+data.event.name"></h3>
+
+        <p>
+            For this decay event, the incoming particle
+            <span *ngIf="!data.event.parent.particle_alias" [innerHTML]="data.event.parent.particle_name"></span>
+            <span *ngIf="data.event.parent.particle_alias" [innerHTML]="data.event.parent.particle_alias"></span>
+            decays to the outgoing particles
+            <span *ngFor="let dp of data.event.decay_products; let i=index">
+                <span *ngIf="i>0 && data.event.decay_products.length > 2">, </span>
+                <span *ngIf="i === data.event.decay_products.length -1"> and </span>
+                <span *ngIf="!dp.particle_alias" [innerHTML]="dp.particle_name"></span>
+                <span *ngIf="dp.particle_alias" [innerHTML]="dp.particle_alias"></span>
+            </span>. Any particles denoted by an X or Y in this simulation are unknowns.
+            The side navigation menu contains a list of all
+            the decays that could appear in this simulation. Comparison with your decay shows that <strong>your decay
+                could be one of the following</strong>:
+        </p>
+
+        <div *ngIf="data.eventsSameSignature.length > 0" class="event-body">
+            <!--<div class="help-dialog-extra-bottom-margin">
+                Events matching this signature:
+            </div>-->
+            <div *ngFor="let eventSameSignature of data.eventsSameSignature" [innerHTML]="eventSameSignature"></div>
+        </div>
+
+        <p class="extra-margin-bottom-above-divider">
+            One of the goals of your
+            analysis will be
+            to determine which of the above is the correct decay process for your event.
+        </p>
+
+        <mat-divider></mat-divider>
+
+        <h3>Analysis of an Event</h3>
 
         <p>
             The particles in our simulation are traveling in a <strong>magnetic field</strong> that is pointing
-            <strong>into the page</strong>. Using the 'right hand rule', we see that
-            <strong>positively charged particles</strong> will go in a counter-clockwise circle, and <strong>negatively
+            into the page. Using the 'right hand rule', we see that
+            <strong>positively charged particles</strong> will follow a <strong>counter-clockwise path</strong> and
+            <strong>negatively
                 charged</strong>
-            particles will go in a clockwise circle:
+            particles will follow a <strong>clockwise path</strong>:
         </p>
-        <p>
-            positive charge: CCW
-            <br>
-            negative charge: CW
-        </p>
-
-
-        <h3>An Example</h3>
-        <p>
-            Here is a sample decay event (not yours) in which one particle came in (the <strong>green line</strong>)
-            and decayed into three particles going out (the <strong>orange lines</strong>):
-        </p>
-        <img src="../../../assets/event-with-border.png" alt="An Event" width="300" align="center">
-
-        <p>
-            From the direction of rotation (CW or CCW),
-            we can see that the incoming particle was negatively charged, two of the outgoing
-            particles were negatively charged, and one was positively charged.
-        </p>
-
-        <h3>Dots</h3>
+        <div class="help-dialog-indent">
+            positive charge:
+            <span class="svg-icon">
+                <app-ccw-icon></app-ccw-icon>
+            </span>
+            <div class="negative-top-margin">
+                negative charge:
+                <span class="svg-icon">
+                    <app-cw-icon></app-cw-icon>
+                </span>
+            </div>
+        </div>
 
         <p>
-            The dots represent wires perpendicular to the page.  When a charged particle
+            Note that <strong>neutral particles</strong> (particles with zero charge) are not affected by the magnetic
+            field and <strong>travel in a straight line</strong>.
+        </p>
+
+        <p>
+            Consider the following event (not yours) in which one particle comes in (the <strong
+                class="green-text">green
+                line</strong>)
+            and decays into three particles going out (the <strong class="orange-text">orange lines</strong>):
+        </p>
+
+        <div fxLayout="row" fxLayoutAlign="center start">
+            <div fxFlex class="help-dialog-image-container">
+                <img src="../../../assets/K->XYpi-with-text.png" alt="An Event" width="300">
+            </div>
+        </div>
+
+        <p>
+            Since the <span class="green-text">incoming particle</span> is traveling in a clockwise direction (<span
+                class="svg-icon">
+                <app-cw-icon></app-cw-icon>
+            </span>), we know that it is negatively charged.
+            Similarly, two of the <span class="orange-text">outgoing particles</span>
+            are negatively charged (<span class="svg-icon">
+                <app-cw-icon></app-cw-icon>
+            </span>), and one is positively charged
+            (<span class="svg-icon">
+                <app-ccw-icon></app-ccw-icon>
+            </span>).
+        </p>
+
+        <h3>The Dots</h3>
+
+        <p>
+            The dots in the event image represent wires perpendicular to the page. When a charged particle
             gets close to one of the wires, the wire senses the particle and registers a 'hit'
-            (represented by the larger dots).
+            (represented by a larger dot).
         </p>
+
+        <h3>Adding Circles</h3>
+
+        <p>
+            The first step in analyzing your event is to find the radius of each of the circular paths followed by
+            the charged particles. Start by hovering over the dots to select them (if you accidentally
+            select dots from the wrong circle, you can use the <strong>Deselect/Select</strong> slider
+            to fix the mistake):
+        </p>
+
+
+        <div fxLayout="row" fxLayoutAlign="center start">
+            <div fxFlex class="help-dialog-image-container">
+                <img src="../../../assets/K->XYpi-first-circle-dots.png" alt="An Event" width="300">
+            </div>
+        </div>
+
+        <p>
+            Then click on <strong>Add Circle</strong>
+            to fit a circle to the dots (indicated by the thin dash-dotted line):
+        </p>
+
+        <div fxLayout="row" fxLayoutAlign="center start">
+            <div fxFlex class="help-dialog-image-container">
+                <img src="../../../assets/K->XYpi-first-circle-fit.png" alt="An Event" width="300">
+            </div>
+        </div>
+
+        <p>
+            Once you have added a circle, a panel appears that you can open up and use to edit
+            the properties of the circular path. In this case, the particle is <strong
+                class="green-text">incoming</strong>
+            and traveling in a clockwise path (<span class="svg-icon">
+                <app-cw-icon></app-cw-icon>
+            </span>):
+        </p>
+
+        <div fxLayout="row" fxLayoutAlign="center start">
+            <div fxFlex class="help-dialog-image-container">
+                <img src="../../../assets/K->XYpi-first-circle-edit-properties.png" alt="An Event" width="250">
+            </div>
+        </div>
 
     </div>
 

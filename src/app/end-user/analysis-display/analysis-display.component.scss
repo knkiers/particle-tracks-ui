@@ -28,9 +28,53 @@
 }
 
 .event-body {
-    margin-left: 20px;
+    //margin-left: 20px;
+    text-align: center;
+    margin-bottom: 16px;
 }
 
-.image-container {
-    width: 80%;
+.svg-icon {
+    vertical-align: top;
+    display: inline-block;
+    line-height: 20px;
+}
+
+.help-dialog-indent {
+    //margin-left: 50px;
+    text-align: center;
+}
+
+.help-dialog-extra-bottom-margin {
+    margin-bottom: 6px;
+}
+
+.negative-top-margin {
+    margin-top: -8px;
+}
+
+.extra-margin-bottom-above-divider {
+    margin-bottom: 16px;
+}
+
+.help-dialog-image-container {
+    width: 100%;
+    height: 300px;
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.green-text {
+    color: olivedrab;
+}
+
+.orange-text {
+    color: sandybrown;
+}
+
+h3 {
+    margin-top: 16px;
+}
+
+h2 {
+    margin-bottom: 0px;
 }

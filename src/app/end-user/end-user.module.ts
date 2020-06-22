@@ -15,9 +15,11 @@ import { CircleTableComponent } from './circle-table/circle-table.component';
 import { MomentumAxisComponent } from './momentum-axis/momentum-axis.component';
 import { AnalysisStepperComponent, NavigateAwayDialog } from './analysis-stepper/analysis-stepper.component';
 import { ReviewEventComponent } from './review-event/review-event.component';
+import { CcwIconComponent } from './ccw-icon/ccw-icon.component';
+import { CwIconComponent } from './cw-icon/cw-icon.component';
 
 @NgModule({
-  declarations: [EndUserComponent, AnalysisDisplayComponent, CircleItemComponent, CircleTableComponent, MomentumAxisComponent, AnalysisStepperComponent, NavigateAwayDialog, CannotFitCircleDialog, HelpDialog, EventNowUnsubmittedDialog, ReviewEventComponent],
+  declarations: [EndUserComponent, AnalysisDisplayComponent, CircleItemComponent, CircleTableComponent, MomentumAxisComponent, AnalysisStepperComponent, NavigateAwayDialog, CannotFitCircleDialog, HelpDialog, EventNowUnsubmittedDialog, ReviewEventComponent, CcwIconComponent, CwIconComponent],
   imports: [
     CommonModule,
     EndUserRoutingModule,

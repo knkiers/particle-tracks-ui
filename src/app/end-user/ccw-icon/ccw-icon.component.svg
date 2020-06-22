@@ -1,0 +1,5 @@
+<svg height="24" width="24">
+    <!-- arc generator: http://xahlee.info/js/svg_circle_arc.html-->
+    <path d=" M 12 5 A 7 7 0 1 1 7 8" stroke="black" stroke-width="2" fill="none"></path>
+    <polygon points="9,5,12,2,12,8" stroke="black" fill="black"></polygon>
+</svg>
