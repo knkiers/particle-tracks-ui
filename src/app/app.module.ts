@@ -15,6 +15,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
+
 //import { RoundRealPipe } from './shared/pipes/round-real.pipe';
 //import { EndUserComponent } from './end-user/end-user.component';
 
@@ -33,7 +34,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     EventListModule,
     EndUserModule,
     TeacherModule,
-    PublicResourcesModule
+    PublicResourcesModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -11,6 +11,7 @@ import { HelpOnlineAnalysisComponent, HelpOfflineAnalysisComponent } from './sta
 import { CcwIconComponent } from './static-content/ccw-icon/ccw-icon.component';
 import { CwIconComponent } from './static-content/cw-icon/cw-icon.component';
 
+import { KatexModule } from 'ng-katex';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { CwIconComponent } from './static-content/cw-icon/cw-icon.component';
     CwIconComponent],
   imports: [
     CommonModule,
-    AngularMaterialModule
+    AngularMaterialModule,
+    KatexModule
   ],
   exports: [
     CommonModule, 
