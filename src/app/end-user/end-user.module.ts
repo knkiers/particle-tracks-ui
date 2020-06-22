@@ -9,7 +9,7 @@ import { EndUserRoutingModule } from './end-user-routing.module';
 import { EndUserComponent } from './end-user.component';
 
 import { AngularMaterialModule } from '../shared/angular-material/angular-material.module';
-import { AnalysisDisplayComponent, CannotFitCircleDialog, EventNowUnsubmittedDialog } from './analysis-display/analysis-display.component';
+import { AnalysisDisplayComponent, CannotFitCircleDialog, EventNowUnsubmittedDialog, HelpDialog } from './analysis-display/analysis-display.component';
 import { CircleItemComponent } from './circle-item/circle-item.component';
 import { CircleTableComponent } from './circle-table/circle-table.component';
 import { MomentumAxisComponent } from './momentum-axis/momentum-axis.component';
@@ -17,7 +17,7 @@ import { AnalysisStepperComponent, NavigateAwayDialog } from './analysis-stepper
 import { ReviewEventComponent } from './review-event/review-event.component';
 
 @NgModule({
-  declarations: [EndUserComponent, AnalysisDisplayComponent, CircleItemComponent, CircleTableComponent, MomentumAxisComponent, AnalysisStepperComponent, NavigateAwayDialog, CannotFitCircleDialog, EventNowUnsubmittedDialog, ReviewEventComponent],
+  declarations: [EndUserComponent, AnalysisDisplayComponent, CircleItemComponent, CircleTableComponent, MomentumAxisComponent, AnalysisStepperComponent, NavigateAwayDialog, CannotFitCircleDialog, HelpDialog, EventNowUnsubmittedDialog, ReviewEventComponent],
   imports: [
     CommonModule,
     EndUserRoutingModule,
@@ -25,6 +25,7 @@ import { ReviewEventComponent } from './review-event/review-event.component';
     AngularMaterialModule,
     SharedModule
   ],
-  exports: [MomentumAxisComponent, CircleTableComponent, AnalysisDisplayComponent, ReviewEventComponent]
+  exports: [MomentumAxisComponent, CircleTableComponent, AnalysisDisplayComponent, ReviewEventComponent],
+  entryComponents: [HelpDialog]
 })
 export class EndUserModule { }

@@ -1,0 +1,88 @@
+<h2 *ngIf="!data.editModeOn && !data.event" mat-dialog-title>Getting Started</h2>
+<h2 *ngIf="!data.editModeOn && data.event" mat-dialog-title>Events</h2>
+
+<mat-dialog-content class="mat-typography">
+
+    <!-- Event not yet selected or -->
+
+    <div *ngIf="!data.editModeOn && !data.event">
+        <h3>First Step</h3>
+
+        <p>
+            The first step of your analysis is to choose an event.
+            Click on <strong>Get Event</strong> until you see one
+            that you like and then click <strong>Analyze This Event</strong>
+            to select it for analysis.
+        </p>
+
+    </div>
+
+    <div *ngIf="!data.editModeOn && data.event">
+
+        <h3 [innerHTML]="'Your Event: '+data.event.name"></h3>
+
+        <p>
+            A particle physics decay <strong>event</strong> is when an unstable particle
+            decays spontaneously into two or more other particles.
+        </p>
+
+        <p>
+            For the event you have chosen, the incoming particle
+            <span *ngIf="!data.event.parent.particle_alias" [innerHTML]="data.event.parent.particle_name"></span>
+            <span *ngIf="data.event.parent.particle_alias" [innerHTML]="data.event.parent.particle_alias"></span>
+            decayed to the outgoing particles
+            <span *ngFor="let dp of data.event.decay_products; let i=index">
+                <span *ngIf="i>0 && data.event.decay_products.length > 2">, </span>
+                <span *ngIf="i === data.event.decay_products.length -1"> and </span>
+                <span *ngIf="!dp.particle_alias" [innerHTML]="dp.particle_name"></span>
+                <span *ngIf="dp.particle_alias" [innerHTML]="dp.particle_alias"></span>
+            </span>.
+
+        </p>
+
+        <h3>Magnetic Field</h3>
+
+        <p>
+            The particles in our simulation are traveling in a <strong>magnetic field</strong> that is pointing
+            <strong>into the page</strong>. Using the 'right hand rule', we see that
+            <strong>positively charged particles</strong> will go in a counter-clockwise circle, and <strong>negatively
+                charged</strong>
+            particles will go in a clockwise circle:
+        </p>
+        <p>
+            positive charge: CCW
+            <br>
+            negative charge: CW
+        </p>
+
+
+        <h3>An Example</h3>
+        <p>
+            Here is a sample decay event (not yours) in which one particle came in (the <strong>green line</strong>)
+            and decayed into three particles going out (the <strong>orange lines</strong>):
+        </p>
+        <img src="../../../assets/event-with-border.png" alt="An Event" width="300" align="center">
+
+        <p>
+            From the direction of rotation (CW or CCW),
+            we can see that the incoming particle was negatively charged, two of the outgoing
+            particles were negatively charged, and one was positively charged.
+        </p>
+
+        <h3>Dots</h3>
+
+        <p>
+            The dots represent wires perpendicular to the page.  When a charged particle
+            gets close to one of the wires, the wire senses the particle and registers a 'hit'
+            (represented by the larger dots).
+        </p>
+
+    </div>
+
+
+
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button (click)="onClose()">OK</button>
+</mat-dialog-actions>

@@ -1,11 +1,11 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, ViewChild, Input, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 
 //import { ROUTER_DIRECTIVES } from '@angular/router';
 import { Subscription } from 'rxjs';
 //import {FormsModule} from '@angular/forms';
 
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTooltip } from '@angular/material/tooltip';
 
 import { EventDisplayService } from '../../shared/services/event-display.service';
@@ -76,8 +76,8 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
 
   errorMessage: string = '';
 
-  revealedEvent: string = '';
-  eventsSameSignature: string[] = [];
+  revealedEvent: string = ''; // the event in question, but with the "X" and "Y" replaced by the actual particle names
+  eventsSameSignature: string[] = []; // all events in the database that match the current event's signature
 
   event: Event;
   eventPreviouslySubmitted: boolean = false;
@@ -202,6 +202,23 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       // the url had an id param, so browsing to the version of the url with no id param will force a refresh....
       this.router.navigate(['/events']);
     }
+  }
+
+  openHelpDialog(): void {
+    const dialogRef = this.dialog.open(HelpDialog, {
+      width: '600px',
+      data: {
+        editModeOn: this.editModeOn,
+        eventsSameSignature: this.eventsSameSignature,
+        event: this.event
+      }
+
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed', result);
+      //this.redirect();
+    });
   }
 
   openCannotFitCircleDialog(): void {
@@ -959,6 +976,28 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   }
 
 }
+
+export interface HelpDialogData {
+  editModeOn: boolean;
+  eventsSameSignature: string[];
+  event: Event;
+}
+
+@Component({
+  selector: 'help-dialog',
+  templateUrl: 'help-dialog.html',
+  styleUrls: ['analysis-display.component.scss']
+})
+export class HelpDialog {
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: HelpDialogData,
+    public dialogRef: MatDialogRef<HelpDialog>) { }
+
+  onClose(): void {
+    this.dialogRef.close();
+  }
+}
+
 
 @Component({
   selector: 'cannot-fit-circle-dialog',
