@@ -30,6 +30,7 @@ import { KatexModule } from 'ng-katex';
   ],
   exports: [
     CommonModule, 
+    KatexModule,
     RoundRealPipe, 
     ChargedDecaysComponent, 
     NeutralDecaysComponent, 

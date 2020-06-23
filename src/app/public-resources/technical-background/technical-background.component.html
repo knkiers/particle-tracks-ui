@@ -1,0 +1,58 @@
+<div class="container">
+    <div fxLayout="row" fxLayoutAlign="space-around center">
+        <div fxFlex.gt-sm="900px">
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title class="help-title-container">
+                        Some Background on Energy and Momentum in Particle Physics
+                    </mat-card-title>
+                    <mat-card-subtitle class="help-title-container">
+                        A quick primer on special relativity with the things you need to know before analyzing your data
+                    </mat-card-subtitle>
+                </mat-card-header>
+
+                <mat-card-content>
+                    <div class="help-body-container">
+
+                        <h3>1. Momentum is a Vector</h3>
+
+                        <ng-katex-paragraph [paragraph]="momIsVectorParagraph"></ng-katex-paragraph>
+
+                        <h3>2. Energy, Momentum and Mass</h3>
+
+                        <ng-katex-paragraph [paragraph]="energyMomMassParagraph"></ng-katex-paragraph>
+
+                        <h3>3. Units</h3>
+
+                        <ng-katex-paragraph [paragraph]="unitsParagraph"></ng-katex-paragraph>
+
+                        <h3>4. Speed</h3>
+
+                        <ng-katex-paragraph [paragraph]="speedParagraph"></ng-katex-paragraph>
+
+                        <h3>5. Massless Particles</h3>
+
+                        <ng-katex-paragraph [paragraph]="masslessParticlesParagraph"></ng-katex-paragraph>
+                        
+                        <h3>6. Momentum Conservation</h3>
+
+                        <ng-katex-paragraph [paragraph]="momentumConservedParagraph"></ng-katex-paragraph>
+
+                        <h3>7. Energy Conservation</h3>
+
+                        <ng-katex-paragraph [paragraph]="energyConservedParagraph"></ng-katex-paragraph>
+
+                        <h3>8. Momentum of a Charged Particle in a Magnetic Field</h3>
+
+                        <ng-katex-paragraph [paragraph]="pBrParagraph"></ng-katex-paragraph>
+
+                        <p>
+                            That's it!  That's all you need to know in order to analyze your data.  For an example, 
+                            please see ....
+                        </p>
+                        </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</div>

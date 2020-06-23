@@ -9,6 +9,7 @@ import { ParticlePropertiesComponent} from './particle-properties/particle-prope
 import { AnalyzeEventComponent } from './analyze-event/analyze-event.component';
 import { HelpOnlineAnalysisWrapperComponent } from './help-online-analysis-wrapper/help-online-analysis-wrapper.component';
 import { HelpOfflineAnalysisWrapperComponent } from './help-offline-analysis-wrapper/help-offline-analysis-wrapper.component';
+import { TechnicalBackgroundComponent } from './technical-background/technical-background.component';
 
 const publicRoutes: Routes = [
   { 
@@ -35,6 +36,10 @@ const publicRoutes: Routes = [
       {
         path: 'help-offline-analysis',
         component: HelpOfflineAnalysisWrapperComponent,
+      },
+      {
+        path: 'background',
+        component: TechnicalBackgroundComponent,
       },
     ]
   },

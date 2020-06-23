@@ -13,6 +13,7 @@ import { AnalyzeEventComponent } from './analyze-event/analyze-event.component';
 import { EndUserModule } from '../end-user/end-user.module';
 import { HelpOnlineAnalysisWrapperComponent } from './help-online-analysis-wrapper/help-online-analysis-wrapper.component';
 import { HelpOfflineAnalysisWrapperComponent } from './help-offline-analysis-wrapper/help-offline-analysis-wrapper.component';
+import { TechnicalBackgroundComponent } from './technical-background/technical-background.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { HelpOfflineAnalysisWrapperComponent } from './help-offline-analysis-wra
     ParticlePropertiesComponent, 
     AnalyzeEventComponent, 
     HelpOnlineAnalysisWrapperComponent, 
-    HelpOfflineAnalysisWrapperComponent,
+    HelpOfflineAnalysisWrapperComponent, 
+    TechnicalBackgroundComponent,
   ],
   imports: [
     CommonModule,

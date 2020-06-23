@@ -32,12 +32,8 @@
       </a>
       <div *ngIf="resourcesNavExpanded">
         <a mat-list-item (click)="navigationSidenav.close()"
-          routerLinkActive="list-item-active" [routerLink]="['/public/particle-decays']">
-          <span class="child-list-item">List of Particle Decays</span>
-        </a>
-        <a mat-list-item (click)="navigationSidenav.close()"
-          routerLinkActive="list-item-active" [routerLink]="['/public/particle-properties']">
-          <span class="child-list-item">List of Particle Properties</span>
+          routerLinkActive="list-item-active" [routerLink]="['/public/background']">
+          <span class="child-list-item">Background</span>
         </a>
         <a mat-list-item (click)="navigationSidenav.close()"
           routerLinkActive="list-item-active" [routerLink]="['/public/help-online-analysis']">
@@ -46,6 +42,14 @@
         <a mat-list-item (click)="navigationSidenav.close()"
           routerLinkActive="list-item-active" [routerLink]="['/public/help-offline-analysis']">
           <span class="child-list-item">Analysis -- Part II (Offline)</span>
+        </a>
+        <a mat-list-item (click)="navigationSidenav.close()"
+          routerLinkActive="list-item-active" [routerLink]="['/public/particle-decays']">
+          <span class="child-list-item">List of Particle Decays</span>
+        </a>
+        <a mat-list-item (click)="navigationSidenav.close()"
+          routerLinkActive="list-item-active" [routerLink]="['/public/particle-properties']">
+          <span class="child-list-item">List of Particle Properties</span>
         </a>
         <a mat-list-item (click)="navigationSidenav.close()"
           routerLinkActive="list-item-active" [routerLink]="['/public/particle-decays']">
