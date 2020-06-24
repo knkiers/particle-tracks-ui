@@ -9,7 +9,7 @@ export interface Particle {
 export interface EventType {
     decay_id: number;
     parent: Particle;
-    daughters: Particle[];
+    decay_products: Particle[];
     name: string;
 }
 

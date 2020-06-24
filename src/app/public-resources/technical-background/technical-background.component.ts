@@ -22,7 +22,7 @@ export class TechnicalBackgroundComponent implements OnInit {
 
   energyMomMassParagraph: string = `
     The relativistic energy of a particle is related to the magnitude of 
-    it momentum (\$p\$) and its mass (\$m\$):
+    its momentum (\$p\$) and its mass (\$m\$):
     \$ E = \\sqrt{p^2c^2+m^2c^4}\$, where \$c\$ is the speed of light.  
     If you set the momentum to zero, you arrive
     at Einstein's famous equation, \$E=mc^2\$.  In these expressions, momentum is always
@@ -34,7 +34,8 @@ export class TechnicalBackgroundComponent implements OnInit {
 
   unitsParagraph: string = `
     Energy, momentum and mass are all measured in units of MeV ("mega-electronvolts"), 
-    where 1 MeV\$~\\simeq 1.602\\times10^{-13}~\$ J.
+    where 1 MeV\$~\\simeq 1.602\\times10^{-13}~\$ J (although you should not convert
+    energies to joules -- just keep them in MeV).
   `;
 
   speedParagraph: string = `
@@ -49,7 +50,7 @@ export class TechnicalBackgroundComponent implements OnInit {
   masslessParticlesParagraph: string = `
     The photon is a massless particle, meaning \$m=0\$ for photons.  The same is almost true for 
     particles called neutrinos (they actually have tiny, non-zero masses, but it's OK to set 
-    them to zero here).  What happens to our equations for energy, momentum
+    those to zero here).  What happens to our equations for energy, momentum
     and speed when we set the mass of a particle to zero?  If you are used to using the non-relativistic
     definition of momentum, you might expect the momentum to be zero for a massless particle.  But this is
     not the case, actually, since the definition of momentum changes in Einstein's theory of special relativity!
@@ -68,7 +69,7 @@ export class TechnicalBackgroundComponent implements OnInit {
 
   energyConservedParagraph: string = `
     Relativistic energy is also conserved.  Since energy is a scalar (not a vector), there
-    is only one equation, instead of two.  Considering the same decay above, we would 
+    is only one equation, instead of two.  Considering the same decay as above, we would 
     have \$\$E_{A}=E_{X}+E_{Y}+E_{Z}.\$\$  (Note that $X$ is the name of the particle 
     here, which is not to be confused with the "\$x\$" direction!)  Recall that each of the \$E\$'s is related
     to its corresponding \$p\$ and \$m\$.  Thus, for example, \$E_A = \\sqrt{p_A^2 + m_A^2}\$.

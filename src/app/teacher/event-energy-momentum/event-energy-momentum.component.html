@@ -66,6 +66,8 @@
                         </table>
                     </div>
                     <h1 class="student-data-table-title">Student Data:</h1>
+                    <h3 class="student-data-table-title">...assuming correct underlying event </h3>
+                    <!--
                     <div class="mat-elevation-z1">
                         <table mat-table [dataSource]="studentDataSource">
                             <ng-container matColumnDef="particle">
@@ -126,7 +128,14 @@
                             <tr mat-row *matRowDef="let row; columns: displayedColumnsStudentData;"></tr>
                         </table>
 
+
+                        
+
                     </div>
+
+                    Trying another table 
+                -->
+                    <app-student-data-table [studentData]="studentData"></app-student-data-table>
 
                     <div *ngIf="errorMessages.length > 0">
                         <h1 class="student-data-table-title warning-title">

@@ -23,7 +23,8 @@ export class EventReviewService {
       numberNeutralParticles++;
       eventNeutralData = {
         mass: event.parent.mass,
-        name: event.parent.particle_name
+        name: event.parent.particle_name,
+        particleId: event.parent.particle_id
       }
     }
     event.decay_products.forEach((particle: any) => {
@@ -31,7 +32,8 @@ export class EventReviewService {
         numberNeutralParticles++;
         eventNeutralData = {
           mass: particle.mass,
-          name: particle.particle_name
+          name: particle.particle_name,
+          particleId: particle.particle_id
         }
       } else {
         numberChargedParticles++;

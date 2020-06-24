@@ -16,6 +16,7 @@ import { EventsSameSignature } from '../interfaces/event-type';
 import { UnitConversionService } from './unit-conversion.service';
 import { UserService } from './user.service';
 import { HttpService } from './http.service';
+import { CircleActivatedDots } from '../interfaces/circle-activated-dots';
 
 @Injectable({
   providedIn: 'root'
@@ -86,7 +87,7 @@ export class EventDisplayService {
   }
 
   // Service message command
-  announceGridActivation(gridIndices: number[], eventActivatedDots: any) {
+  announceGridActivation(gridIndices: number[], eventActivatedDots: CircleActivatedDots[]) {
     this.gridActivationAnnouncedSource.next({
       gridIndices: gridIndices, 
       eventActivatedDots: eventActivatedDots
@@ -105,7 +106,7 @@ export class EventDisplayService {
     var particleDirection;
     var px, py, pathParams;
     var activatedGridIndices = [];
-    let eventActivatedDots: any[] = [];// useful for reviewing students' data....
+    let eventActivatedDots: CircleActivatedDots[] = [];// useful for reviewing students' data....
 
     px = event.parent.energy_momentum[1];
     py = event.parent.energy_momentum[2];
@@ -117,6 +118,8 @@ export class EventDisplayService {
         px, py, particleDirection, 'incoming');
       inChargedString += pathParams.string;
       eventActivatedDots.push({
+        charge: event.parent.charge,
+        particleId: event.parent.particle_id,
         dotIndices: pathParams.activatedDots,
         mass: event.parent.mass,
         momentum: Math.sqrt(px * px + py * py),
@@ -142,6 +145,8 @@ export class EventDisplayService {
           px, py, particleDirection, 'outgoing');
         outChargedString += pathParams.string;
         eventActivatedDots.push({
+          charge: dP.charge,
+          particleId: dP.particle_id,
           dotIndices: pathParams.activatedDots,
           mass: dP.mass,
           momentum: Math.sqrt(px * px + py * py),

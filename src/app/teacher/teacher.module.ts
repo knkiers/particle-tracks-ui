@@ -15,10 +15,11 @@ import { UserEventWrapperAnchorDirective } from './user-events-by-id/user-event-
 import { EventEnergyMomentumComponent } from './event-energy-momentum/event-energy-momentum.component';
 import { AnalysisDisplayWrapperComponent } from './analysis-display-wrapper/analysis-display-wrapper.component';
 import { UserEventAnchorDirective } from './analysis-display-wrapper/user-event-anchor.directive';
+import { StudentDataTableComponent } from './student-data-table/student-data-table.component';
 
 
 @NgModule({
-  declarations: [DashboardComponent, TeacherComponent, UserEventsByIdComponent, EventInfoAnchorDirective, UserEventWrapperAnchorDirective, EventEnergyMomentumComponent, AnalysisDisplayWrapperComponent, UserEventAnchorDirective],
+  declarations: [DashboardComponent, TeacherComponent, UserEventsByIdComponent, EventInfoAnchorDirective, UserEventWrapperAnchorDirective, EventEnergyMomentumComponent, AnalysisDisplayWrapperComponent, UserEventAnchorDirective, StudentDataTableComponent],
   imports: [
     CommonModule,
     AngularMaterialModule,

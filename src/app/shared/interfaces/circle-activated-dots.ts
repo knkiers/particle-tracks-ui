@@ -9,5 +9,7 @@ export interface CircleActivatedDots {
   index: number;
   name: string;
   incoming: boolean;
-  CW: boolean
+  CW: boolean;
+  charge: number;
+  particleId: number;
 }
