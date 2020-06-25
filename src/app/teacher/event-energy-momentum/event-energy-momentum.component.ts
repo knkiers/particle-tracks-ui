@@ -6,7 +6,7 @@ import { POINT_THREE } from '../../shared/services/unit-conversion.service';
 import { EventAnalysisService } from '../../shared/services/event-analysis.service';
 import { EventDisplayService } from '../../shared/services/event-display.service';
 import { UnitConversionService } from '../../shared/services/unit-conversion.service';
-import { EventReviewService } from '../../shared/services/event-review.service';
+import { EventReviewService, CharacterizedEvent } from '../../shared/services/event-review.service';
 
 import { Particle, EventType, EventsSameSignature } from '../../shared/interfaces/event-type';
 import { CircleActivatedDots } from '../../shared/interfaces/circle-activated-dots';
@@ -40,7 +40,7 @@ export interface StudentIncorrectData {
   decayTypeIsCorrect: boolean; //true if the decay type is correct, but the final state particles are mixed up
   name: string; //name of the process for the incorrect particle assignments
   studentData: StudentDatum[];
-  studentDataSource: MatTableDataSource<any>;
+  //studentDataSource: MatTableDataSource<any>;
 }
 
 @Component({
@@ -56,7 +56,7 @@ export class EventEnergyMomentumComponent implements OnInit {
   displayedColumnsStudentData: string[] = ['particle', 'circleNumber', 'inOut', 'mass', 'radius', 'theta', 'momentum', 'px', 'py', 'energy'];
 
   eventSummaryDataSource: MatTableDataSource<any>;
-  studentDataSource: MatTableDataSource<any>;
+  //studentDataSource: MatTableDataSource<any>;
 
   revealedEvent: string = ''; // the event in question, but with the "X" and "Y" replaced by the actual particle names
   eventsSameSignature: string[] = []; // all events in the database that match the current event's signature
@@ -69,11 +69,12 @@ export class EventEnergyMomentumComponent implements OnInit {
   eventDataSummary: any = null;
   errorMessages: any = [];
   studentDataIsValid: boolean = true;
-  numberChargedParticles: number = 0;
-  numberNeutralParticles: number = 0;
-  eventNeutralData: any = null;//if there is a neutral particle, this contains its mass and name
-  incomingIsCharged: boolean = true;
-  neutralParticleData: any = null; // if there is a neutral particle (assumed to at most one neutral particle!), this will contain some of its data
+  characterizedEvent: CharacterizedEvent;
+  //numberChargedParticles: number = 0;
+  //numberNeutralParticles: number = 0;
+  //eventNeutralData: any = null;//if there is a neutral particle, this contains its mass and name
+  //incomingIsCharged: boolean = true;
+  //neutralParticleData: any = null; // if there is a neutral particle (assumed to at most one neutral particle!), this will contain some of its data
 
   errorMessage: string = '';
 
@@ -86,13 +87,13 @@ export class EventEnergyMomentumComponent implements OnInit {
   ngOnInit(): void {
     console.log('Inside on init!');
     this.buildEventDataSummary();
-    this.characterizeEvent(); // determine # of charged/neutral particles, etc.
+    this.characterizedEvent = this.characterizeEvent(); // determine # of charged/neutral particles, etc.
     this.determineActivatedDots();
     let studentDataOriginal = this.buildStudentData();
     this.checkErrors(studentDataOriginal);
     this.studentData = this.checkEnergyMomentumConservation(studentDataOriginal);
     console.log('student data: ', this.studentData);
-    this.studentDataSource = new MatTableDataSource(this.studentData);
+    //this.studentDataSource = new MatTableDataSource(this.studentData);
     if (this.errorMessages.length === 0) {
       // if there are no gross errors (CW/CCW property, incoming/outgoing property, # of circles), check to see what would be obtained if charged particles were misidentified
       this.buildTablesIncorrectAssignments();
@@ -137,11 +138,11 @@ export class EventEnergyMomentumComponent implements OnInit {
   }
 
   characterizeEvent() {
-    let eventCharacterization = this.eventReviewService.characterizeEvent(this.eventData.event);
-    this.incomingIsCharged = eventCharacterization.incomingIsCharged;
-    this.numberChargedParticles = eventCharacterization.numberChargedParticles;
-    this.numberNeutralParticles = eventCharacterization.numberNeutralParticles;
-    this.eventNeutralData = eventCharacterization.eventNeutralData;
+    return this.eventReviewService.characterizeEvent(this.eventData.event);
+    //this.incomingIsCharged = eventCharacterization.incomingIsCharged;
+    //this.numberChargedParticles = eventCharacterization.numberChargedParticles;
+    //this.numberNeutralParticles = eventCharacterization.numberNeutralParticles;
+    //this.eventNeutralData = eventCharacterization.eventNeutralData;
   }
 
   buildTablesIncorrectAssignments() {
@@ -175,8 +176,8 @@ export class EventEnergyMomentumComponent implements OnInit {
                 this.studentIncorrectData.push({
                   decayTypeIsCorrect: true,
                   name: this.revealedEvent,
-                  studentData: alteredStudentData,
-                  studentDataSource: new MatTableDataSource(alteredStudentData)
+                  studentData: alteredStudentData
+                  //studentDataSource: new MatTableDataSource(alteredStudentData)
                 });
               }
             }
@@ -190,13 +191,13 @@ export class EventEnergyMomentumComponent implements OnInit {
 
                 if (typeof alteredStudentDataOriginal !== 'boolean') {
                   // now check energy and momentum conservation and add in corresponding rows
-                  let alteredStudentData = this.checkEnergyMomentumConservation(alteredStudentDataOriginal);
+                  let alteredStudentData = this.checkEnergyMomentumConservation(alteredStudentDataOriginal, matchingDecay);
                   // ...and push the result to the array of incorrect data 
                   this.studentIncorrectData.push({
                     decayTypeIsCorrect: false,
                     name: matchingDecay.name,
-                    studentData: alteredStudentData,
-                    studentDataSource: new MatTableDataSource(alteredStudentData)
+                    studentData: alteredStudentData
+                    //studentDataSource: new MatTableDataSource(alteredStudentData)
                   });
                   if (!this.eventData.event.is_two_body_decay) {
                     // This is a three (or more) body decay.  At this point only support 2- or 3-body decays.
@@ -207,13 +208,13 @@ export class EventEnergyMomentumComponent implements OnInit {
       
                     if (typeof secondAlteredDataOriginal !== 'boolean') {
                       // now check energy and momentum conservation and add in corresponding rows
-                      let secondAlteredData = this.checkEnergyMomentumConservation(secondAlteredDataOriginal);
+                      let secondAlteredData = this.checkEnergyMomentumConservation(secondAlteredDataOriginal, matchingDecay);
                       // ...and push the result to the array of incorrect data 
                       this.studentIncorrectData.push({
                         decayTypeIsCorrect: true,
                         name: matchingDecay.name,
-                        studentData: secondAlteredData,
-                        studentDataSource: new MatTableDataSource(secondAlteredData)
+                        studentData: secondAlteredData
+                        //studentDataSource: new MatTableDataSource(secondAlteredData)
                       });
                     }
                   }
@@ -290,7 +291,7 @@ export class EventEnergyMomentumComponent implements OnInit {
     console.log('>>>>>>>starting a new one>>>>>');
     console.log('student data: ', this.studentData);
     this.studentData.forEach((actualStudentDatum: StudentDatum) => {
-      if (actualStudentDatum.summaryRow === false) {
+      if ((actualStudentDatum.summaryRow === false) && (actualStudentDatum.charge !== 0)) {// don't include neutral particles, since they get added later using checkEnergyMomentumConservation(...)
         if (actualStudentDatum.incoming === true) {
           // this is an incoming particle
           let studentDatum: StudentDatum = JSON.parse(JSON.stringify(actualStudentDatum));
@@ -587,11 +588,11 @@ export class EventEnergyMomentumComponent implements OnInit {
    */
   checkErrors(studentData: any) {
     // check # of student circles and compare against event data
-    if (this.eventData.circles && this.eventData.circles.length > this.numberChargedParticles) {
+    if (this.eventData.circles && this.eventData.circles.length > this.characterizedEvent.numberChargedParticles) {
       this.errorMessages.push('The number of student-created circles exceeds the number of charged particles in the event.');
       this.studentDataIsValid = false;
     }
-    if (this.eventData.circles && this.eventData.circles.length < this.numberChargedParticles) {
+    if (this.eventData.circles && this.eventData.circles.length < this.characterizedEvent.numberChargedParticles) {
       this.errorMessages.push('The number of student-created circles is less than the number of charged particles in the event.');
       this.studentDataIsValid = false;
     }
@@ -628,8 +629,18 @@ export class EventEnergyMomentumComponent implements OnInit {
     });
   }
 
-  checkEnergyMomentumConservation(studentDataOriginal: StudentDatum[]): StudentDatum[] {
-    // https://www.samanthaming.com/tidbits/70-3-ways-to-clone-objects/
+  checkEnergyMomentumConservation(studentDataOriginal: StudentDatum[], eventType: EventType | boolean = false): StudentDatum[] {
+    // if eventType is not included, we use the default for localCharacterizedEvent (this.characterizedEvent, which is the one for the actual event);
+    // otherwise we determine it for the eventType that is coming in
+    
+    let localCharacterizedEvent: CharacterizedEvent;
+    if (typeof eventType !== 'boolean') {
+      localCharacterizedEvent = this.eventReviewService.characterizeEventFromEventType(eventType);
+    } else {
+      // https://www.samanthaming.com/tidbits/70-3-ways-to-clone-objects/
+      localCharacterizedEvent = JSON.parse(JSON.stringify(this.characterizedEvent));
+    }
+
     let studentData: StudentDatum[] = JSON.parse(JSON.stringify(studentDataOriginal)); // clone the object, since we're going to be altering it...otherwise gets a bit confusing
     let inpx: number = 0;
     let outpx: number = 0;
@@ -668,7 +679,7 @@ export class EventEnergyMomentumComponent implements OnInit {
     // now we append and/or prepend some rows to this.studentData, which is not a great approach,
     // but not sure how else to get this information into the table....
 
-    if (this.numberNeutralParticles === 0) {
+    if (localCharacterizedEvent.numberNeutralParticles === 0) {
       studentDeltaData = {
         deltaPx: inpx - outpx,
         deltaPy: inpy - outpy,
@@ -678,10 +689,10 @@ export class EventEnergyMomentumComponent implements OnInit {
         deltaEPercent: inE > 0 ? (inE - outE) * 100 / inE : '??',
       }
     } else {// there is a neutral particle
-      let mass = this.eventNeutralData.mass;
-      let name = this.eventNeutralData.name;
-      let particleId = this.eventNeutralData.particleId;
-      if (this.incomingIsCharged) {// one of the final state particles is neutral
+      let mass = localCharacterizedEvent.eventNeutralData.mass;
+      let name = localCharacterizedEvent.eventNeutralData.name;
+      let particleId = localCharacterizedEvent.eventNeutralData.particleId;
+      if (localCharacterizedEvent.incomingIsCharged) {// one of the final state particles is neutral
         let pMag = Math.sqrt((inpx - outpx) * (inpx - outpx) + (inpy - outpy) * (inpy - outpy));
         studentData.push({
           particleId: particleId,
