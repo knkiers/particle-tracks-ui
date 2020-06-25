@@ -22,7 +22,10 @@
         </ng-container>
         <ng-container matColumnDef="mass">
             <th mat-header-cell *matHeaderCellDef> Mass (MeV) </th>
-            <td mat-cell *matCellDef="let element">{{element.mass}}</td>
+            <td mat-cell *matCellDef="let element">
+                <strong *ngIf="element.isBeingCalculated">{{element.mass | roundReal : 4}}</strong>
+                <span *ngIf="!element.isBeingCalculated">{{element.mass | roundReal : 4}}</span>
+            </td>
         </ng-container>
         <ng-container matColumnDef="radius">
             <th mat-header-cell *matHeaderCellDef> r (cm)</th>
@@ -49,12 +52,47 @@
             <td mat-cell *matCellDef="let element">{{element.py | roundReal : 4}}</td>
         </ng-container>
         <ng-container matColumnDef="energy">
-            <th mat-header-cell *matHeaderCellDef> E (MeV) </th>
-            <td mat-cell *matCellDef="let element">{{element.energy | roundReal : 4}}</td>
+            <th mat-header-cell *matHeaderCellDef> E (MeV)<sup>*</sup> </th>
+            <td mat-cell *matCellDef="let element">
+                <strong *ngIf="element.isBeingCalculated">{{element.energy | roundReal : 4}}</strong>
+                <span *ngIf="!element.isBeingCalculated">{{element.energy | roundReal : 4}}</span>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="calculate">
+            <th mat-header-cell *matHeaderCellDef> Calculate<sup>*</sup> </th>
+            <td mat-cell *matCellDef="let element; let i = index" class="centered-content">
+                <mat-icon *ngIf="element.icon && element.canBeCalculated" class="material-icons action-icon"
+                    (click)="recalculateStudentData(i)"
+                    [matTooltip]="element.summaryRow ? 'Calculate the energy difference' : 'Use energy conservation to calculate energy and mass for this particle'"
+                    matTooltipPosition="above">{{element.icon}}</mat-icon>
+                <mat-icon *ngIf="element.icon && !element.canBeCalculated" class="material-icons static-icon"
+                    [matTooltip]="element.summaryRow ? 'Energy difference is being calculated' : 'Energy conservation is being used to calculate energy and mass for this particle'"
+                    matTooltipPosition="above">{{element.icon}}</mat-icon>
+            </td>
         </ng-container>
 
 
         <tr mat-header-row *matHeaderRowDef="displayedColumnsStudentData"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumnsStudentData;"></tr>
     </table>
+    <p class="footnote-no-padding">
+        <sup>*</sup>By default we use the known values for the masses (along with the momenta) to calculate the
+        energies.
+        Another option is to use energy conservation to determine the energy of one of the particles and then use that
+        to
+        determine the mass of that particle. Click on the <strong>calculate icon</strong> to use this approach for any of
+        the
+        particles. If a mass shows up as NaN, it may mean that the calculated energy is less than the calculated
+        momentum for that particle.
+    </p>
+    <p class="footnote">
+        <sup>**</sup>For energies and momenta, &Delta; gives the sum of the incoming minus the outgoing values.
+        &Delta;&#37;
+        is &Delta; mutliplied by 100&#37; and divided by the magnitude of the largest (or incoming) value in the column.
+        For masses, &Delta;
+        gives the calculated minus actual value and &Delta;&#37; compares this to the known value.
+    </p>
+
 </div>
+
+<!-- tooltip: Use energy conservation to determine the energy and mass of this particle.-->

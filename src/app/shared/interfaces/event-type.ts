@@ -3,7 +3,8 @@ export interface Particle {
     mass: number;
     name: string;
     verbose_name: string;
-    charge: number
+    charge: number;
+//    alias: string;
 }
 
 export interface EventType {

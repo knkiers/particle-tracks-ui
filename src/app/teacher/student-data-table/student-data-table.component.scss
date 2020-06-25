@@ -2,8 +2,31 @@ table {
     width: 100%;
 }
 
-.material-icons.icon-align-no-space {
-    vertical-align: middle;
-    color: #D32F2F;
+.action-icon {
+    vertical-align: bottom;
+    color: #FFC400;// #01579B;
+    cursor: pointer;
 }
 
+.static-icon {
+    vertical-align: bottom;
+    color: #FFC400;// #01579B;
+}
+
+.centered-content {
+    text-align: center;
+    justify-content:center;
+}
+
+.footnote {
+    color: #757575;
+    font-size: smaller;
+    margin: 5px 10px 0px 10px;
+    padding-bottom: 10px;
+}
+
+.footnote-no-padding {
+    color: #757575;
+    font-size: smaller;
+    margin: 5px 10px 0px 10px;
+}

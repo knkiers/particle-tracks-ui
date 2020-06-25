@@ -21,11 +21,11 @@ export interface StudentDatum {
   CW: boolean | null;
   activatedDotsIndex: number | null;
   circleNumber: number | null | string;
-  energy: number;
+  energy: number | null | string;
   error: boolean;
   incoming: boolean | null;
   inout: string | null;
-  mass: number | null;
+  mass: number | null | string;
   name: string | null;
   particleId: number | null;
   pMag: number | null | string;
@@ -34,6 +34,9 @@ export interface StudentDatum {
   r: number | null | string;
   summaryRow: boolean;
   theta: number | null | string;
+  canBeCalculated: boolean; // if it is possible to do a calculation using this row (i.e., should it be clickable)
+  icon: string; // empty string or something like a calculator (can be calculated) or check mark
+  isBeingCalculated: boolean; // used to determine if some elements are shown in bold face
 }
 
 export interface StudentIncorrectData {
@@ -52,14 +55,14 @@ export class EventEnergyMomentumComponent implements OnInit {
 
   @Input() eventData: any = null;
 
-  displayedColumnsEventDataSummary: string[] = ['particle', 'inOut', 'xY', 'mass', 'theta', 'momentum', 'px', 'py', 'energy'];
-  displayedColumnsStudentData: string[] = ['particle', 'circleNumber', 'inOut', 'mass', 'radius', 'theta', 'momentum', 'px', 'py', 'energy'];
+  displayedColumnsEventDataSummary: string[] = ['particle', 'inOut', 'xY', 'theta', 'momentum', 'px', 'py', 'mass', 'energy'];
+  //displayedColumnsStudentData: string[] = ['particle', 'circleNumber', 'inOut', 'mass', 'radius', 'theta', 'momentum', 'px', 'py', 'energy'];
 
   eventSummaryDataSource: MatTableDataSource<any>;
   //studentDataSource: MatTableDataSource<any>;
 
   revealedEvent: string = ''; // the event in question, but with the "X" and "Y" replaced by the actual particle names
-  eventsSameSignature: string[] = []; // all events in the database that match the current event's signature
+  eventsSameSignature: EventsSameSignature; // all events in the database that match the current event's signature
 
   eventActivatedDots: CircleActivatedDots[] = []; // an array containing sets of activated dots and other properties for each particle in the event
   studentData: StudentDatum[] = [];
@@ -154,88 +157,88 @@ export class EventEnergyMomentumComponent implements OnInit {
       // only proceed if the analysis is otherwise correct (correct number of circles, etc.)
       this.eventDisplayService.getEventsSameSignature(this.eventData.event.event_type_id)
         .subscribe(
-          (eventsSameSignature: EventsSameSignature) => {
-            console.log('events same signature: ', eventsSameSignature);
-            this.revealedEvent = eventsSameSignature.original_decay.name;
-            this.eventsSameSignature = [];
-            eventsSameSignature.matching_decays.forEach((eventType: EventType) => {
-              this.eventsSameSignature.push(eventType.name);
-            });
+          (results: EventsSameSignature) => {
+            console.log('events same signature: ', results);
+            this.revealedEvent = results.original_decay.name;
+            this.eventsSameSignature = results;
+            //eventsSameSignature.matching_decays.forEach((eventType: EventType) => {
+            //  this.eventsSameSignature.push(eventType.name);
+            //});
             console.log('revealed event: ', this.revealedEvent);
             console.log('events same signature: ', this.eventsSameSignature);
-            if (!this.eventData.event.is_two_body_decay) {
-              // This is a three (or more) body decay.  At this point only support 2- or 3-body decays.  Assume that there could
-              // be at most two particles in the final state that have the same charge as each other and that those could reasonably
-              // have been mixed up by the student, even if the correct process was chosen.
-              let alteredStudentDataOriginal: StudentDatum[] | boolean = this.swapMassesInStudentData(this.studentData);
-
-              if (typeof alteredStudentDataOriginal !== 'boolean') {
-                // now check energy and momentum conservation and add in corresponding rows
-                let alteredStudentData = this.checkEnergyMomentumConservation(alteredStudentDataOriginal);
-                // ...and push the result to the array of incorrect data 
-                this.studentIncorrectData.push({
-                  decayTypeIsCorrect: true,
-                  name: this.revealedEvent,
-                  studentData: alteredStudentData
-                  //studentDataSource: new MatTableDataSource(alteredStudentData)
-                });
-              }
-            }
-            // now need to try different processes altogether and interchange final state particles in a reasonable way;
-            // then, if this is a 3-body decay, need to interchange the final-state particles that have the same charge and
-            // try that, too....
-            eventsSameSignature.matching_decays.forEach((matchingDecay: EventType) => {
-              if (!this.decaysAreEquivalent(matchingDecay, eventsSameSignature.original_decay)) {
-                // skip the one that matches the original one, since we handled that above....
-                let alteredStudentDataOriginal: StudentDatum[] | boolean = this.createStudentDataWithIncorrectEvent(matchingDecay);
-
-                if (typeof alteredStudentDataOriginal !== 'boolean') {
-                  // now check energy and momentum conservation and add in corresponding rows
-                  let alteredStudentData = this.checkEnergyMomentumConservation(alteredStudentDataOriginal, matchingDecay);
-                  // ...and push the result to the array of incorrect data 
-                  this.studentIncorrectData.push({
-                    decayTypeIsCorrect: false,
-                    name: matchingDecay.name,
-                    studentData: alteredStudentData
-                    //studentDataSource: new MatTableDataSource(alteredStudentData)
-                  });
-                  if (!this.eventData.event.is_two_body_decay) {
-                    // This is a three (or more) body decay.  At this point only support 2- or 3-body decays.
-                    // In the code above, we chose one possibilities for the particle assignments for the two 
-                    // equally-charged particles (if there were two outgoing particles with the same charge)...now
-                    // do the other one
-                    let secondAlteredDataOriginal: StudentDatum[] | boolean = this.swapMassesInStudentData(alteredStudentData);
-      
-                    if (typeof secondAlteredDataOriginal !== 'boolean') {
-                      // now check energy and momentum conservation and add in corresponding rows
-                      let secondAlteredData = this.checkEnergyMomentumConservation(secondAlteredDataOriginal, matchingDecay);
-                      // ...and push the result to the array of incorrect data 
-                      this.studentIncorrectData.push({
-                        decayTypeIsCorrect: true,
-                        name: matchingDecay.name,
-                        studentData: secondAlteredData
-                        //studentDataSource: new MatTableDataSource(secondAlteredData)
-                      });
-                    }
-                  }
-                }
-              } else {
-                console.log('found the original decay!  skipping it....');
-              }
-            });
-            console.log('student incorrect data: ', this.studentIncorrectData);
-            
+            this.assembleIncorrectAnalyses();
           },
           error => {
             this.errorMessage = error;
           }
         );
-
-
     }
-
-
   }
+
+  assembleIncorrectAnalyses() {
+    if (!this.eventData.event.is_two_body_decay) {
+      // This is a three (or more) body decay.  At this point only support 2- or 3-body decays.  Assume that there could
+      // be at most two particles in the final state that have the same charge as each other and that those could reasonably
+      // have been mixed up by the student, even if the correct process was chosen.
+      let alteredStudentDataOriginal: StudentDatum[] | boolean = this.swapMassesInStudentData(this.studentData);
+
+      if (typeof alteredStudentDataOriginal !== 'boolean') {
+        // now check energy and momentum conservation and add in corresponding rows
+        let alteredStudentData = this.checkEnergyMomentumConservation(alteredStudentDataOriginal);
+        // ...and push the result to the array of incorrect data 
+        this.studentIncorrectData.push({
+          decayTypeIsCorrect: true,
+          name: this.revealedEvent,
+          studentData: alteredStudentData
+          //studentDataSource: new MatTableDataSource(alteredStudentData)
+        });
+      }
+    }
+    // now need to try different processes altogether and interchange final state particles in a reasonable way;
+    // then, if this is a 3-body decay, need to interchange the final-state particles that have the same charge and
+    // try that, too....
+    this.eventsSameSignature.matching_decays.forEach((matchingDecay: EventType) => {
+      if (!this.decaysAreEquivalent(matchingDecay, this.eventsSameSignature.original_decay)) {
+        // skip the one that matches the original one, since we handled that above....
+        let alteredStudentDataOriginal: StudentDatum[] | boolean = this.createStudentDataWithIncorrectEvent(matchingDecay);
+
+        if (typeof alteredStudentDataOriginal !== 'boolean') {
+          // now check energy and momentum conservation and add in corresponding rows
+          let alteredStudentData = this.checkEnergyMomentumConservation(alteredStudentDataOriginal, matchingDecay);
+          // ...and push the result to the array of incorrect data 
+          this.studentIncorrectData.push({
+            decayTypeIsCorrect: false,
+            name: matchingDecay.name,
+            studentData: alteredStudentData
+            //studentDataSource: new MatTableDataSource(alteredStudentData)
+          });
+          if (!this.eventData.event.is_two_body_decay) {
+            // This is a three (or more) body decay.  At this point only support 2- or 3-body decays.
+            // In the code above, we chose one possibilities for the particle assignments for the two 
+            // equally-charged particles (if there were two outgoing particles with the same charge)...now
+            // do the other one
+            let secondAlteredDataOriginal: StudentDatum[] | boolean = this.swapMassesInStudentData(alteredStudentData);
+
+            if (typeof secondAlteredDataOriginal !== 'boolean') {
+              // now check energy and momentum conservation and add in corresponding rows
+              let secondAlteredData = this.checkEnergyMomentumConservation(secondAlteredDataOriginal, matchingDecay);
+              // ...and push the result to the array of incorrect data 
+              this.studentIncorrectData.push({
+                decayTypeIsCorrect: false,
+                name: matchingDecay.name,
+                studentData: secondAlteredData
+                //studentDataSource: new MatTableDataSource(secondAlteredData)
+              });
+            }
+          }
+        }
+      } else {
+        console.log('found the original decay!  skipping it....');
+      }
+    });
+    console.log('student incorrect data: ', this.studentIncorrectData);
+  }
+
 
   decaysAreEquivalent(event1: EventType, event2: EventType): boolean {
     // check if two event types match by checking the ids of the initial and final-state particles;
@@ -424,7 +427,7 @@ export class EventEnergyMomentumComponent implements OnInit {
       // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/POSITIVE_INFINITY
       let newEnergy0: number = Number.POSITIVE_INFINITY; // just in case....
       let newEnergy1: number = Number.POSITIVE_INFINITY; // just in case....
-      if ((typeof pMag0 === 'number') && (typeof pMag1 === 'number')) {
+      if ((typeof pMag0 === 'number') && (typeof pMag1 === 'number') && (typeof mass0 === 'number') && (typeof mass1 === 'number')) {
         // the pMags must be numbers in this case....
         newEnergy0 = Math.sqrt(pMag0 * pMag0 + mass1 * mass1);
         newEnergy1 = Math.sqrt(pMag1 * pMag1 + mass0 * mass0);
@@ -484,12 +487,22 @@ export class EventEnergyMomentumComponent implements OnInit {
           activatedDotsIndex: bestFitIndex,
           error: false,
           summaryRow: false,// true for the summary rows at the end of the table....
+          canBeCalculated: true,
+          icon: 'calculate',
+          isBeingCalculated: false
         }
       );
       circleNumber++;
     });
     return studentData;
   }
+
+  /*
+  computedTable(studentData: StudentDatum[]): StudentDatum[] {
+    let computedStudentData: StudentDatum[] = JSON.parse(JSON.stringify(studentData));
+    return computedStudentData;
+  }
+  */
 
   determineActivatedDots() {
     this.eventActivatedDots = [];
@@ -665,11 +678,15 @@ export class EventEnergyMomentumComponent implements OnInit {
         if (circle.incoming) {
           inpx += circle.px;
           inpy += circle.py;
-          inE += circle.energy;
+          if (typeof circle.energy === 'number') {
+            inE += circle.energy;
+          }
         } else {
           outpx += circle.px;
           outpy += circle.py;
-          outE += circle.energy;
+          if (typeof circle.energy === 'number') {
+            outE += circle.energy;
+          }
         }
       } else {
         console.log('There seems to be a problem -- px and/or py is not a number');
@@ -711,12 +728,15 @@ export class EventEnergyMomentumComponent implements OnInit {
           name: name,
           activatedDotsIndex: null,
           error: false,
-          summaryRow: false
+          summaryRow: false,
+          canBeCalculated: true,
+          icon: 'calculate',
+          isBeingCalculated: false
         });
         let deltaE = inE - outE - Math.sqrt(pMag * pMag + mass * mass);
         studentDeltaData = {
-          deltaPx: '-',
-          deltaPy: '-',
+          deltaPx: '',
+          deltaPy: '',
           deltaE: deltaE,
           deltaPxPercent: '',
           deltaPyPercent: '',
@@ -741,13 +761,16 @@ export class EventEnergyMomentumComponent implements OnInit {
           name: name,
           activatedDotsIndex: null,
           error: false,
-          summaryRow: false
+          summaryRow: false,
+          canBeCalculated: true,
+          icon: 'calculate',
+          isBeingCalculated: false
         });
         inE = Math.sqrt(pMag * pMag + mass * mass)
         let deltaE = inE - outE;
         studentDeltaData = {
-          deltaPx: '-',
-          deltaPy: '-',
+          deltaPx: '',
+          deltaPy: '',
           deltaE: deltaE,
           deltaPxPercent: '',
           deltaPyPercent: '',
@@ -764,16 +787,19 @@ export class EventEnergyMomentumComponent implements OnInit {
       incoming: null,
       CW: null,
       r: null,
-      pMag: '&Delta;:',
+      pMag: '&Delta;:<sup>**</sup>',
       px: studentDeltaData.deltaPx,
       py: studentDeltaData.deltaPy,
       theta: null,
-      mass: null,
+      mass: '',
       energy: studentDeltaData.deltaE,
       name: null,
       activatedDotsIndex: null,
       error: false,
-      summaryRow: true
+      summaryRow: true,
+      canBeCalculated: false,
+      icon: 'check',
+      isBeingCalculated: true
     });
     studentData.push({
       particleId: null,
@@ -783,7 +809,7 @@ export class EventEnergyMomentumComponent implements OnInit {
       incoming: null,
       CW: null,
       r: null,
-      pMag: '&Delta;%:',
+      pMag: '&Delta;%:<sup>**</sup>',
       px: studentDeltaData.deltaPxPercent,
       py: studentDeltaData.deltaPyPercent,
       theta: null,
@@ -792,11 +818,23 @@ export class EventEnergyMomentumComponent implements OnInit {
       name: null,
       activatedDotsIndex: null,
       error: false,
-      summaryRow: true
+      summaryRow: true,
+      canBeCalculated: false,
+      icon: '',
+      isBeingCalculated: true
     });
     //console.log('student data: ', studentData);
     return studentData;
   }
+
+  /*
+  onCalculationRowUpdate(calculationRow: number, studentDataElement: number) {
+    console.log('calculationRow: ', calculationRow);
+    console.log('studentDataElement: ', studentDataElement);
+  }
+  */
+
+
 
   closeAnalysisDisplay() {
     this.eventAnalysisService.announcedAnalysisDisplayClosed();
