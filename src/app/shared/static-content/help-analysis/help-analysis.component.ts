@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-help-online-analysis',
@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./help-analysis.component.scss']
 })
 export class HelpOnlineAnalysisComponent implements OnInit {
+
+  @Input() includeLinks: boolean = false;
 
   constructor() { }
 

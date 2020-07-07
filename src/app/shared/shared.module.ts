@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 import { AngularMaterialModule } from '../shared/angular-material/angular-material.module';
 
@@ -25,6 +26,7 @@ import { KatexModule } from 'ng-katex';
     CwIconComponent],
   imports: [
     CommonModule,
+    RouterModule,
     AngularMaterialModule,
     KatexModule
   ],

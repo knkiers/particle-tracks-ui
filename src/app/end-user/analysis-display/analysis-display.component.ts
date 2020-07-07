@@ -142,7 +142,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
         console.log('inside component -- event is ready to submit!');
         if (!this.isPublicUser) {
           // a public (i.e., non-authenticated) user should never get here, but just in case....
-          this.saveEvent(false);
+          this.saveEvent(true);
         }
       }
     )

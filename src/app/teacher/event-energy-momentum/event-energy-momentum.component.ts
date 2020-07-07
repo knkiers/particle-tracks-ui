@@ -798,7 +798,7 @@ export class EventEnergyMomentumComponent implements OnInit {
       error: false,
       summaryRow: true,
       canBeCalculated: false,
-      icon: 'check',
+      icon: 'west',
       isBeingCalculated: true
     });
     studentData.push({

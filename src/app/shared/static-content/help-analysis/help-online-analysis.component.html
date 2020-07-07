@@ -2,7 +2,7 @@
 
 <p>
     The particles in our simulation are traveling in a <strong>magnetic field</strong> that is pointing
-    into the page. Using the 'right hand rule', we see that
+    into the page. Using the right hand rule, we see that
     <strong>positively charged particles</strong> will follow a <strong>counter-clockwise path</strong> and
     <strong>negatively
         charged</strong>
@@ -104,8 +104,9 @@
 <p>
     Note that the information panel for Circle #1 shows that the radius of the circle
     is r = 29.7520 cm. This value, along with the value for the strength of the magnetic
-    field, can be used to determine the momentum of the particle in the 'offline' part
-    of the analysis.
+    field, can be used to determine the momentum of the particle in the 
+    <span *ngIf="includeLinks"><a [routerLink]="['/public/help-offline-analysis']">offline</a> part of the analysis.</span>
+    <span *ngIf="!includeLinks">offline part of the analysis (for help with this, see the <strong>Resources</strong> in the side navigation menu).</span>
 </p>
 <p>
     Continuing in the same way, you can select the points for the positively charged
@@ -150,7 +151,7 @@
 <p>
     You can continue in this way for each of the charged particles in the event. Once you are finished,
     click on the <strong>Review</strong> tab, to check that you didn't make any mistakes, and then
-    click on <strong>Finish</strong> to <strong>Submit</strong> your event.
+    click on <strong>Finish</strong> and <strong>Submit</strong> your event.
 </p>
 
 <h3>Neutral Particles</h3>
@@ -197,4 +198,13 @@
     and the other is negatively charged (<span class="svg-icon">
         <app-cw-icon></app-cw-icon>
     </span>).
+</p>
+
+<h3>Offline Analysis</h3>
+
+<p>
+    Once you have completed the online portion of your analysis and submitted your event, 
+    you can move to the 
+    <span *ngIf="includeLinks"><a [routerLink]="['/public/help-offline-analysis']">offline</a> part of your analysis.</span>
+    <span *ngIf="!includeLinks">offline part of your analysis (see the <strong>Resources</strong> in the side navigation menu for some help getting started).</span>
 </p>

@@ -67,11 +67,15 @@
                             <tr mat-row *matRowDef="let row; columns: displayedColumnsEventDataSummary;"></tr>
                         </table>
                     </div>
+
                     <h1 class="student-data-table-title">Student Data</h1>
                     <h3 class="student-data-table-subtitle">...what the student should get (based on their data), assuming all particles are assigned correctly: </h3>
                     
                     <app-student-data-table [studentData]="studentData"></app-student-data-table>
 
+                    <div class="divider-extra-space"></div>
+                    <mat-divider></mat-divider>
+                    
                     <div *ngIf="studentIncorrectData.length > 0">
                         <h1 class="student-data-table-title">Student Data using Incorrect Particle Assignments </h1>
                         <h3 class="student-data-table-subtitle">(some of these could be reasonable alternatives to the correct analysis)</h3>

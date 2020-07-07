@@ -10,6 +10,8 @@ import { HelpOnlineAnalysisComponent } from '../../shared/static-content/help-an
 })
 export class HelpOnlineAnalysisWrapperComponent implements OnInit {
 
+  includeLinks: boolean = true;
+
   constructor() { }
 
   ngOnInit(): void {

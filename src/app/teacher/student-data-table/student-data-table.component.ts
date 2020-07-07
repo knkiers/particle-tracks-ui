@@ -84,7 +84,7 @@ export class StudentDataTableComponent implements OnInit {
 
       this.computedStudentData[refreshRow].canBeCalculated = false;
       this.computedStudentData[refreshRow].isBeingCalculated = true;
-      this.computedStudentData[refreshRow].icon = 'check';
+      this.computedStudentData[refreshRow].icon = 'west';
       
     }
     this.studentDataSource = new MatTableDataSource(this.computedStudentData);
