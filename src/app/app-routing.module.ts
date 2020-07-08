@@ -1,5 +1,11 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, ExtraOptions } from '@angular/router';
+
+const routerOptions: ExtraOptions = {
+  scrollPositionRestoration: 'top',
+  //anchorScrolling: 'enabled',
+  //scrollOffset: [0, 64]
+};
 
 const appRoutes: Routes = [
   //{ path: 'crisis-center', component: CrisisListComponent },

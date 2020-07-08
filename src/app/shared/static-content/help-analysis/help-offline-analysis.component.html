@@ -1,58 +1,250 @@
-<h3>Energy, Momentum and Mass</h3>
-
-<ng-katex-paragraph [paragraph]="paragraph1"></ng-katex-paragraph>
-
-
-
-
-<h3>Units</h3>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<mat-divider></mat-divider>
-
-<h3>Analysis of an Event</h3>
-
-
-
-
+<h3>Two Classes of Events</h3>
 
 <p>
-    The particles in our simulation are traveling in a <strong>magnetic field</strong> that is pointing
-    into the page. Using the 'right hand rule', we see that
-    <strong>positively charged particles</strong> will follow a <strong>counter-clockwise path</strong> and
-    <strong>negatively
-        charged</strong>
-    particles will follow a <strong>clockwise path</strong>:
+    There are two distinct classes of events that we consider. In the first, all of the particles are charged. In the
+    second,
+    one of the particles (either the initial particle or one of the decay products) is neutral. Our approach to
+    analyzing
+    these two classes of events is a bit different.
 </p>
-<div class="help-dialog-indent">
-    positive charge:
-    <span class="svg-icon">
-        <app-ccw-icon></app-ccw-icon>
-    </span>
-    <div class="negative-top-margin">
-        negative charge:
-        <span class="svg-icon">
-            <app-cw-icon></app-cw-icon>
-        </span>
+
+<p>
+    <strong>If all of the particles in an event are charged,</strong> they will all leave circular tracks in the
+    detector
+    and we will be able to calculate the momentum vectors for all of the particles. In this case, momentum
+    conservation can be checked in the <ng-katex [equation]="xVariable"></ng-katex> and <ng-katex
+        [equation]="yVariable"></ng-katex>
+    directions by subtracting the total final momentum from the initial momentum.
+</p>
+
+<p>
+    <strong>If one of the particles is neutral,</strong> we can
+    determine the <ng-katex [equation]="xVariable"></ng-katex> and <ng-katex [equation]="yVariable"></ng-katex>
+    components of the momentum of the neutral particle (which escapes the detector undetected)
+    by first calculating the momentum of each of the charged particles and then using the conservation of momentum.
+</p>
+
+<h3>Sample Analysis: K<sup>-</sup> &rarr; X<sup>+</sup> + Y<sup>-</sup> + &pi;<sup>-</sup></h3>
+
+<p>
+    Let's consider the decay <strong>K<sup>-</sup> &rarr; X<sup>+</sup> + Y<sup>-</sup> + &pi;<sup>-</sup></strong>,
+    a decay for which <strong>all of the particles are charged.</strong> (We make some comments
+    <!-- https://stackoverflow.com/questions/35639174/passive-link-in-angular-2-a-href-equivalent -->
+    <a [routerLink]="" (click)="scrollToNeutralParticleSection()">below</a>
+    about how things change if there is a neutral particle in the decay.)
+</p>
+
+<blockquote>
+    <strong>The goal of our analysis</strong> is to determine the identities of the
+    unknown particles in the decay (X<sup>+</sup> and Y<sup>-</sup>)
+    and to determine the energies and momenta of all of the particles.
+</blockquote>
+
+<p>
+    Here is what the decay looks like in the simulation:
+</p>
+
+<div fxLayout="row" fxLayoutAlign="center start">
+    <div fxFlex class="help-dialog-image-container">
+        <img src="../../../../assets/K->XYpi-with-text.png" alt="An Event" width="300">
     </div>
 </div>
 
-<ng-katex [equation]="equation"></ng-katex>
-<ng-katex [equation]="pBrEquation"></ng-katex>
+<p>
+    Recall that <span class="green-text">incoming</span> and <span class="orange-text">outgoing</span>
+    particles in the simulation are denoted by <span class="green-text">green</span> and <span class="orange-text">orange</span>
+    lines, respectively. Also, since the magnetic field points into the page, negatively charged
+    particles travel in
+    clockwise paths, while positively charged particles travel in counter-clockwise paths (see
+    <a [routerLink]="['/public/help-online-analysis']">here</a> for more discussion about this).
+</p>
 
-<ng-katex-paragraph [paragraph]="paragraph"></ng-katex-paragraph>
+<p>
+    Following the instructions in the <a [routerLink]="['/public/help-online-analysis']">online analysis</a>, we
+    add circles for the incoming and outgoing particles. For the incoming particle, which is a negatively charged
+    kaon (K<sup>-</sup>) we have:
+</p>
 
+<div fxLayout="row" fxLayoutAlign="center start">
+    <div fxFlex class="help-dialog-image-container">
+        <img src="../../../../assets/K->XYpi-first-circle-dots-with-axes.png" alt="An Event" width="300">
+    </div>
+</div>
+
+<div fxLayout="row" fxLayoutAlign="center start">
+    <div fxFlex class="help-dialog-card-image-container">
+        <img src="../../../../assets/K->XYpi-first-circle-edit-properties-with-angle.png" alt="An Event" width="300">
+    </div>
+</div>
+
+<p>
+    So the radius of the circle is 29.7520 cm and the kaon's momentum vector
+    (which is tangent to the circle at the interaction point) makes an angle of &theta; = 2.4267 rad with the
+    horizontal.
+    The magnetic field for this event happens to be B = 11.0 kG. Using expressions that may be found on the
+    <a [routerLink]="['/public/background']">technical background</a> page, we can calculate the magnitude
+    and the <ng-katex [equation]="xVariable"></ng-katex> and <ng-katex [equation]="yVariable"></ng-katex> components
+    of the kaon's momentum:
+
+    <ng-katex-paragraph [paragraph]="pBrParagraph"></ng-katex-paragraph>
+
+    <ng-katex-paragraph [paragraph]="pxpyParagraph"></ng-katex-paragraph>
+
+    Also, since we know that the incoming particle is a negatively charged kaon, we can look up its
+    <a [routerLink]="['/public/particle-properties']">mass</a>, which turns out to be
+    <ng-katex [equation]="kaonMass"></ng-katex>. Thus, the energy of the kaon is:
+
+    <ng-katex-paragraph [paragraph]="kaonEnergyParagraph"></ng-katex-paragraph>
+
+</p>
+
+<p>
+    We can proceed in a similar manner for the other charged particles in the event. Recalling that the
+    rotation direction of the particle's trajectory is determined by its charge (positive or negative), we
+    can immediately determine which of the outgoing paths corresponds to the X<sup>+</sup> (since only one of the
+    outgoing paths is counter-clockwise). Beyond this, however, we have some ambiguity. In particular, we have
+    two problems:
+</p>
+
+<ol>
+    <li>
+        We don't know which of the two negatively charged particles (going clockwise) is the &pi;<sup>-</sup>
+        and which is the Y<sup>-</sup>. We can determine the momentum for each track (from the track's radius), but we
+        don't know the particles' identities, so we can't calculate the energy with confidence.
+    </li>
+    <li>
+        We don't know the identities of the X<sup>+</sup> and Y<sup>-</sup> particles. Again, this means that we can't
+        compute
+        their energies with certainty.
+    </li>
+</ol>
+
+<p>
+    Fortunately, there are only a finite number of possibilities for X<sup>+</sup> and Y<sup>-</sup>. To see what
+    these are, you can look at the <a [routerLink]="['/public/particle-decays']">list of particle decays</a>.
+    The only decays that match the signature K<sup>-</sup> &rarr; X<sup>+</sup> + Y<sup>-</sup> + &pi;<sup>-</sup>
+    are:
+</p>
+
+<ul class="help-dialog-center no-bullets">
+    <li>
+        K<sup>-</sup> &rarr; e<sup>+</sup> + e<sup>-</sup> + &pi;<sup>-</sup>
+    </li>
+    <li>
+        K<sup>-</sup> &rarr; &mu;<sup>+</sup> + &mu;<sup>-</sup> + &pi;<sup>-</sup>
+    </li>
+    <li>
+        K<sup>-</sup> &rarr; &pi;<sup>+</sup> + &pi;<sup>-</sup> + &pi;<sup>-</sup>
+    </li>
+</ul>
+
+<p>
+    Thus, there are a total of five different configurations to check (three possibilities for X and Y, plus
+    two ambiguities in the final state for e<sup>-</sup> &harr; &pi;<sup>-</sup> and &mu;<sup>-</sup> &harr; &pi;<sup>-</sup>).
+    To determine the identities of the particles, we need to try out the various options and see which
+    is most consistent with the conservation of energy.  If you use a spreadsheet for your analysis you will see that
+    it is not difficult to check out the various options.  
+</p>
+
+<p>
+    Using a "guess and check" approach, we would eventually see that the underlying decay is
+    K<sup>-</sup> &rarr; e<sup>+</sup> + e<sup>-</sup> + &pi;<sup>-</sup> in this case.  
+    Our final results may be summarized in a table as follows:
+</p>
+
+<div class="mat-elevation-z1 extra-margin-below">
+    <table mat-table [dataSource]="sampleDataSource">
+        <ng-container matColumnDef="particle">
+            <th mat-header-cell *matHeaderCellDef> Particle </th>
+            <td mat-cell *matCellDef="let element" [innerHTML]="element.name"></td>
+        </ng-container>
+        <ng-container matColumnDef="circleNumber">
+            <th mat-header-cell *matHeaderCellDef> Circle # </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.circleNumber}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="inOut">
+            <th mat-header-cell *matHeaderCellDef> in/out </th>
+            <td mat-cell *matCellDef="let element">{{element.inout}}</td>
+        </ng-container>
+        <ng-container matColumnDef="mass">
+            <th mat-header-cell *matHeaderCellDef> Mass (MeV) </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.mass }}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="radius">
+            <th mat-header-cell *matHeaderCellDef> r (cm)</th>
+            <td mat-cell *matCellDef="let element">{{element.r | roundReal : 2}}</td>
+        </ng-container>
+        <ng-container matColumnDef="theta">
+            <th mat-header-cell *matHeaderCellDef> &theta; (rad)</th>
+            <td mat-cell *matCellDef="let element">{{element.theta | roundReal : 2}}</td>
+        </ng-container>
+        <ng-container matColumnDef="momentum">
+            <th mat-header-cell *matHeaderCellDef> p (MeV) </th>
+            <td mat-cell *matCellDef="let element">
+                <span *ngIf="element.summaryRow" [innerHTML]="element.pMag"></span>
+                <span *ngIf="!element.summaryRow">{{element.pMag | roundReal : 2}}</span>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="px">
+            <th mat-header-cell *matHeaderCellDef> p<sub>x</sub> (MeV)</th>
+            <td mat-cell *matCellDef="let element">{{element.px | roundReal : 2}}</td>
+        </ng-container>
+        <ng-container matColumnDef="py">
+            <th mat-header-cell *matHeaderCellDef> p<sub>y</sub> (MeV) </th>
+            <td mat-cell *matCellDef="let element">{{element.py | roundReal : 2}}</td>
+        </ng-container>
+        <ng-container matColumnDef="energy">
+            <th mat-header-cell *matHeaderCellDef> E (MeV) </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.energy | roundReal : 2}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="beta">
+            <th mat-header-cell *matHeaderCellDef> &beta; </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.beta}}
+            </td>
+        </ng-container>
+        
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsStudentData"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsStudentData;"></tr>
+    </table>
+</div>
+
+<p>
+    ...where the last column shows &beta; = v/c = p/E, which is the speed of the particle expressed as a fraction of the speed of light.
+    We have kept some extra significant digits for &beta; for the electron and positron, so that you can see
+    that they are going very close to (but not quite at!) the speed of light.
+</p>
+<p>
+    In the second-to-last row of the table we have shown the disagreement between the initial energy and momentum and the 
+    final values (this is "&Delta;" in each case).  If energy and momentum were conserved exactly in our
+    analysis, then this row would contain zeros.  Our "measurements" of the particles' energies and momenta
+    have included small uncertainties, however, so this has led to an apparent non-conservation of energy
+    and momentum.
+    To determine "&Delta;%, we have divided &Delta; by 
+    the magnitude of the largest entry in the corresponding column, and multiplied the result by 100%.
+    As you can check, the other possible choices for particle assignments give significantly worse agreement
+    for the conservation of energy (i.e., a larger value for the corresponding &Delta;).
+</p>
+
+
+
+<h3 #neutralParticleSection>
+    Data Analysis for Decays Involving a Neutral Particle
+</h3>
+
+<p>
+    In the example described above, all of the particles were charged, so they all left a track
+    in the wire chamber, allowing their momenta to be measured.  If the decay includes one neutral
+    particle, <strong>one can use the conservation of momentum</strong> to determine the <ng-katex [equation]="xVariable"></ng-katex> 
+    and <ng-katex [equation]="yVariable"></ng-katex>  components of the momentum of the neutral particle.
+    In this case, there would be no "&Delta;" or "&Delta;%" entries for the momentum columns, since
+    the results would simply be zero.
+</p>
 
 

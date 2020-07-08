@@ -10,7 +10,7 @@
     line-height: 20px;
 }
 
-.help-dialog-indent {
+.help-dialog-center {
     //margin-left: 50px;
     text-align: center;
 }
@@ -20,6 +20,10 @@
 }
 
 .extra-margin-bottom-above-divider {
+    margin-bottom: 16px;
+}
+
+.extra-margin-below {
     margin-bottom: 16px;
 }
 
@@ -37,6 +41,10 @@
     margin-bottom: 16px;
 }
 
+//https://www.tutorialspoint.com/How-to-create-an-unordered-list-without-bullets-in-HTML#:~:text=For%20creating%20an%20unordered%20list,bullets%20in%20an%20unordered%20list.
+.no-bullets {
+    list-style-type: none;
+}
 
 .green-text {
     color: olivedrab;
@@ -53,3 +61,8 @@ h3 {
 h2 {
     margin-bottom: 0px;
 }
+
+table {
+    width: 100%;
+}
+
