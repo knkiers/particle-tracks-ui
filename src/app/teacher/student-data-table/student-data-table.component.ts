@@ -14,7 +14,7 @@ export class StudentDataTableComponent implements OnInit {
   @Input() studentData: StudentDatum[];
   @Output() updateCalculationRow = new EventEmitter<number>();
 
-  displayedColumnsStudentData: string[] = ['particle', 'circleNumber', 'inOut', 'radius', 'theta', 'momentum', 'px', 'py', 'mass', 'energy', 'calculate'];
+  displayedColumnsStudentData: string[] = ['particle', 'circleNumber', 'inOut', 'radius', 'theta', 'momentum', 'px', 'py', 'mass', 'energy', 'beta', 'calculate'];
 
   computedStudentData: StudentDatum[];
   studentDataSource: MatTableDataSource<any>;

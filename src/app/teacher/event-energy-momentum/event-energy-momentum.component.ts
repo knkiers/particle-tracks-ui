@@ -55,7 +55,7 @@ export class EventEnergyMomentumComponent implements OnInit {
 
   @Input() eventData: any = null;
 
-  displayedColumnsEventDataSummary: string[] = ['particle', 'inOut', 'xY', 'theta', 'momentum', 'px', 'py', 'mass', 'energy'];
+  displayedColumnsEventDataSummary: string[] = ['particle', 'inOut', 'xY', 'theta', 'momentum', 'px', 'py', 'mass', 'energy', 'beta'];
   //displayedColumnsStudentData: string[] = ['particle', 'circleNumber', 'inOut', 'mass', 'radius', 'theta', 'momentum', 'px', 'py', 'energy'];
 
   eventSummaryDataSource: MatTableDataSource<any>;
