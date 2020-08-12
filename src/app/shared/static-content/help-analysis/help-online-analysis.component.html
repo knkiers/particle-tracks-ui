@@ -8,7 +8,7 @@
         charged</strong>
     particles will follow a <strong>clockwise path</strong>:
 </p>
-<div class="help-dialog-indent">
+<div class="help-dialog-center">
     positive charge:
     <span class="svg-icon">
         <app-ccw-icon></app-ccw-icon>
@@ -104,9 +104,11 @@
 <p>
     Note that the information panel for Circle #1 shows that the radius of the circle
     is r = 29.7520 cm. This value, along with the value for the strength of the magnetic
-    field, can be used to determine the momentum of the particle in the 
-    <span *ngIf="includeLinks"><a [routerLink]="['/public/help-offline-analysis']">offline</a> part of the analysis.</span>
-    <span *ngIf="!includeLinks">offline part of the analysis (for help with this, see the <strong>Resources</strong> in the side navigation menu).</span>
+    field, can be used to determine the momentum of the particle in the
+    <span *ngIf="includeLinks"><a [routerLink]="['/public/help-offline-analysis']">offline</a> part of the
+        analysis.</span>
+    <span *ngIf="!includeLinks">offline part of the analysis (for help with this, see the <strong>Resources</strong> in
+        the side navigation menu).</span>
 </p>
 <p>
     Continuing in the same way, you can select the points for the positively charged
@@ -159,7 +161,7 @@
 <p>
     If one of the particles in an event is <strong>neutral</strong>, it will <strong>not be detected</strong> by
     the wires. Also, its
-    path will not be bent into a circle by the magnetic field (because it has no charge). In our simulation,
+    path will not be bent into a circle by the magnetic field (because the particle has no charge). In our simulation,
     neutral particles are represented by straight dashed lines:
 </p>
 
@@ -200,11 +202,24 @@
     </span>).
 </p>
 
-<h3>Offline Analysis</h3>
 
-<p>
-    Once you have completed the online portion of your analysis and submitted your event, 
-    you can move to the 
-    <span *ngIf="includeLinks"><a [routerLink]="['/public/help-offline-analysis']">offline</a> part of your analysis.</span>
-    <span *ngIf="!includeLinks">offline part of your analysis (see the <strong>Resources</strong> in the side navigation menu for some help getting started).</span>
-</p>
+<div *ngIf="includeLinks">
+    <h3>Ready to Get Started?</h3>
+    <p>
+        Click <a [routerLink]="['/events']">here</a> to generate, analyze and submit an event.
+        If you've already done this, you're ready for the <a
+            [routerLink]="['/public/help-offline-analysis']">offline</a> part of your analysis.
+    </p>
+
+</div>
+
+<div *ngIf="!includeLinks">
+    <h3>Offline Analysis</h3>
+    <p>
+        Once you have completed the online portion of your analysis and submitted your event,
+        you can move to the
+        <!--<span *ngIf="includeLinks"><a [routerLink]="['/public/help-offline-analysis']">offline</a> part of your analysis.</span>-->
+        <span *ngIf="!includeLinks">offline part of your analysis (see the <strong>Resources</strong> in the side
+            navigation menu for some help getting started).</span>
+    </p>
+</div>

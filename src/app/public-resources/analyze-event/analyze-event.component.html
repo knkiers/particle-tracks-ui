@@ -20,7 +20,8 @@
                                 <mat-card-content>
                                     <div>
                                         <mat-icon class="align-icon">warning</mat-icon>&nbsp;In the following you will
-                                        be able to choose a particle decay event and then analyze it. Note that <strong class="secondary-colour">
+                                        be able to choose a particle decay event and then analyze it. Note that <strong
+                                            class="secondary-colour">
                                             your event and analysis will not be saved</strong>
                                         because you are not signed in to an account.
                                     </div>
@@ -50,7 +51,7 @@
                         (analysisStatus)="onAnalysisStatusUpdate($event)">
                     </app-analysis-display>
                 </mat-card>
-                <mat-card [ngClass]="{'hidden-card': !showReviewCard}" class="review-card-margin">
+                <mat-card [ngClass]="{'hidden-card': !showReviewCard}" class="extra-top-margin">
                     <app-review-event [isPublicUser]="true" (reviewStatus)="onReviewStatusUpdate($event)">
                     </app-review-event>
                 </mat-card>

@@ -51,10 +51,12 @@
           routerLinkActive="list-item-active" [routerLink]="['/public/particle-properties']">
           <span class="child-list-item">List of Particle Properties</span>
         </a>
+        <!--
         <a mat-list-item (click)="navigationSidenav.close()"
           routerLinkActive="list-item-active" [routerLink]="['/public/particle-decays']">
           <span class="child-list-item">Explore</span>
         </a>
+      -->
       </div>
       <div *ngIf="isAdmin()">
         <!-- https://stackblitz.com/edit/dynamic-nested-sidenav-menu?file=app%2Fapp.component.scss -->

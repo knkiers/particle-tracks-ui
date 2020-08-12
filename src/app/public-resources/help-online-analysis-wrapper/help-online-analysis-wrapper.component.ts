@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { UserService } from '../../shared/services/user.service';
+
 import { HelpOnlineAnalysisComponent } from '../../shared/static-content/help-analysis/help-analysis.component';
 
 @Component({
@@ -12,9 +14,13 @@ export class HelpOnlineAnalysisWrapperComponent implements OnInit {
 
   includeLinks: boolean = true;
 
-  constructor() { }
+  constructor(private userService: UserService) { }
 
   ngOnInit(): void {
+  }
+
+  isLoggedIn(){
+    return this.userService.isLoggedIn();
   }
 
 }

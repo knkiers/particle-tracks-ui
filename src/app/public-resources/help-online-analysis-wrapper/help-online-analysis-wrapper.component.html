@@ -7,7 +7,13 @@
                         Analysis -- Part I (Online)
                     </mat-card-title>
                     <mat-card-subtitle class="help-title-container">
-                        Some help getting started with the online portion of the analysis
+                        Some help getting started with the online portion of the analysis.  
+                        <span *ngIf="isLoggedIn()"> 
+                            Click <a [routerLink]="['/events']">here</a> if you're ready to analyze an event.
+                        </span>
+                        <span *ngIf="!isLoggedIn()">
+                            <a [routerLink]="['/login']">Sign in</a> if you're ready to analyze an event.
+                        </span>
                     </mat-card-subtitle>
                 </mat-card-header>
 

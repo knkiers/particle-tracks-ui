@@ -58,6 +58,17 @@
                 <span *ngIf="!element.isBeingCalculated">{{element.energy | roundReal : 4}}</span>
             </td>
         </ng-container>
+        <ng-container matColumnDef="beta">
+            <th mat-header-cell *matHeaderCellDef> &beta; </th>
+            <td mat-cell *matCellDef="let element">
+                <strong *ngIf="(!element.summaryRow) && element.isBeingCalculated">
+                    {{element.pMag/element.energy | roundReal : 6}}
+                </strong>
+                <span *ngIf="(!element.summaryRow) && (!element.isBeingCalculated)">
+                    {{element.pMag/element.energy | roundReal : 6}}
+                </span>
+            </td>
+        </ng-container>
         <ng-container matColumnDef="calculate">
             <th mat-header-cell *matHeaderCellDef> Calculate<sup>*</sup> </th>
             <td mat-cell *matCellDef="let element; let i = index" class="centered-content">

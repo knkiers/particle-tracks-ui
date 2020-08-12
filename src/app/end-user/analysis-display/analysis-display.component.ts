@@ -55,6 +55,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   @ViewChild('selectDeselectSliderTooltip') selectDeselectSliderTooltip: MatTooltip;
   @ViewChild('titleTooltip') titleTooltip: MatTooltip;
   @ViewChild('subtitleTooltip') subtitleTooltip: MatTooltip;
+  @ViewChild('showReviewCardTooltip') showReviewCardTooltip: MatTooltip;
 
 
   // TODO: Should make circles and dots objects with methods; then they can 'do' things
@@ -826,6 +827,9 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     }
     if (this.subtitleTooltip !== undefined) {
       this.subtitleTooltip.show();
+    }
+    if (this.showReviewCardTooltip !== undefined) {
+      this.showReviewCardTooltip.show();
     }
   }
 

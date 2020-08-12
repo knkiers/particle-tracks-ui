@@ -11,7 +11,7 @@ export class TechnicalBackgroundComponent implements OnInit {
     In our simulations we will always be working in two dimensions,
     which means that the momentum of a particle will always be a two-dimensional
     vector.
-    If the magnitude of the momentum is $p$, and the
+    If the magnitude of the momentum is $p$ and the
     momentum vector is pointing in the direction \$\\theta\$, then the
     \$x\$ and \$y\$ components are
     \$\$p_x = p \\cos\\theta,~~~~~ p_y = p \\sin\\theta.\$\$
