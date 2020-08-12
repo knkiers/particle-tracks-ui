@@ -33,6 +33,36 @@
     margin-bottom: 16px;
 }
 
+.event-body-small-bottom-margin {
+    text-align: center;
+    margin-bottom: 0px;
+}
+
 .extra-margin-bottom-above-divider {
     margin-bottom: 16px;
 }
+
+.extra-top-margin {
+    margin-top: 20px;
+}
+
+.extra-left-right-padding {
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.warning-card {
+    background-color: #9575CD !important;
+    color: white !important;
+    margin: 0px;
+}
+
+.card-top-space {
+    margin-top: 20px;
+}
+
+.align-icon {
+    vertical-align: bottom;
+}
+
+

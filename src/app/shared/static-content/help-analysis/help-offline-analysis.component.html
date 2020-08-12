@@ -1,11 +1,11 @@
-<h3>Two Classes of Events</h3>
+<h3>Two Kinds of Events</h3>
 
 <p>
-    There are two distinct classes of events that we consider. In the first, all of the particles are charged. In the
+    There are kinds of events that we consider. In the first, all of the particles are charged. In the
     second,
     one of the particles (either the initial particle or one of the decay products) is neutral. Our approach to
     analyzing
-    these two classes of events is a bit different.
+    these two kinds of events is a bit different.
 </p>
 
 <p>
@@ -52,7 +52,8 @@
 
 <p>
     Recall that <span class="green-text">incoming</span> and <span class="orange-text">outgoing</span>
-    particles in the simulation are denoted by <span class="green-text">green</span> and <span class="orange-text">orange</span>
+    particles in the simulation are denoted by <span class="green-text">green</span> and <span
+        class="orange-text">orange</span>
     lines, respectively. Also, since the magnetic field points into the page, negatively charged
     particles travel in
     clockwise paths, while positively charged particles travel in counter-clockwise paths (see
@@ -140,15 +141,16 @@
 
 <p>
     Thus, there are a total of five different configurations to check (three possibilities for X and Y, plus
-    two ambiguities in the final state for e<sup>-</sup> &harr; &pi;<sup>-</sup> and &mu;<sup>-</sup> &harr; &pi;<sup>-</sup>).
+    two ambiguities in the final state for e<sup>-</sup> &harr; &pi;<sup>-</sup> and &mu;<sup>-</sup> &harr;
+    &pi;<sup>-</sup>).
     To determine the identities of the particles, we need to try out the various options and see which
-    is most consistent with the conservation of energy.  If you use a spreadsheet for your analysis you will see that
-    it is not difficult to check out the various options.  
+    is most consistent with the conservation of energy. If you use a spreadsheet for your analysis you will see that
+    it is not difficult to check out the various options.
 </p>
 
 <p>
     Using a "guess and check" approach, we would eventually see that the underlying decay is
-    K<sup>-</sup> &rarr; e<sup>+</sup> + e<sup>-</sup> + &pi;<sup>-</sup> in this case.  
+    K<sup>-</sup> &rarr; e<sup>+</sup> + e<sup>-</sup> + &pi;<sup>-</sup> in this case.
     Our final results may be summarized in a table as follows:
 </p>
 
@@ -209,24 +211,26 @@
                 {{element.beta}}
             </td>
         </ng-container>
-        
+
         <tr mat-header-row *matHeaderRowDef="displayedColumnsStudentData"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumnsStudentData;"></tr>
     </table>
 </div>
 
 <p>
-    ...where the last column shows &beta; = v/c = p/E, which is the speed of the particle expressed as a fraction of the speed of light.
+    ...where the last column shows &beta; = v/c = p/E, which is the speed of the particle expressed as a fraction of the
+    speed of light.
     We have kept some extra significant digits for &beta; for the electron and positron, so that you can see
     that they are going very close to (but not quite at!) the speed of light.
 </p>
 <p>
-    In the second-to-last row of the table we have shown the disagreement between the initial energy and momentum and the 
-    final values (this is "&Delta;" in each case).  If energy and momentum were conserved exactly in our
-    analysis, then this row would contain zeros.  Our "measurements" of the particles' energies and momenta
+    In the second-to-last row of the table we have shown the disagreement between the initial energy and momentum and
+    the
+    final values (this is "&Delta;" in each case). If energy and momentum were conserved exactly in our
+    analysis, then this row would contain zeros. Our "measurements" of the particles' energies and momenta
     have included small uncertainties, however, so this has led to an apparent non-conservation of energy
     and momentum.
-    To determine "&Delta;%, we have divided &Delta; by 
+    To determine "&Delta;%," we have divided &Delta; by
     the magnitude of the largest entry in the corresponding column, and multiplied the result by 100%.
     As you can check, the other possible choices for particle assignments give significantly worse agreement
     for the conservation of energy (i.e., a larger value for the corresponding &Delta;).
@@ -240,11 +244,10 @@
 
 <p>
     In the example described above, all of the particles were charged, so they all left a track
-    in the wire chamber, allowing their momenta to be measured.  If the decay includes one neutral
-    particle, <strong>one can use the conservation of momentum</strong> to determine the <ng-katex [equation]="xVariable"></ng-katex> 
-    and <ng-katex [equation]="yVariable"></ng-katex>  components of the momentum of the neutral particle.
+    in the wire chamber, allowing their momenta to be measured. If the decay includes one neutral
+    particle, <strong>one can use the conservation of momentum</strong> to determine the <ng-katex
+        [equation]="xVariable"></ng-katex>
+    and <ng-katex [equation]="yVariable"></ng-katex> components of the momentum of the neutral particle.
     In this case, there would be no "&Delta;" or "&Delta;%" entries for the momentum columns, since
     the results would simply be zero.
 </p>
-
-
