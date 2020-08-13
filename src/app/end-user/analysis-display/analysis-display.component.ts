@@ -251,6 +251,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     if (!this.noEventRetrieved) {
       this.turnOffEditMode();
       this.resetAxes();
+      this.eventsSameSignature = [];
       this.event = null;
       this.analyzedEventId = null
       this.noEventRetrieved = true;
