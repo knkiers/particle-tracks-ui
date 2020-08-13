@@ -100,6 +100,9 @@ export class EventEnergyMomentumComponent implements OnInit {
     if (this.errorMessages.length === 0) {
       // if there are no gross errors (CW/CCW property, incoming/outgoing property, # of circles), check to see what would be obtained if charged particles were misidentified
       this.buildTablesIncorrectAssignments();
+    } else {
+      // there were apparently one or more gross errors, so fetch the data about other possible decays, but don't bother putting together the tables
+      this.fetchEventsSameSignature();
     }
   }
 
@@ -146,6 +149,29 @@ export class EventEnergyMomentumComponent implements OnInit {
     //this.numberChargedParticles = eventCharacterization.numberChargedParticles;
     //this.numberNeutralParticles = eventCharacterization.numberNeutralParticles;
     //this.eventNeutralData = eventCharacterization.eventNeutralData;
+  }
+
+  fetchEventsSameSignature() {
+    // Normally this.buildTablesIncorrectAssignments() is called (to work out the various ways that the student could have
+    // assigned the particles incorrectly).  This method is called if there have been one or more gross errors.  In that
+    // case, we just want a list of the various possible decays, etc.
+    this.eventDisplayService.getEventsSameSignature(this.eventData.event.event_type_id)
+      .subscribe(
+        (results: EventsSameSignature) => {
+          console.log('events same signature: ', results);
+          this.revealedEvent = results.original_decay.name;
+          this.eventsSameSignature = results;
+          //eventsSameSignature.matching_decays.forEach((eventType: EventType) => {
+          //  this.eventsSameSignature.push(eventType.name);
+          //});
+          console.log('revealed event: ', this.revealedEvent);
+          console.log('events same signature: ', this.eventsSameSignature);
+          //this.assembleIncorrectAnalyses();
+        },
+        error => {
+          this.errorMessage = error;
+        }
+      );
   }
 
   buildTablesIncorrectAssignments() {
@@ -629,7 +655,7 @@ export class EventEnergyMomentumComponent implements OnInit {
           this.studentDataIsValid = false;
           circle.error = true;
           studentData[i].error = true;
-          this.errorMessages.push(`Circle #${circleNumber + 1} and Circle #${i + 1} appear to refer to the same charged particle track.`);
+          this.errorMessages.push(`Circle #${circleNumber + 1} and Circle #${i + 1} appear to refer to the same charged particle track.  Hover or click the circle property panels (at the top of the page) to see which dots were used in the fits.`);
         }
       }
       //check the sense of the rotation (CW or CCW) to see if the student's data matches the actual event

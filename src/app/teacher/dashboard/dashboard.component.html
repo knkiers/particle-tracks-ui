@@ -22,7 +22,8 @@
                             </mat-form-field>
                             <mat-icon class="icon-align">search</mat-icon>
                         </div>
-                        <table mat-table [dataSource]="dataSource" matSort>
+                        <!--https://stackoverflow.com/questions/46743115/default-sorting-in-angular-material-sort-header-->
+                        <table mat-table [dataSource]="dataSource" matSort matSortActive="latest_activity" matSortDirection="desc">
                             <!-- First name column -->
                             <ng-container matColumnDef="firstName">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header="first_name"> First Name </th>
