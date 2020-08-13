@@ -42,6 +42,10 @@ table {
     color: #D32F2F;
 }
 
+.extra-bottom-margin {
+    margin-bottom: 5px;
+}
+
 .warning-list {
     margin-bottom: 5px;
     padding-left: 10px;
@@ -49,4 +53,18 @@ table {
 
 .divider-extra-space {
     height: 20px;
+}
+
+.extra-left-padding {
+    padding-left: 10px;
+}
+
+.evet-list-center {
+    //margin-left: 50px;
+    text-align: center;
+}
+
+//https://www.tutorialspoint.com/How-to-create-an-unordered-list-without-bullets-in-HTML#:~:text=For%20creating%20an%20unordered%20list,bullets%20in%20an%20unordered%20list.
+.no-bullets {
+    list-style-type: none;
 }
