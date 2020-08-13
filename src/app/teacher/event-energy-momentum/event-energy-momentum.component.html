@@ -78,7 +78,7 @@
                         <span class="warning-title">There were one or more errors in the analysis, so the student's particle assignments may differ from what is shown here. </span></h3>
                     
                     <app-student-data-table [studentData]="studentData"></app-student-data-table>
-
+                    
                     <div class="divider-extra-space"></div>
                     <mat-divider></mat-divider>
                     
@@ -93,13 +93,28 @@
                     </div>
 
                     <div *ngIf="errorMessages.length > 0">
-                        <h1 class="student-data-table-title warning-title">
+                        <h1 class="student-data-table-title warning-title extra-bottom-margin">
                             <div> Errors/Warnings:</div>
                         </h1>
                         <div *ngFor="let error of errorMessages" class="warning-list">
                             <i class="material-icons icon-align">error_outline</i> {{error}}
                         </div>
                     </div>
+
+                    <div *ngIf="errorMessages.length > 0 && eventsSameSignature">
+                        <h1 class="student-data-table-title">Events with this Signature</h1>
+                        <div class="extra-left-padding">
+                            <p>Here are the events in the database that match the signature for this event (<span [innerHtml]="eventData.event.name"></span>):</p>
+                            <ul class="event-list-center no-bullets">
+                                <li *ngFor="let eventType of eventsSameSignature.matching_decays">
+                                    <span [innerHTML]="eventType.name"></span>
+                                    <span *ngIf="eventType.name == revealedEvent"> (correct choice)</span>
+                                </li>
+                            </ul>
+                            <p>The student made one or more mistakes in their analysis, so they may not have chosen the correct event.  The above list may give some other reasonable options.</p>
+                        </div>
+                    </div>
+
                 </mat-card-content>
 
 
