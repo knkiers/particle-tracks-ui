@@ -73,7 +73,9 @@
                     </div>
 
                     <h1 class="student-data-table-title">Student Data</h1>
-                    <h3 class="student-data-table-subtitle">...what the student should get (based on their data), assuming all particles are assigned correctly: </h3>
+                    <h3 *ngIf="errorMessages.length == 0" class="student-data-table-subtitle">...what the student should get (based on their data), assuming all particles are assigned correctly: </h3>
+                    <h3 *ngIf="errorMessages.length > 0" class="student-data-table-subtitle">...what the student might get, based on their data.  
+                        <span class="warning-title">There were one or more errors in the analysis, so the student's particle assignments may differ from what is shown here. </span></h3>
                     
                     <app-student-data-table [studentData]="studentData"></app-student-data-table>
 
