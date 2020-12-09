@@ -14,7 +14,6 @@
     "@angular/animations": "~9.1.4",
     "@angular/cdk": "^9.2.2",
     "@angular/common": "~9.1.4",
-    "@angular/compiler": "~9.1.4",
     "@angular/core": "~9.1.4",
     "@angular/flex-layout": "^9.0.0-beta.29",
     "@angular/forms": "~9.1.4",
@@ -32,6 +31,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.1100.3",
     "@angular/cli": "^11.0.3",
+    "@angular/compiler": "^11.0.4",
     "@angular/compiler-cli": "~9.1.4",
     "@angular/language-service": "~9.1.4",
     "@types/jasmine": "~3.5.0",
