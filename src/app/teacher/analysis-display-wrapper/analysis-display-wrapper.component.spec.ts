@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { AnalysisDisplayWrapperComponent } from './analysis-display-wrapper.component';
 
@@ -6,7 +6,7 @@ describe('AnalysisDisplayWrapperComponent', () => {
   let component: AnalysisDisplayWrapperComponent;
   let fixture: ComponentFixture<AnalysisDisplayWrapperComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ AnalysisDisplayWrapperComponent ]
     })

@@ -1,11 +1,6 @@
 /* tslint:disable:no-unused-variable */
 
-import {
-  beforeEach, beforeEachProviders,
-  describe, xdescribe,
-  expect, it, xit,
-  async, inject
-} from '@angular/core/testing';
+import { beforeEach, beforeEachProviders, describe, xdescribe, expect, it, xit, inject, waitForAsync } from '@angular/core/testing';
 import { EventAnalysisService } from './event-analysis.service';
 
 describe('EventAnalysis Service', () => {

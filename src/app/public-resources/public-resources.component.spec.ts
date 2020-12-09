@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { PublicResourcesComponent } from './public-resources.component';
 
@@ -6,7 +6,7 @@ describe('PublicResourcesComponent', () => {
   let component: PublicResourcesComponent;
   let fixture: ComponentFixture<PublicResourcesComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ PublicResourcesComponent ]
     })

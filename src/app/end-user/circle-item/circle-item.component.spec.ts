@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { CircleItemComponent } from './circle-item.component';
 
@@ -6,7 +6,7 @@ describe('CircleItemComponent', () => {
   let component: CircleItemComponent;
   let fixture: ComponentFixture<CircleItemComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ CircleItemComponent ]
     })

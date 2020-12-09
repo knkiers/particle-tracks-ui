@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { HelpOnlineAnalysisWrapperComponent } from './help-online-analysis-wrapper.component';
 
@@ -6,7 +6,7 @@ describe('HelpOnlineAnalysisWrapperComponent', () => {
   let component: HelpOnlineAnalysisWrapperComponent;
   let fixture: ComponentFixture<HelpOnlineAnalysisWrapperComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ HelpOnlineAnalysisWrapperComponent ]
     })
