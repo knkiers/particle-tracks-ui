@@ -28,8 +28,18 @@
         <mat-card-content>
             <div fxLayout="row" fxLayoutAlign="end">
                 <span *ngIf="editModeOn" class="negative-top-margin" #selectDeselectSliderTooltip="matTooltip"
-                    matTooltip="Deselect accidentally selected points -- slide back to select points again"
-                    matTooltipPosition="below">
+                    matTooltip="Modes for selecting and deselecting dots"
+                    matTooltipPosition="right">
+                    
+                    <mat-form-field appearance="outline" class="no-bottom-padding">
+                        <mat-label>Select/Deselect Mode</mat-label>
+                        <mat-select [(value)]="selectMode">
+                            <mat-option *ngFor="let selectModeOption of selectModeOptions" [value]="selectModeOption.value">
+                                {{selectModeOption.viewValue}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <!---
                     <mat-label class="mat-slide-toggle-content">
                         Deselect&nbsp;
                     </mat-label>
@@ -37,8 +47,19 @@
                     </mat-slide-toggle>
                     <mat-label class="mat-slide-toggle-content">&nbsp;Select
                     </mat-label>
+                -->
                 </span>
             </div>
+            <!--
+            <mat-form-field appearance="fill">
+                <mat-label>Select/Deselect Mode</mat-label>
+                <mat-select [(value)]="selectMode">
+                    <mat-option *ngFor="let selectModeOption of selectModeOptions" [value]="selectModeOption.value">
+                        {{selectModeOption.viewValue}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        -->
             <div *ngIf="boundaries && dots">
                 <svg [attr.height]="boundaries.height" [attr.width]="boundaries.width">
                     <rect [attr.x]="boundaries.xminPx" [attr.y]="boundaries.ymaxPx"
@@ -68,7 +89,7 @@
                     </g>
 
                     <g *ngFor="let dot of dots">
-                        <circle (mouseover)="dot.checkDot(colourModeOn)" [attr.r]="dot.findRadius()" [attr.cx]="dot.x"
+                        <circle (mouseover)="dot.mouseOverToSelectDeselect(selectMode)" (click)="dot.clickToToggle(selectMode)" [attr.r]="dot.findRadius()" [attr.cx]="dot.x"
                             [attr.cy]="dot.y" [attr.stroke-width]="dot.findStrokeWidth()"
                             [attr.stroke]="dot.findStrokeColour()" [attr.fill]="dot.findFillColour()">
                         </circle>
@@ -127,6 +148,9 @@
                     </button>
 
                 </div>
+
+    
+
                 <!--<div *ngIf="revealedEvent && isAdmin()">
                     <strong>Event: </strong>
                     <span [innerHTML]="revealedEvent"></span>
@@ -178,12 +202,12 @@
 
 </div>
 
-<div *ngIf="isPublicUser" fxLayout="row" fxLayoutAlign="space-around center"
-    class="card-top-space">
+<div *ngIf="isPublicUser" fxLayout="row" fxLayoutAlign="space-around center" class="card-top-space">
     <div fxFlex.gt-sm="650px">
         <mat-card class="warning-card">
             <mat-card-content>
-                <mat-icon class="align-icon">warning</mat-icon>&nbsp; This is a preview version only.  If you wish to save or submit your analyzed event, please <a [routerLink]="['/login']">sign in</a>.
+                <mat-icon class="align-icon">warning</mat-icon>&nbsp; This is a preview version only. If you wish to
+                save or submit your analyzed event, please <a [routerLink]="['/login']">sign in</a>.
             </mat-card-content>
         </mat-card>
     </div>

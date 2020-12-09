@@ -8,6 +8,12 @@ const FILL_COLOUR_ACTIVATED = 'darkslateblue';
 const FILL_COLOUR_NOT_ACTIVATED = 'grey';
 const FILL_COLOUR_USED_FOR_FIT = 'white';
 
+export enum SelectModes {
+    HoverSelect = "HOVER-SELECT",
+    HoverDeselect = "HOVER-DESELECT",
+    TapSelectDeselect = "TAP-SELECT-DESELECT"
+}
+
 export class Dot {
     id: number;
     activated: boolean;
@@ -25,18 +31,29 @@ export class Dot {
         this.y = obj.y;
         this.ycm = obj.ycm;
     }
-    checkDot(colourModeOn: boolean) {
+
+    mouseOverToSelectDeselect(selectMode: string) {
         console.log('moused!');
-        if (colourModeOn) {
+        if (selectMode === SelectModes.HoverSelect) {
             if (this.activated && (!this.useForFit)) {
                 this.useForFit = true;
             }
-        } else {
+        } else if (selectMode === SelectModes.HoverDeselect) {
             if (this.activated && (this.useForFit)) {
                 this.useForFit = false;
             }
         }
     }
+
+    clickToToggle(selectMode: string) {
+        console.log('clicked!');
+        if (selectMode === SelectModes.TapSelectDeselect) {
+            if (this.activated) {
+                this.useForFit = !this.useForFit;
+            }
+        }
+    }
+
     findRadius() {
         return this.activated ? RADIUS_ACTIVATED : RADIUS_NOT_ACTIVATED;
     }

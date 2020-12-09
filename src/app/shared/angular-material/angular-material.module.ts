@@ -44,6 +44,8 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 import {MatDividerModule} from '@angular/material/divider';
 
+import { LayoutModule } from '@angular/cdk/layout';
+
 const modules: any[] = [
   MatMenuModule,
   MatSidenavModule,
@@ -67,7 +69,8 @@ const modules: any[] = [
   MatTooltipModule,
   MatProgressSpinnerModule,
   MatProgressBarModule,
-  MatDividerModule
+  MatDividerModule,
+  LayoutModule
 ]
 
 @NgModule({
