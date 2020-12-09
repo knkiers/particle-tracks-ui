@@ -45,27 +45,27 @@
                             </ng-container>
                             <ng-container matColumnDef="theta">
                                 <th mat-header-cell *matHeaderCellDef> &theta; (rad)</th>
-                                <td mat-cell *matCellDef="let element">{{element.theta | roundReal : 4}}</td>
+                                <td mat-cell *matCellDef="let element">{{element.theta | roundReal : numDigits}}</td>
                             </ng-container>
                             <ng-container matColumnDef="momentum">
                                 <th mat-header-cell *matHeaderCellDef> p (MeV) </th>
-                                <td mat-cell *matCellDef="let element">{{element.pMag | roundReal : 4}}</td>
+                                <td mat-cell *matCellDef="let element">{{element.pMag | roundReal : numDigits}}</td>
                             </ng-container>
                             <ng-container matColumnDef="px">
                                 <th mat-header-cell *matHeaderCellDef> p<sub>x</sub> (MeV)</th>
-                                <td mat-cell *matCellDef="let element">{{element.px | roundReal : 4}}</td>
+                                <td mat-cell *matCellDef="let element">{{element.px | roundReal : numDigits}}</td>
                             </ng-container>
                             <ng-container matColumnDef="py">
                                 <th mat-header-cell *matHeaderCellDef> p<sub>y</sub> (MeV) </th>
-                                <td mat-cell *matCellDef="let element">{{element.py | roundReal : 4}}</td>
+                                <td mat-cell *matCellDef="let element">{{element.py | roundReal : numDigits}}</td>
                             </ng-container>
                             <ng-container matColumnDef="energy">
                                 <th mat-header-cell *matHeaderCellDef> E (MeV) </th>
-                                <td mat-cell *matCellDef="let element">{{element.energy | roundReal : 4}}</td>
+                                <td mat-cell *matCellDef="let element">{{element.energy | roundReal : numDigits}}</td>
                             </ng-container>
                             <ng-container matColumnDef="beta">
                                 <th mat-header-cell *matHeaderCellDef> &beta; </th>
-                                <td mat-cell *matCellDef="let element">{{element.pMag/element.energy | roundReal : 6}}</td>
+                                <td mat-cell *matCellDef="let element">{{element.pMag/element.energy | roundReal : numBetaDigits}}</td>
                             </ng-container>
                             <tr mat-header-row *matHeaderRowDef="displayedColumnsEventDataSummary"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumnsEventDataSummary;"></tr>

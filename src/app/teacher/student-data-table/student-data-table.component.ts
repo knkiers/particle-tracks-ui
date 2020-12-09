@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { MatTableDataSource } from '@angular/material/table';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 import { StudentDatum } from '../event-energy-momentum/event-energy-momentum.component';
 
@@ -16,16 +17,62 @@ export class StudentDataTableComponent implements OnInit {
 
   displayedColumnsStudentData: string[] = ['particle', 'circleNumber', 'inOut', 'radius', 'theta', 'momentum', 'px', 'py', 'mass', 'energy', 'beta', 'calculate'];
 
+  numDigits: number = 4;
+  numBetaDigits: number = 7;
   computedStudentData: StudentDatum[];
   studentDataSource: MatTableDataSource<any>;
 
-  constructor() { }
+  constructor(breakpointObserver: BreakpointObserver) { 
+    breakpointObserver.observe([
+      Breakpoints.XSmall,
+      Breakpoints.Small
+    ]).subscribe(result => {
+      if (result.matches) {
+        this.activateSmallLayout(result);
+      }
+    });
+    breakpointObserver.observe([
+      Breakpoints.Medium
+    ]).subscribe(result => {
+      if (result.matches) {
+        this.activateMediumLayout(result);
+      }
+    });
+    breakpointObserver.observe([
+      Breakpoints.Large,
+      Breakpoints.XLarge,
+    ]).subscribe(result => {
+      if (result.matches) {
+        this.activateLargeLayout(result);
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.computedStudentData = JSON.parse(JSON.stringify(this.studentData));
     this.studentDataSource = new MatTableDataSource(this.computedStudentData);
   }
 
+  activateSmallLayout(result: any): void {
+    console.log('result: ', result);
+    console.log('we have a small layout!');
+    this.numDigits = 2;
+    this.numBetaDigits = 4;
+  }
+
+  activateMediumLayout(result: any): void {
+    console.log('result: ', result);
+    console.log('we have a medium layout!');
+    this.numDigits = 3;
+    this.numBetaDigits = 6;
+  }
+
+  activateLargeLayout(result: any): void {
+    console.log('result: ', result);
+    console.log('we have a large layout!');
+    this.numDigits = 4;
+    this.numBetaDigits = 7;
+  }
   
   recalculateStudentData(refreshRow: number): void {
     console.log('refresh row: ', refreshRow);

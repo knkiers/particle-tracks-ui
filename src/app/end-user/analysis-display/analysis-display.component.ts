@@ -20,7 +20,7 @@ import { HelpOnlineAnalysisComponent } from '../../shared/static-content/help-an
 //import { CircleBindingService } from '../circle-binding.service';
 
 import { Event } from '../../shared/models/event';
-import { Dot } from '../../shared/models/dot';
+import { SelectModes, Dot } from '../../shared/models/dot';
 import { Circle } from '../../shared/models/circle';
 
 import { CircleActivatedDots } from '../../shared/interfaces/circle-activated-dots';
@@ -37,6 +37,11 @@ import { POINT_THREE, R_MIN, R_MAX, B_MAX } from '../../shared/services/unit-con
 //    the user's login name in the nav bar, etc.
 
 const AXIS_FRACTION = 0.8;
+
+interface SelectModeOptions {
+  value: string;
+  viewValue: string;
+}
 
 @Component({
   selector: 'app-analysis-display',
@@ -68,6 +73,14 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
   @Input() isPublicUser: boolean = false; // this component can be loaded in from the public-facing part of the website, too; in that case, don't do the auto-saving, etc.
   @Output() analysisStatus = new EventEmitter<any>();
   @Output() showReviewCard = new EventEmitter<boolean>(); //used for the public-facing version of the component
+  
+  selectModeOptions: SelectModeOptions[] = [
+    {value: SelectModes.HoverSelect, viewValue: 'Select Dots by Hovering'},
+    {value: SelectModes.HoverDeselect, viewValue: 'Deselect Dots by Hovering'},
+    {value: SelectModes.TapSelectDeselect, viewValue: 'Toggle Dots by Clicking'}
+  ];
+  selectMode: string = SelectModes.HoverDeselect;
+
   reviewCardShown: boolean = false;
 
   userIsReadOnly: boolean = false; // set to true if viewing from the admin (for grading purposes)
@@ -112,7 +125,7 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
 
   editModeOn = false;
   revealEvent = false;
-  colourModeOn: boolean = false;
+  //colourModeOn: boolean = false;
   showAxes = false;
 
   userEvents: any = [];
@@ -838,13 +851,15 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
     //console.log('inside toggle edit mode fn');
     if (!this.editModeOn) {
       this.editModeOn = true;
-      this.colourModeOn = true;
+      //this.colourModeOn = true;
+      this.selectMode = SelectModes.HoverSelect;
       this.eventInfoService.announceEventUpdate(this.event, this.editModeOn, this.circles, this.eventActivatedDots);
     }
   }
 
   turnOffEditMode() {
     this.editModeOn = false;
+    this.selectMode = SelectModes.HoverDeselect;
   }
 
   showEvent() {
@@ -928,8 +943,8 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
 
     this.editModeOn = true;
     this.revealEvent = false;
-    this.colourModeOn = true;
-
+    //this.colourModeOn = true;
+    this.selectMode = SelectModes.HoverSelect;
     this.bFieldStrength = eventData.bFieldStrength;
     this.bFieldDirection = eventData.bFieldDirection;
 
@@ -954,13 +969,6 @@ export class AnalysisDisplayComponent implements OnInit, OnDestroy {
       this.displayUnsubmitWarningSnackbar();
     }
 
-  }
-
-
-  toggleColourMode() {
-    console.log('colour mode toggled!');
-    this.colourModeOn = !this.colourModeOn;
-    console.log('colour mode is on? ', this.colourModeOn);
   }
 
   /*

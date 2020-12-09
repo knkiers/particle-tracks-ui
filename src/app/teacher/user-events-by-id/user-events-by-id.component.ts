@@ -113,7 +113,7 @@ export class UserEventsByIdComponent implements OnInit, OnDestroy {
   }
 
   openUserEvent(eventData: any) {
-    console.log(eventData);
+    //console.log(eventData);
     console.log('in user events by id; user event wrapper anchor: ', this.userEventWrapperAnchor);
     this.userEventWrapperAnchor.viewContainer.clear();
     let componentFactory = this.componentFactoryResolver.resolveComponentFactory(AnalysisDisplayWrapperComponent);
@@ -126,7 +126,9 @@ export class UserEventsByIdComponent implements OnInit, OnDestroy {
     this.eventEnergyMomentumComponent = this.eventInfoAnchor.viewContainer.createComponent(eventInfoComponentFactory).instance;
     this.eventEnergyMomentumComponent.eventData = eventData;
     //this.analysisDisplayComponent.userIsReadOnly = true;
-
+    //https://www.iditect.com/how-to/50355688.html
+    let scrollElem= document.querySelector('#moveTop');
+    scrollElem.scrollIntoView();  
   }
 
   closeUserEvent() {

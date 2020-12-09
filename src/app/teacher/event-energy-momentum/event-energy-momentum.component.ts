@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
 import { MatTableDataSource } from '@angular/material/table';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 import { POINT_THREE } from '../../shared/services/unit-conversion.service';
 import { EventAnalysisService } from '../../shared/services/event-analysis.service';
@@ -61,6 +62,9 @@ export class EventEnergyMomentumComponent implements OnInit {
   eventSummaryDataSource: MatTableDataSource<any>;
   //studentDataSource: MatTableDataSource<any>;
 
+  numDigits: number = 4;
+  numBetaDigits: number = 7;
+
   revealedEvent: string = ''; // the event in question, but with the "X" and "Y" replaced by the actual particle names
   eventsSameSignature: EventsSameSignature; // all events in the database that match the current event's signature
 
@@ -85,7 +89,32 @@ export class EventEnergyMomentumComponent implements OnInit {
     private eventDisplayService: EventDisplayService,
     private eventAnalysisService: EventAnalysisService,
     private unitConversionService: UnitConversionService,
-    private eventReviewService: EventReviewService) { }
+    private eventReviewService: EventReviewService,
+    breakpointObserver: BreakpointObserver) {
+    breakpointObserver.observe([
+      Breakpoints.XSmall,
+      Breakpoints.Small
+    ]).subscribe(result => {
+      if (result.matches) {
+        this.activateSmallLayout(result);
+      }
+    });
+    breakpointObserver.observe([
+      Breakpoints.Medium
+    ]).subscribe(result => {
+      if (result.matches) {
+        this.activateMediumLayout(result);
+      }
+    });
+    breakpointObserver.observe([
+      Breakpoints.Large,
+      Breakpoints.XLarge,
+    ]).subscribe(result => {
+      if (result.matches) {
+        this.activateLargeLayout(result);
+      }
+    });
+  }
 
   ngOnInit(): void {
     console.log('Inside on init!');
@@ -104,6 +133,27 @@ export class EventEnergyMomentumComponent implements OnInit {
       // there were apparently one or more gross errors, so fetch the data about other possible decays, but don't bother putting together the tables
       this.fetchEventsSameSignature();
     }
+  }
+
+  activateSmallLayout(result: any): void {
+    console.log('result: ', result);
+    console.log('we have a small layout!');
+    this.numDigits = 2;
+    this.numBetaDigits = 4;
+  }
+
+  activateMediumLayout(result: any): void {
+    console.log('result: ', result);
+    console.log('we have a medium layout!');
+    this.numDigits = 3;
+    this.numBetaDigits = 6;
+  }
+
+  activateLargeLayout(result: any): void {
+    console.log('result: ', result);
+    console.log('we have a large layout!');
+    this.numDigits = 4;
+    this.numBetaDigits = 7;
   }
 
   // the data coming from the server has px and py, but not |p|, which is
@@ -671,7 +721,7 @@ export class EventEnergyMomentumComponent implements OnInit {
   checkEnergyMomentumConservation(studentDataOriginal: StudentDatum[], eventType: EventType | boolean = false): StudentDatum[] {
     // if eventType is not included, we use the default for localCharacterizedEvent (this.characterizedEvent, which is the one for the actual event);
     // otherwise we determine it for the eventType that is coming in
-    
+
     let localCharacterizedEvent: CharacterizedEvent;
     if (typeof eventType !== 'boolean') {
       localCharacterizedEvent = this.eventReviewService.characterizeEventFromEventType(eventType);
