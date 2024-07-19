@@ -25,3 +25,7 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+export const LoginUrl = BaseURL + "/api/token/";
+## Update to Ubutuntu 24.04
+
+1. The only change I made on the frontend was to change LoginUrl to `export const LoginUrl = BaseURL + "/api/token/";` in `src/app/shared/services.urls.ts` this was to match the backend change to simplejwt.
